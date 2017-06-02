@@ -395,7 +395,7 @@ def genClassFromRes(className, res, version=None):
     delResServiceInfo(res)
     version = genNextVersion(version)
         
-    class_txt = '''# !/usr/bin/env python
+    class_txt = '''#!/usr/bin/env python
 # -*- coding: cp1251 -*-
 
 import wx

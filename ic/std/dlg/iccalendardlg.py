@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -7,13 +7,7 @@
 
 import wx
 from . import std_dialogs_proto
-
-try:
-    from ic.std.utils import ic_time
-except ImportError:
-    from ic.utils import ic_time
-
-__version__ = (0, 0, 1, 2)
+from ic.std.utils import ic_time
 
 
 class icCalendarDialog(std_dialogs_proto.calendarDialogProto):

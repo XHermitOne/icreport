@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -7,13 +7,7 @@
 
 import wx
 from . import std_dialogs_proto
-
-try:
-    from ic.std.utils import ic_time
-except ImportError:
-    from ic.utils import ic_time
-
-__version__ = (0, 1, 1, 2)
+from ic.std.utils import ic_time
 
 
 class icDateRangeDialog(std_dialogs_proto.dateRangeDialogProto):
@@ -37,17 +31,6 @@ class icDateRangeDialog(std_dialogs_proto.dateRangeDialogProto):
             return ic_time.wxdate2pydate(self._selected_range[0]), ic_time.wxdate2pydate(self._selected_range[1])
         return None
 
-    def setConcreteDateCheck(self, checked=True):
-        """
-        Вкл./выкл. режима установки конкретной даты.
-        @param checked: Установлена метка или нет. 
-        """
-        self.concrete_date_checkBox.SetValue(checked)
-        self.lastDatePicker.Enable(not checked)
-        if checked:
-            first_date = self.firstDatePicker.GetValue()
-            self.lastDatePicker.SetValue(first_date)
-
     def onCancelButtonClick(self, event):
         self._selected_range = None
         self.EndModal(wx.ID_CANCEL)
@@ -57,43 +40,6 @@ class icDateRangeDialog(std_dialogs_proto.dateRangeDialogProto):
         self._selected_range = (self.firstDatePicker.GetValue(),
                                 self.lastDatePicker.GetValue())
         self.EndModal(wx.ID_OK)
-        event.Skip()
-
-    def onFirstDateChanged(self, event):
-        """
-        Обработчик изменения начальной даты диапазона. 
-        """
-        first_date = event.GetDate()
-        last_date = self.lastDatePicker.GetValue()
-
-        if first_date > last_date:
-            self.lastDatePicker.SetValue(first_date)
-        elif self.concrete_date_checkBox.IsChecked():
-            self.lastDatePicker.SetValue(first_date)
-
-        event.Skip()
-
-    def onLastDateChanged(self, event):
-        """
-        Обработчик изменения конечной даты диапазона. 
-        """
-        first_date = self.firstDatePicker.GetValue()
-        last_date = event.GetDate()
-
-        if first_date > last_date:
-            self.firstDatePicker.SetValue(last_date)
-
-        event.Skip()
-
-    def onConcreteDateCheckBox(self, event):
-        """
-        Обработчик вкл./выкл. флага конкретной даты.
-        """
-        checked = event.IsChecked()
-        self.lastDatePicker.Enable(not checked)
-        if checked:
-            first_date = self.firstDatePicker.GetValue()
-            self.lastDatePicker.SetValue(first_date)
         event.Skip()
 
 

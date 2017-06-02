@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -46,7 +46,7 @@ from ic.std.log import log
 
 from ic.report import do_report
 
-__version__ = (0, 0, 7, 3)
+__version__ = (0, 0, 7, 4)
 
 
 def main(argv):
@@ -90,11 +90,9 @@ def main(argv):
             print('icReport version: %s' % '.'.join([str(ver) for ver in __version__]))
             sys.exit(0)
         elif option in ('-d', '--debug'):
-            from ic.std.utils import utils
-            utils.set_var('DEBUG_MODE', True)
+            config.set_glob_var('DEBUG_MODE', True)
         elif option in ('-l', '--log'):
-            from ic.std.utils import utils
-            utils.set_var('LOG_MODE', True)
+            config.set_glob_var('LOG_MODE', True)
         elif option in ('-V', '--viewer'):
             mode = 'view'
         elif option in ('-E', '--editor'):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*- 
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version Feb 16 2016)
+## Python code generated with wxFormBuilder (version Jun 17 2015)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO "NOT" EDIT THIS FILE!
@@ -33,7 +33,6 @@ class calendarDialogProto ( wx.Dialog ):
 		bSizer2.Add( self.cancelButton, 0, wx.ALL, 5 )
 		
 		self.okButton = wx.Button( self, wx.ID_ANY, u"ОК", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.okButton.SetDefault() 
 		bSizer2.Add( self.okButton, 0, wx.ALL, 5 )
 		
 		
@@ -95,7 +94,6 @@ class yearDialogProto ( wx.Dialog ):
 		bSizer4.Add( self.cancelButton, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
 		self.okButton = wx.Button( self, wx.ID_ANY, u"ОК", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.okButton.SetDefault() 
 		bSizer4.Add( self.okButton, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
 		
@@ -161,7 +159,6 @@ class monthDialogProto ( wx.Dialog ):
 		bSizer8.Add( self.cancelButton, 0, wx.ALL, 5 )
 		
 		self.okButton = wx.Button( self, wx.ID_ANY, u"ОК", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.okButton.SetDefault() 
 		bSizer8.Add( self.okButton, 0, wx.ALL, 5 )
 		
 		
@@ -247,7 +244,6 @@ class monthRangeDialogProto ( wx.Dialog ):
 		bSizer8.Add( self.cancelButton, 0, wx.ALL, 5 )
 		
 		self.okButton = wx.Button( self, wx.ID_ANY, u"ОК", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.okButton.SetDefault() 
 		bSizer8.Add( self.okButton, 0, wx.ALL, 5 )
 		
 		
@@ -282,19 +278,11 @@ class monthRangeDialogProto ( wx.Dialog ):
 class dateRangeDialogProto ( wx.Dialog ):
 	
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Выбор периода", pos = wx.DefaultPosition, size = wx.Size( 391,184 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Выбор периода", pos = wx.DefaultPosition, size = wx.Size( 393,150 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
 		
 		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 		
 		bSizer6 = wx.BoxSizer( wx.VERTICAL )
-		
-		bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.concrete_date_checkBox = wx.CheckBox( self, wx.ID_ANY, u"На определенную дату", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer20.Add( self.concrete_date_checkBox, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		
-		
-		bSizer6.Add( bSizer20, 1, wx.EXPAND, 5 )
 		
 		fgSizer2 = wx.FlexGridSizer( 0, 2, 0, 0 )
 		fgSizer2.AddGrowableCol( 1 )
@@ -326,7 +314,6 @@ class dateRangeDialogProto ( wx.Dialog ):
 		bSizer8.Add( self.cancelButton, 0, wx.ALL, 5 )
 		
 		self.okButton = wx.Button( self, wx.ID_ANY, u"ОК", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.okButton.SetDefault() 
 		bSizer8.Add( self.okButton, 0, wx.ALL, 5 )
 		
 		
@@ -339,9 +326,6 @@ class dateRangeDialogProto ( wx.Dialog ):
 		self.Centre( wx.BOTH )
 		
 		# Connect Events
-		self.concrete_date_checkBox.Bind( wx.EVT_CHECKBOX, self.onConcreteDateCheckBox )
-		self.firstDatePicker.Bind( wx.EVT_DATE_CHANGED, self.onFirstDateChanged )
-		self.lastDatePicker.Bind( wx.EVT_DATE_CHANGED, self.onLastDateChanged )
 		self.cancelButton.Bind( wx.EVT_BUTTON, self.onCancelButtonClick )
 		self.okButton.Bind( wx.EVT_BUTTON, self.onOkButtonClick )
 	
@@ -350,15 +334,6 @@ class dateRangeDialogProto ( wx.Dialog ):
 	
 	
 	# Virtual event handlers, overide them in your derived class
-	def onConcreteDateCheckBox( self, event ):
-		event.Skip()
-	
-	def onFirstDateChanged( self, event ):
-		event.Skip()
-	
-	def onLastDateChanged( self, event ):
-		event.Skip()
-	
 	def onCancelButtonClick( self, event ):
 		event.Skip()
 	
@@ -404,117 +379,6 @@ class NSIListDialogProto ( wx.Dialog ):
 		# Connect Events
 		self.cancel_button.Bind( wx.EVT_BUTTON, self.onCancelButtonClick )
 		self.ok_button.Bind( wx.EVT_BUTTON, self.onOkButtonClick )
-	
-	def __del__( self ):
-		pass
-	
-	
-	# Virtual event handlers, overide them in your derived class
-	def onCancelButtonClick( self, event ):
-		event.Skip()
-	
-	def onOkButtonClick( self, event ):
-		event.Skip()
-	
-
-###########################################################################
-## Class integerDialogProto
-###########################################################################
-
-class integerDialogProto ( wx.Dialog ):
-	
-	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 509,134 ), style = wx.DEFAULT_DIALOG_STYLE )
-		
-		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
-		
-		bSizer15 = wx.BoxSizer( wx.VERTICAL )
-		
-		bSizer19 = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.label_staticText = wx.StaticText( self, wx.ID_ANY, u"Значение:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.label_staticText.Wrap( -1 )
-		bSizer19.Add( self.label_staticText, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		
-		self.value_spinCtrl = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 100, 0 )
-		bSizer19.Add( self.value_spinCtrl, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		
-		
-		bSizer15.Add( bSizer19, 1, wx.EXPAND, 5 )
-		
-		bSizer2 = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.cancelButton = wx.Button( self, wx.ID_ANY, u"Отмена", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer2.Add( self.cancelButton, 0, wx.ALL, 5 )
-		
-		self.okButton = wx.Button( self, wx.ID_ANY, u"ОК", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.okButton.SetDefault() 
-		bSizer2.Add( self.okButton, 0, wx.ALL, 5 )
-		
-		
-		bSizer15.Add( bSizer2, 0, wx.ALIGN_RIGHT, 5 )
-		
-		
-		self.SetSizer( bSizer15 )
-		self.Layout()
-		
-		self.Centre( wx.BOTH )
-		
-		# Connect Events
-		self.cancelButton.Bind( wx.EVT_BUTTON, self.onCancelButtonClick )
-		self.okButton.Bind( wx.EVT_BUTTON, self.onOkButtonClick )
-	
-	def __del__( self ):
-		pass
-	
-	
-	# Virtual event handlers, overide them in your derived class
-	def onCancelButtonClick( self, event ):
-		event.Skip()
-	
-	def onOkButtonClick( self, event ):
-		event.Skip()
-	
-
-###########################################################################
-## Class radioChoiceDialogProto
-###########################################################################
-
-class radioChoiceDialogProto ( wx.Dialog ):
-	
-	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 566,133 ), style = wx.DEFAULT_DIALOG_STYLE )
-		
-		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
-		
-		bSizer19 = wx.BoxSizer( wx.VERTICAL )
-		
-		choice_radioBoxChoices = [ u"Item1", u"Item2", u"item 3", u"item 4", u"item5" ]
-		self.choice_radioBox = wx.RadioBox( self, wx.ID_ANY, u"Title", wx.DefaultPosition, wx.DefaultSize, choice_radioBoxChoices, 1, wx.RA_SPECIFY_ROWS )
-		self.choice_radioBox.SetSelection( 0 )
-		bSizer19.Add( self.choice_radioBox, 1, wx.ALL|wx.EXPAND, 5 )
-		
-		bSizer2 = wx.BoxSizer( wx.HORIZONTAL )
-		
-		self.cancelButton = wx.Button( self, wx.ID_ANY, u"Отмена", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer2.Add( self.cancelButton, 0, wx.ALL, 5 )
-		
-		self.okButton = wx.Button( self, wx.ID_ANY, u"ОК", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.okButton.SetDefault() 
-		bSizer2.Add( self.okButton, 0, wx.ALL, 5 )
-		
-		
-		bSizer19.Add( bSizer2, 0, wx.ALIGN_RIGHT, 5 )
-		
-		
-		self.SetSizer( bSizer19 )
-		self.Layout()
-		
-		self.Centre( wx.BOTH )
-		
-		# Connect Events
-		self.cancelButton.Bind( wx.EVT_BUTTON, self.onCancelButtonClick )
-		self.okButton.Bind( wx.EVT_BUTTON, self.onOkButtonClick )
 	
 	def __del__( self ):
 		pass

@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: cp1251 -*-
 """
 Стандартные пакеты
