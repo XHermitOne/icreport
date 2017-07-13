@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# !/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import os.path
@@ -24,7 +24,7 @@ try:
 except ImportError:
     log.error(u'ODFpy Import Error.')
 
-__version__ = (0, 0, 2, 3)
+__version__ = (0, 0, 2, 4)
 
 DIMENSION_CORRECT = 35
 DEFAULT_STYLE_ID = 'Default'
@@ -148,10 +148,10 @@ class icODS(object):
         font = {}
         font_name = dData.get('FontName', 'Arial')
         font_size = dData.get('Size', '10')
-        font_bold = 'bold' if dData.get('Bold', '0') == '1' else None
-        font_italic = 'italic' if dData.get('Italic', '0') == '1' else None
+        font_bold = 'bold' if dData.get('Bold', '0') in (True, '1') else None
+        font_italic = 'italic' if dData.get('Italic', '0') in (True, '1') else None
 
-        through = 'solid' if dData.get('StrikeThrough', '0') == '1' else None
+        through = 'solid' if dData.get('StrikeThrough', '0') in (True, '1') else None
         underline = 'solid' if dData.get('Underline', 'None') != 'None' else None
 
         font['fontfamily'] = font_name
