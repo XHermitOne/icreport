@@ -27,6 +27,7 @@ from ic.std.log import log
 from ic.std.utils import filefunc
 from ic.std.utils import res
 from ic.std.dlg import dlg
+from ic.std.utils import textfunc
 
 from ic.report import icrepgen
 from ic.report import icreptemplate
@@ -340,7 +341,7 @@ class icReportGeneratorSystem:
             db_connection = sqlalchemy.create_engine(db_url)
             # Освободить БД
             # db_connection.dispose()
-            log.info(u'DB SQL <%s>' % unicode(sql, 'utf-8'))
+            log.info(u'DB SQL <%s>' % textfunc.toUnicode(sql, 'utf-8'))
             sql_result = db_connection.execute(sql)
             rows = sql_result.fetchall()
             cols = rows[0].keys() if rows else []
