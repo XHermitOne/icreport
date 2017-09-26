@@ -24,7 +24,7 @@ import ic.report
 from ic.report import report_generator
 from ic import config
 
-__version__ = (0, 0, 1, 4)
+__version__ = (0, 0, 2, 1)
 
 # Константы
 # Индексы полей списка кортежей
@@ -190,7 +190,7 @@ class icReportBrowserPrototype:
 
         self.img_list = wx.ImageList(16, 16)
         self.img_list.Add(bmp.createBitmap(os.path.join(get_img_dirname(), 'reports.png')))
-        self.img_list.Add(bmp.createBitmap(os.path.join(get_img_dirname(), 'report-excel.png')))
+        self.img_list.Add(bmp.createBitmap(os.path.join(get_img_dirname(), 'page_excel.png')))
         self.img_list.Add(bmp.createBitmap(os.path.join(get_img_dirname(), 'report.png')))
         self.rep_tree.AssignImageList(self.img_list)
 
@@ -201,7 +201,7 @@ class icReportBrowserPrototype:
         # Кнопка вывода отчета/предварительного просмотра/печати
         self.rep_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
                                                              bmp.createBitmap(os.path.join(get_img_dirname(),
-                                                                                           'document-search-result.png')),
+                                                                                           'report_magnify.png')),
                                                              u'Предв. просмотр',
                                                              size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                    REP_BROWSER_BUTTONS_HEIGHT),
@@ -221,7 +221,7 @@ class icReportBrowserPrototype:
         # Кнопка установки параметров страницы
         self.page_setup_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
                                                                     bmp.createBitmap(os.path.join(get_img_dirname(),
-                                                                                                  'printer--pencil.png')),
+                                                                                                  'page_orientation.png')),
                                                                     u'Параметры страницы',
                                                                     size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                           REP_BROWSER_BUTTONS_HEIGHT),
@@ -231,7 +231,7 @@ class icReportBrowserPrototype:
         # Кнопка конвертирования отчета
         self.convert_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
                                                                  bmp.createBitmap(os.path.join(get_img_dirname(),
-                                                                                               'document-export.png')),
+                                                                                               'excel_exports.png')),
                                                                  u'Конвертация',
                                                                  size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                        REP_BROWSER_BUTTONS_HEIGHT),
@@ -242,7 +242,7 @@ class icReportBrowserPrototype:
             # Кнопка настройки
             self.set_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
                                                                  bmp.createBitmap(os.path.join(get_img_dirname(),
-                                                                                               'folder-open-document-text.png')),
+                                                                                               'folder_vertical_document.png')),
                                                                  u'Папка отчетов',
                                                                  size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                        REP_BROWSER_BUTTONS_HEIGHT),
@@ -252,7 +252,7 @@ class icReportBrowserPrototype:
             # Кнопка создания нового отчета
             self.new_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
                                                                  bmp.createBitmap(os.path.join(get_img_dirname(),
-                                                                                               'report--plus.png')),
+                                                                                               'report_add.png')),
                                                                  u'Создание',
                                                                  size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                        REP_BROWSER_BUTTONS_HEIGHT),
@@ -262,7 +262,7 @@ class icReportBrowserPrototype:
             # Кнопка редактирования отчета
             self.edit_button=wx.lib.buttons.GenBitmapTextButton(self,wx.NewId(),
                                                                 bmp.createBitmap(os.path.join(get_img_dirname(),
-                                                                                              'report--pencil.png')),
+                                                                                              'report_design.png')),
                                                                 u'Редактирование',
                                                                 size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                       REP_BROWSER_BUTTONS_HEIGHT),
@@ -272,7 +272,7 @@ class icReportBrowserPrototype:
             # Кнопка Обновления отчета
             self.convert_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
                                                                      bmp.createBitmap(os.path.join(get_img_dirname(),
-                                                                                                   'arrow-circle-double.png')),
+                                                                                                   'arrow_refresh.png')),
                                                                      u'Обновление',
                                                                      size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                            REP_BROWSER_BUTTONS_HEIGHT),
@@ -282,7 +282,7 @@ class icReportBrowserPrototype:
             # Кнопка модуля отчета
             self.module_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
                                                                     bmp.createBitmap(os.path.join(get_img_dirname(),
-                                                                                                  'script-attribute-p.png')),
+                                                                                                  'script_lightning.png')),
                                                                     u'Модуль отчета',
                                                                     size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                           REP_BROWSER_BUTTONS_HEIGHT),
@@ -292,7 +292,7 @@ class icReportBrowserPrototype:
         # Кнопка выхода
         self.exit_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
                                                               bmp.createBitmap(os.path.join(get_img_dirname(),
-                                                                                            'door-open-out.png')),
+                                                                                            'door_in.png')),
                                                               u'Выход',
                                                               size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                     REP_BROWSER_BUTTONS_HEIGHT),
@@ -308,7 +308,7 @@ class icReportBrowserPrototype:
         Функция получения иконки формы браузера.
         """
         if self.icon is None:
-            icon_filename = os.path.join(get_img_dirname(), 'reports-stack.png')
+            icon_filename = os.path.join(get_img_dirname(), 'report_stack.png')
             self.icon = wx.Icon(icon_filename, wx.BITMAP_TYPE_PNG)
         return self.icon
 

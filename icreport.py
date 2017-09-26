@@ -46,7 +46,9 @@ from ic.std.log import log
 
 from ic.report import do_report
 
-__version__ = (0, 0, 7, 4)
+__version__ = (0, 0, 7, 5)
+
+DEFAULT_REPORTS_PATH = './reports'
 
 
 def main(argv):
@@ -134,6 +136,8 @@ def main(argv):
 
     # ВНИМАНИЕ! Небходимо добавить путь к папке отчетов,
     # чтобы проходили импорты модулей отчетов
+    if path is None:
+        path = DEFAULT_REPORTS_PATH
     if os.path.exists(path) and os.path.isdir(path) and path not in sys.path:
         sys.path.append(path)
 
