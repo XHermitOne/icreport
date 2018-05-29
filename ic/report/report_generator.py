@@ -11,6 +11,7 @@ from ic.std.utils import res
 
 from ic.report import icxmlreportgenerator
 from ic.report import icodsreportgenerator
+from ic.report import icxlsreportgenerator
 from ic.report import icreportmangenerator
 from ic.report import icrtfreportgenerator
 
@@ -22,6 +23,7 @@ REP_GEN_SYS = None
 # Спецификации
 _ReportGeneratorSystemTypes = {'.xml': icxmlreportgenerator.icXMLReportGeneratorSystem,         # Мой XMLSS генератор
                                '.ods': icodsreportgenerator.icODSReportGeneratorSystem,         # Мой ODS генератор
+                               '.xls': icxlsreportgenerator.icXLSReportGeneratorSystem,         # Мой XLS генератор
                                '.rep': icreportmangenerator.icReportManagerGeneratorSystem,     # Report Manager
                                '.rtf': icrtfreportgenerator.icRTFReportGeneratorSystem,         # RTF генератор
                                }

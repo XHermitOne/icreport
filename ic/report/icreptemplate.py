@@ -18,7 +18,7 @@ from ic.std.utils import execfunc
 
 from ic.report import icrepgen
 
-__version__ = (0, 0, 1, 1)
+__version__ = (0, 0, 2, 1)
 
 # Константы
 # Теги шаблона
@@ -77,6 +77,22 @@ class icReportTemplate:
         # Структура шаблона отчета,  которую понимает генератор отчетов.
         self._rep_template = None
 
+        # Полное имя исходного файла шаблона
+        self.template_filename = None
+
+    def setTemplateFilename(self, template_filename):
+        """
+        Полное имя исходного файла шаблона.
+        @param template_filename: Полное имя исходного файла шаблона
+        """
+        self.template_filename = template_filename
+
+    def getTemplateFilename(self):
+        """
+        Полное имя исходного файла шаблона.
+        """
+        return self.template_filename
+
     def save(self, template_filename, template_name=None):
         """
         Сохранить шаблон в Pickle файле.
@@ -99,6 +115,7 @@ class icReportTemplate:
         @param template_filename: Имя XML файла шаблона.
         @param template_name: Имя шаблона (листа).
         """
+        self.setTemplateFilename(template_filename)
         pickle_file_name = os.path.splitext(template_filename)[0]+DEFAULT_REPORT_FILE_EXT
         pickle_file = None
         try:
@@ -608,10 +625,20 @@ class icExcelXMLReportTemplate(icReportTemplate):
             log.fatal('Parse template <%s>' % template_name)
         return None
 
+    def _existTagBand(self):
+        """
+        Присутствует в шаблоне колонка тегов бендов?
+            Если не существует, то далее считаем,
+            что весь шаблон - это  заголовок отчета [header].
+        @return: True - колонка тегов бендов есть в шаблоне / False - нет.
+        """
+        return self._tag_band_col is None
+
     def _getTagBandIdx(self, Rows_):
         """
         Определить номер колонки тегов бэндов.
         @param Rows_: Список описаний строк.
+        @return: Номер колонки тегов бендов.
         """
         if self._tag_band_col is None:
             # Это последняя колонка
@@ -989,15 +1016,21 @@ class icExcelXMLReportTemplate(icReportTemplate):
             row = Rows_[Row_]
             # Проверка корректности описания строки
             if 'children' not in row or not row['children']:
-                log.warning('WARNING. _getTagBandRow function <%s>' % row)
+                log.warning(u'WARNING. _getTagBandRow function <%s>' % row)
                 return self.__cur_band
             i_tag = self._getTagBandIdx(Rows_)
 
-            if i_tag > 0:
-                i_tag, tag_value = self._findTagBandRow(row)
-                if i_tag >= 0:
-                    # Если тег найден, то взять его
-                    self.__cur_band = tag_value
+            # ВНИМАНИЕ! Если колонки тегов бендов нет в шаблоне
+            # то считаем что весь шаблон это шапка отчета
+            # Используется для простого заполнения тегами
+            if not self._existTagBand():
+                self.__cur_band = HEADER_TAG
+            else:
+                if i_tag > 0:
+                    i_tag, tag_value = self._findTagBandRow(row)
+                    if i_tag >= 0:
+                        # Если тег найден, то взять его
+                        self.__cur_band = tag_value
 
             return self.__cur_band
         except:
@@ -1070,10 +1103,16 @@ class icExcelXMLReportTemplate(icReportTemplate):
         @param ParseRow_: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
-            if 'value' in ParseRow_[0]['children'][0] and ParseRow_[0]['children'][0]['value']:
-                Rep_['description'] = ParseRow_[0]['children'][0]['value']
+            if not self._existTagBand():
+                # Если теги бендов не указаны в шаблоне то
+                # определяем описание как имя файла
+                tmpl_filename = self.getTemplateFilename()
+                Rep_['description'] = os.path.splitext(os.path.basename(tmpl_filename))[0] if tmpl_filename else u''
             else:
-                Rep_['description'] = None
+                if 'value' in ParseRow_[0]['children'][0] and ParseRow_[0]['children'][0]['value']:
+                    Rep_['description'] = ParseRow_[0]['children'][0]['value']
+                else:
+                    Rep_['description'] = None
         except:
             log.fatal(u'_parseDescriptionTag function')
 
@@ -1101,10 +1140,16 @@ class icExcelXMLReportTemplate(icReportTemplate):
         @param ParseRow_: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
-            if 'value' in ParseRow_[0]['children'][0] and ParseRow_[0]['children'][0]['value']:
-                Rep_['generator'] = ParseRow_[0]['children'][0]['value']
+            if not self._existTagBand():
+                # Если теги бендов не указаны в шаблоне то
+                # определяем генератор по расширению имени файла
+                tmpl_filename = self.getTemplateFilename()
+                Rep_['generator'] = os.path.splitext(tmpl_filename)[1].upper() if tmpl_filename else '.ODS'
             else:
-                Rep_['generator'] = None
+                if 'value' in ParseRow_[0]['children'][0] and ParseRow_[0]['children'][0]['value']:
+                    Rep_['generator'] = ParseRow_[0]['children'][0]['value']
+                else:
+                    Rep_['generator'] = None
         except:
             log.fatal(u'_parseGeneratorTag function')
 
@@ -1178,3 +1223,31 @@ class icODSReportTemplate(icExcelXMLReportTemplate):
         result = v_excel.Load(TemplateFile_)
         v_excel.SaveAsXML(TemplateFile_.replace('.ods', '.xml'))
         return result
+
+
+class icXLSReportTemplate(icODSReportTemplate):
+    """
+    Шаблон отчета в формате Excel XLS.
+    """
+
+    def __init__(self):
+        """
+        Конструктор класса.
+        """
+        icODSReportTemplate.__init__(self)
+
+    def open(self, TemplateFile_):
+        """
+        Открыть файл шаблона отчета.
+        @param TemplateFile_: Файл шаблона отчета.
+        """
+        try:
+            ods_filename = os.path.splitext(TemplateFile_)[0] + '.ods'
+            cmd = 'unoconv -f xls %s' % ods_filename
+            log.info(u'Выполнение комманды <%s>' % cmd)
+            os.system(cmd)
+
+            return icODSReportTemplate.open(ods_filename)
+        except:
+            log.fatal(u'Ошибка открытия файла шаблона <%s>' % TemplateFile_)
+        return None

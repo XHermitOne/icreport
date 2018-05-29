@@ -32,14 +32,15 @@ from ic.std.utils import textfunc
 from ic.report import icrepgen
 from ic.report import icreptemplate
 
-__version__ = (0, 0, 2, 3)
+__version__ = (0, 0, 3, 1)
 
 # Константы подсистемы
-DEFAULT_REP_TMPL_FILE = os.path.dirname(__file__)+'/new_report_template.ods'
+DEFAULT_REP_TMPL_FILE = os.path.join(os.path.dirname(__file__), 'new_report_template.ods')
 
 OFFICE_OPEN_CMD_FORMAT = 'libreoffice %s'
 
 ODS_TEMPLATE_EXT = '.ods'
+XLS_TEMPLATE_EXT = '.xls'
 XML_TEMPLATE_EXT = '.xml'
 DEFAULT_TEMPLATE_EXT = ODS_TEMPLATE_EXT
 DEFAULT_REPORT_TEMPLATE_EXT = '.rprt'
@@ -227,6 +228,7 @@ class icReportGeneratorSystem:
 
             # Конвертация
             log.debug(u'Начало конвертации <%s>' % filename)
+            tmpl_filename = None
             template = None
             if os.path.exists(os.path.splitext(filename)[0] + DEFAULT_TEMPLATE_EXT):
                 tmpl_filename = os.path.splitext(filename)[0] + DEFAULT_TEMPLATE_EXT
@@ -245,7 +247,7 @@ class icReportGeneratorSystem:
                 res.saveResourcePickle(new_filename, rep_template)
             log.info(u'Конец конвертации')
    
-    def OpenModule(self,RepTemplateFileName_=None):
+    def OpenModule(self, RepTemplateFileName_=None):
         """
         Открыть модуль отчета в редакторе.
         """
