@@ -38,7 +38,7 @@ import copy
 from ic.std.log import log
 from ic.std.utils import textfunc
 
-__version__ = (0, 0, 1, 4)
+__version__ = (0, 0, 1, 5)
 
 # Константы
 # Ключевые теги для обозначения:
@@ -819,7 +819,7 @@ class icReportGenerator:
                 elif re.search(REP_VAR_PATT, cur_func):
                     var_name = cur_func[2:-2]
                     log.debug(u'Обработка переменной <%s> -- %s' % (var_name, var_name in self._NameSpace))
-                    value = str(self._NameSpace.setdefault(var_name, None))
+                    value = str(self._NameSpace.setdefault(var_name, u''))
                     
                 # Блок кода
                 elif re.search(REP_EXEC_PATT, cur_func):
