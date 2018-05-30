@@ -218,7 +218,7 @@ class icReportGeneratorSystem:
                 shutil.copyfile(src_filename, dst_filename)
 
             cmd = OFFICE_OPEN_CMD_FORMAT % dst_filename
-            log.debug('Command <%s>' % cmd)
+            log.debug(u'Command <%s>' % textfunc.toUnicode(cmd))
             os.system(cmd)
 
             return True

@@ -21,7 +21,9 @@ from ic.report import icrepgensystem
 from ic.report import icrepgen
 from ic.report import icrepfile
 
-__version__ = (0, 0, 1, 6)
+from ic import config
+
+__version__ = (0, 0, 1, 7)
 
 
 class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
@@ -215,9 +217,12 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # 1. Получить таблицу запроса
             query_tbl = self.getQueryTbl(self._Rep, *args, **kwargs)
             if self._isEmptyQueryTbl(query_tbl):
-                if not dlg.getAskBox(u'Внимание',
-                                     u'Нет данных, соответствующих запросу: %s. Продолжить генерацию отчета?' % self._Rep['query']):
-                    return None
+                if not config.get_glob_var('NO_GUI_MODE'):
+                    if not dlg.getAskBox(u'Внимание',
+                                         u'Нет данных, соответствующих запросу: %s. Продолжить генерацию отчета?' % self._Rep['query']):
+                        return None
+                else:
+                    log.warning(u'')
                 query_tbl = self.createEmptyQueryTbl()
 
             # 2. Запустить генерацию
@@ -259,7 +264,8 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             _kwargs.update(dict(db_url=db_url, sql=sql, stylelib=stylelib, variables=vars))
             query_tbl = self.getQueryTbl(self._Rep, **_kwargs)
             if self._isEmptyQueryTbl(query_tbl):
-                dlg.getMsgBox(u'Внимание', u'Нет данных, соответствующих запросу: %s' % self._Rep['query'],
+                dlg.getMsgBox(u'Внимание',
+                              u'Нет данных, соответствующих запросу: %s' % self._Rep['query'],
                               self._ParentForm)
                 return None
 

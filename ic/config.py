@@ -15,12 +15,15 @@
 import os.path
 import datetime
 
-__version__ = (0, 0, 7, 5)
+__version__ = (0, 0, 7, 6)
 
 DEFAULT_ENCODING = 'utf-8'
 
 DEBUG_MODE = True
 LOG_MODE = True
+
+# Консольный режим работы
+NO_GUI_MODE = False
 
 # Имя папки прфиля программы
 PROFILE_DIRNAME = '.icreport'

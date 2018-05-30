@@ -17,7 +17,9 @@ from ic.report import icreptemplate
 from ic.report import icrepgen
 from ic.report import icrepfile
 
-__version__ = (0, 0, 1, 4)
+from ic import config
+
+__version__ = (0, 0, 1, 6)
 
 
 class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
@@ -74,7 +76,8 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         data_rep = self.GenerateReport(Rep_)
         if data_rep:
             rep_file = icrepfile.icExcelXMLReportFile()
-            rep_file_name = self.getReportDir()+'/%s_report_result.xml' % str(data_rep['name'])
+            rep_file_name = os.path.join(self.getReportDir(),
+                                         '%s_report_result.xml' % str(data_rep['name']))
             rep_file.write(rep_file_name, data_rep)
             log.info(u'Сохранение отчета в файл <%s>' % rep_file_name)
             return rep_file_name
@@ -209,9 +212,12 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # 1. Получить таблицу запроса
             query_tbl = self.getQueryTbl(self._Rep)
             if not query_tbl or not query_tbl['__data__']:
-                if dlg.getAskBox(u'Внимание',
-                                 u'Нет данных, соответствующих запросу: %s. Продолжить генерацию отчета?' % self._Rep['query']):
-                    return None
+                if not config.get_glob_var('NO_GUI_MODE'):
+                    if dlg.getAskBox(u'Внимание',
+                                     u'Нет данных, соответствующих запросу: %s. Продолжить генерацию отчета?' % self._Rep['query']):
+                        return None
+                else:
+                    log.warning(u'Пустая таблица запроса. Продолжение генерации.')
                 query_tbl = self.createEmptyQueryTbl()
 
             # 2. Запустить генерацию

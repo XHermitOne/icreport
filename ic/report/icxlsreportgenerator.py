@@ -21,7 +21,9 @@ from ic.report import icrepgensystem
 from ic.report import icrepgen
 from ic.report import icrepfile
 
-__version__ = (0, 0, 1, 3)
+from ic import config
+
+__version__ = (0, 0, 1, 5)
 
 
 class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
@@ -215,9 +217,12 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # 1. Получить таблицу запроса
             query_tbl = self.getQueryTbl(self._Rep, *args, **kwargs)
             if self._isEmptyQueryTbl(query_tbl):
-                if not dlg.getAskBox(u'Внимание',
-                                     u'Нет данных, соответствующих запросу: %s. Продолжить генерацию отчета?' % self._Rep['query']):
-                    return None
+                if not config.get_glob_var('NO_GUI_MODE'):
+                    if not dlg.getAskBox(u'Внимание',
+                                         u'Нет данных, соответствующих запросу: %s. Продолжить генерацию отчета?' % self._Rep['query']):
+                        return None
+                else:
+                    log.warning(u'Пустая таблица запроса. Продолжение генерации.')
                 query_tbl = self.createEmptyQueryTbl()
 
             # 2. Запустить генерацию

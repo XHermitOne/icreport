@@ -32,6 +32,7 @@ icReport - Программа запуска/обзора отчетов.
         --stylelib=         Указание библиотеки стилей для единого оформления отчетов
         --var=              Добавление переменной для заполнения в отчете
         --path=             Указание папки отчетов
+        --no_gui            Включение консольного режима работы
 """
 
 
@@ -46,7 +47,7 @@ from ic.std.log import log
 
 from ic.report import do_report
 
-__version__ = (0, 0, 8, 1)
+__version__ = (0, 0, 8, 2)
 
 DEFAULT_REPORTS_PATH = './reports'
 
@@ -64,7 +65,8 @@ def main(argv):
                                        'postprint', 'postpreview', 'postexport',
                                        'print=', 'preview=', 'export=', 'select=',
                                        'gen=', 'db=', 'sql=',
-                                       'stylelib=', 'var=', 'path='])
+                                       'stylelib=', 'var=', 'path=',
+                                       'no_gui'])
     except getopt.error, msg:
         print(msg)
         print('For help use --help option')
@@ -133,6 +135,8 @@ def main(argv):
                                                                           unicode(var_value, config.DEFAULT_ENCODING)))
         elif option in ('--path',):
             path = arg
+        elif option in ('--no_gui', ):
+            config.set_glob_var('NO_GUI_MODE', True)
 
     # ВНИМАНИЕ! Небходимо добавить путь к папке отчетов,
     # чтобы проходили импорты модулей отчетов

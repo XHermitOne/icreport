@@ -557,7 +557,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
             # Взять таблицу
             rep_template_tabs = [rep_obj for rep_obj in self._rep_worksheet['children'] if rep_obj['name'] == 'Table']
             self._setDefaultCellSize(rep_template_tabs[0])
-            # Привести таблицу к квадратному виду
+            # Привести таблицу к нормальному виду
             rep_template_tab = self._normTable(rep_template_tabs[0])
 
             # Взять описания колонок
