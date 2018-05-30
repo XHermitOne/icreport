@@ -818,7 +818,10 @@ class icReportGenerator:
                 # Переменная
                 elif re.search(REP_VAR_PATT, cur_func):
                     var_name = cur_func[2:-2]
-                    log.debug(u'Обработка переменной <%s> -- %s' % (var_name, var_name in self._NameSpace))
+                    if var_name in self._NameSpace:
+                        log.debug(u'Обработка переменной <%s>' % var_name)
+                    else:
+                        log.warning(u'Переменная <%s> не найдена в пространстве имен')
                     value = str(self._NameSpace.setdefault(var_name, u''))
                     
                 # Блок кода
