@@ -6,11 +6,15 @@
 """
 
 # Подключение библиотек
+import sys
 import os
 import os.path
 import platform
+import pwd
 
 from ic.std.log import log
+
+__version__ = (0, 0, 2, 1)
 
 # Имя папки прфиля программы
 DEFAULT_PROFILE_DIRNAME = '.icreport'
@@ -111,3 +115,31 @@ def getProfilePath(bAutoCreatePath=True):
                 log.fatal(u'Ошибка создания пути профиля <%s>' % profile_path)
         return profile_path
     return '~/' + DEFAULT_PROFILE_DIRNAME
+
+
+def get_home_path(UserName_=None):
+    """
+    Определить домашнюю папку пользователя.
+    """
+    if sys.platform[:3].lower() == 'win':
+        home = os.path.join(os.environ['HOMEDRIVE'], os.environ['HOMEPATH'])
+    else:
+        if UserName_ is None:
+            home = os.environ['HOME']
+        else:
+            user_struct = pwd.getpwnam(UserName_)
+            home = user_struct.pw_dir
+    return home
+
+
+HOME_PATH_SIGN = '~'
+
+
+def normal_path(path, sUserName=None):
+    """
+    Нормировать путь.
+    @param path: Путь.
+    @param sUserName: Имя пользователя.
+    """
+    home_dir = get_home_path(sUserName)
+    return os.path.abspath(os.path.normpath(path.replace(HOME_PATH_SIGN, home_dir)))

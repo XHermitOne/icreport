@@ -46,7 +46,7 @@ from ic.std.log import log
 
 from ic.report import do_report
 
-__version__ = (0, 0, 7, 5)
+__version__ = (0, 0, 8, 1)
 
 DEFAULT_REPORTS_PATH = './reports'
 

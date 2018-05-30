@@ -13,6 +13,7 @@ import os.path
 from .dlg import icreportactiondlg
 from ic.std.log import log
 from ic.std.dlg import dlg
+from ic.std.utils import textfunc
 
 from ic.virtual_excel import icexcel
 
@@ -20,7 +21,7 @@ from ic.report import icrepgensystem
 from ic.report import icrepgen
 from ic.report import icrepfile
 
-__version__ = (0, 0, 1, 1)
+__version__ = (0, 0, 1, 3)
 
 
 class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
@@ -217,6 +218,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                 if not dlg.getAskBox(u'Внимание',
                                      u'Нет данных, соответствующих запросу: %s. Продолжить генерацию отчета?' % self._Rep['query']):
                     return None
+                query_tbl = self.createEmptyQueryTbl()
 
             # 2. Запустить генерацию
             rep = icrepgen.icReportGenerator()

@@ -14,10 +14,11 @@ import copy
 from xml.sax import saxutils
 
 from ic.std.log import log
+from ic.std.utils import textfunc
 
 from ic.report import icrepgen
 
-__version__ = (0, 0, 1, 1)
+__version__ = (0, 0, 1, 2)
 
 # Спецификации и структуры
 # Спецификация стиля ячеек
@@ -70,9 +71,9 @@ class icExcelXMLReportFile(icReportFile):
         @return: Функция возвращает имя созданного xml файла, 
             или None в случае ошибки.
         """
+        xml_file = None
         try:
             # Начать запись
-            xml_file = None
             xml_file = open(RepFileName_, 'w')
             xml_gen = icXMLSSGenerator(xml_file)
             xml_gen.startDocument()
@@ -93,7 +94,7 @@ class icExcelXMLReportFile(icReportFile):
                 # Сбросить индекс ячейки
                 xml_gen.cell_idx = 1
                 for i_col in range(len(RepData_['sheet'][i_row])):
-                    cell=RepData_['sheet'][i_row][i_col]
+                    cell = RepData_['sheet'][i_row][i_col]
                     xml_gen.saveCell(i_row+1, i_col+1, cell, RepData_['sheet'])
                 xml_gen.endRow()
             
@@ -108,7 +109,7 @@ class icExcelXMLReportFile(icReportFile):
         except:
             if xml_file:
                 xml_file.close()
-            log.error(u'Ошибка сохранения отчета <%s>.' % RepFileName_)
+            log.error(u'Ошибка сохранения отчета <%s>.' % textfunc.toUnicode(RepFileName_))
             raise
         return None
 
@@ -644,7 +645,9 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         """
         Определить количество колонок.
         """
-        return max([len(row) for row in Sheet_])
+        if Sheet_:
+            return max([len(row) for row in Sheet_])
+        return 0
 
     def getWidthColumns(self, Sheet_):
         """
@@ -653,7 +656,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         col_count = self.getColumnCount(Sheet_)
         col_width = []
         # Выбрать строку по которой будыт выставяться ширины колонок
-        row = [row for row in Sheet_ if len(row) == col_count][0]
+        row = [row for row in Sheet_ if len(row) == col_count][0] if Sheet_ else list()
         for cell in row:
             if cell:
                 # log.debug('Column width <%s>' % cell['width'])

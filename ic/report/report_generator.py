@@ -15,7 +15,7 @@ from ic.report import icxlsreportgenerator
 from ic.report import icreportmangenerator
 from ic.report import icrtfreportgenerator
 
-__version__ = (0, 0, 1, 1)
+__version__ = (0, 0, 2, 1)
 
 # Константы подсистемы
 REP_GEN_SYS = None
@@ -27,6 +27,9 @@ _ReportGeneratorSystemTypes = {'.xml': icxmlreportgenerator.icXMLReportGenerator
                                '.rep': icreportmangenerator.icReportManagerGeneratorSystem,     # Report Manager
                                '.rtf': icrtfreportgenerator.icRTFReportGeneratorSystem,         # RTF генератор
                                }
+
+# Список расширений источников шаблонов
+SRC_REPORT_EXT = _ReportGeneratorSystemTypes.keys()
 
 
 # Функции управления
@@ -45,27 +48,21 @@ def getReportGeneratorSystem(RepFileName_, ParentForm_=None, bRefresh=True):
         
         global REP_GEN_SYS
 
-        # Тип генератора
-        if isinstance(rep['generator'], str):
-            rep_gen_sys_class = _ReportGeneratorSystemTypes.setdefault(rep['generator'][-4:].lower(), None)
-            if rep_gen_sys_class is not None:
-                if REP_GEN_SYS is None:
-                    REP_GEN_SYS = rep_gen_sys_class(rep, ParentForm_)
-                    REP_GEN_SYS.RepTmplFileName = RepFileName_
-                elif not isinstance(REP_GEN_SYS, rep_gen_sys_class):
-                    REP_GEN_SYS = rep_gen_sys_class(rep, ParentForm_)
-                    REP_GEN_SYS.RepTmplFileName = RepFileName_
-                else:
-                    if bRefresh:
-                        # Просто установить обновление
-                        REP_GEN_SYS.setRepData(rep)
-                        REP_GEN_SYS.RepTmplFileName = RepFileName_
-            else:
-                log.warning(u'Не известный генератор <%s>' % rep['generator'][-4:])
+        # Создание системы ренерации отчетов
+        if REP_GEN_SYS is None:
+            REP_GEN_SYS = createReportGeneratorSystem(rep['generator'], rep, ParentForm_)
+            REP_GEN_SYS.RepTmplFileName = RepFileName_
+        elif not REP_GEN_SYS.sameGeneratorType(rep['generator']):
+            REP_GEN_SYS = createReportGeneratorSystem(rep['generator'], rep, ParentForm_)
+            REP_GEN_SYS.RepTmplFileName = RepFileName_
         else:
-            log.warning(u'Не определен генератор <%s>' % rep['generator'])
+            if bRefresh:
+                # Просто установить обновление
+                REP_GEN_SYS.setRepData(rep)
+                REP_GEN_SYS.RepTmplFileName = RepFileName_
 
-        # Если родительская форма не определена у системы генерации, то установить ее
+        # Если родительская форма не определена у системы генерации,
+        # то установить ее
         if REP_GEN_SYS and REP_GEN_SYS.getParentForm() is None:
             REP_GEN_SYS.setParentForm(ParentForm_)
             
@@ -74,6 +71,30 @@ def getReportGeneratorSystem(RepFileName_, ParentForm_=None, bRefresh=True):
         log.error(u'Ошибка определения объекта системы генерации отчетов. Отчет <%s>.' % RepFileName_)
         raise
     return None
+
+
+def createReportGeneratorSystem(sRepGenSysType, dRep=None, ParentForm_=None):
+    """
+    Создать объект системы генерации отчетов.
+    @param sRepGenSysType: Указание типа системы генерации отчетов.
+        Тип задается расширением файла источника шаблона.
+        В нашем случае один из SRC_REPORT_EXT.
+    @param dRep: Словарь отчета.
+    @param ParentForm_: Родительская форма, необходима для вывода сообщений.
+    @return: Функция возвращает объект-наследник класса icReportGeneratorSystem.
+        None - в случае ошибки.
+    """
+    rep_gen_sys_type = sRepGenSysType[-4:].lower() if type(sRepGenSysType) in (str, unicode) else None
+    rep_gen_sys = None
+    if rep_gen_sys_type:
+        rep_gen_sys_class = _ReportGeneratorSystemTypes.setdefault(rep_gen_sys_type, None)
+        if rep_gen_sys_class is not None:
+            rep_gen_sys = rep_gen_sys_class(dRep, ParentForm_)
+        else:
+            log.warning(u'Не известный тип генератора <%s>' % rep_gen_sys_type)
+    else:
+        log.warning(u'Не корректный тип генератора <%s>' % sRepGenSysType)
+    return rep_gen_sys
 
 
 def getCurReportGeneratorSystem(ReportBrowserDlg_=None):

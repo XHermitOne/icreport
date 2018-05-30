@@ -17,7 +17,7 @@ from ic.report import icreptemplate
 from ic.report import icrepgen
 from ic.report import icrepfile
 
-__version__ = (0, 0, 1, 3)
+__version__ = (0, 0, 1, 4)
 
 
 class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
@@ -212,6 +212,7 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                 if dlg.getAskBox(u'Внимание',
                                  u'Нет данных, соответствующих запросу: %s. Продолжить генерацию отчета?' % self._Rep['query']):
                     return None
+                query_tbl = self.createEmptyQueryTbl()
 
             # 2. Запустить генерацию
             rep = icrepgen.icReportGenerator()
