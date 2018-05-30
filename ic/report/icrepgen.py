@@ -821,7 +821,7 @@ class icReportGenerator:
                     if var_name in self._NameSpace:
                         log.debug(u'Обработка переменной <%s>' % var_name)
                     else:
-                        log.warning(u'Переменная <%s> не найдена в пространстве имен')
+                        log.warning(u'Переменная <%s> не найдена в пространстве имен' % var_name)
                     value = str(self._NameSpace.setdefault(var_name, u''))
                     
                 # Блок кода
