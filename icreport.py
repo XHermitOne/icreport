@@ -47,7 +47,7 @@ from ic.std.log import log
 
 from ic.report import do_report
 
-__version__ = (0, 0, 8, 3)
+__version__ = (0, 0, 8, 4)
 
 DEFAULT_REPORTS_PATH = './reports'
 
@@ -57,23 +57,23 @@ def main(argv):
     Основная запускающая функция.
     @param argv: Список параметров коммандной строки.
     """
+    # Инициализоция системы журналирования
+    log.init(config)
+
     # Разбираем аргументы командной строки
     try:
         options, args = getopt.getopt(argv, 'h?vdVEDpPES',
-                                      ['help', 'version', 'debug',
+                                      ['help', 'version', 'debug', 'log',
                                        'viewer', 'editor',
                                        'postprint', 'postpreview', 'postexport',
                                        'print=', 'preview=', 'export=', 'select=',
                                        'gen=', 'db=', 'sql=',
                                        'stylelib=', 'var=', 'path=',
                                        'no_gui'])
-    except getopt.error, msg:
-        print(msg)
-        print('For help use --help option')
+    except getopt.error as err:
+        log.error(err.msg, bForcePrint=True)
+        log.warning('For help use --help option', bForcePrint=True)
         sys.exit(2)
-
-    # Инициализоция системы журналирования
-    log.init(config)
 
     # Параметры запуска генерации отчета из коммандной строки
     report_filename = None
