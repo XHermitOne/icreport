@@ -24,12 +24,14 @@ try:
 except ImportError:
     log.error(u'ODFpy Import Error.')
 
-__version__ = (0, 0, 3, 1)
+__version__ = (0, 0, 3, 2)
 
 DIMENSION_CORRECT = 35
 DEFAULT_STYLE_ID = 'Default'
 
 CM2PT_CORRECT = 25
+
+INCH2CM = 2.54
 
 SPREADSHEETML_CR = '&#10;'
 
@@ -47,10 +49,10 @@ A3_PAPER_FORMAT = 'A3'
 DEFAULT_ENCODE = 'utf-8'
 
 # Поля страницы по умолчанию
-DEFAULT_XML_MARGIN_TOP = 0.75
-DEFAULT_XML_MARGIN_BOTTOM = 0.75
-DEFAULT_XML_MARGIN_LEFT = 0.75
-DEFAULT_XML_MARGIN_RIGHT = 0.75
+DEFAULT_XML_MARGIN_TOP = 0.787401575
+DEFAULT_XML_MARGIN_BOTTOM = 0.787401575
+DEFAULT_XML_MARGIN_LEFT = 0.787401575
+DEFAULT_XML_MARGIN_RIGHT = 0.787401575
 
 
 class icODS(object):
@@ -468,13 +470,13 @@ class icODS(object):
             margin_left = page_margins[0].get('Left', DEFAULT_XML_MARGIN_LEFT) if page_margins else DEFAULT_XML_MARGIN_LEFT
             margin_right = page_margins[0].get('Right', DEFAULT_XML_MARGIN_RIGHT) if page_margins else DEFAULT_XML_MARGIN_RIGHT
             if margin_top:
-                ods_properties['margintop'] = self._dimension_xml2ods(margin_top)
+                ods_properties['margintop'] = self._dimension_inch2cm(margin_top, True)
             if margin_bottom:
-                ods_properties['marginbottom'] = self._dimension_xml2ods(margin_bottom)
+                ods_properties['marginbottom'] = self._dimension_inch2cm(margin_bottom, True)
             if margin_left:
-                ods_properties['marginleft'] = self._dimension_xml2ods(margin_left)
+                ods_properties['marginleft'] = self._dimension_inch2cm(margin_left, True)
             if margin_right:
-                ods_properties['marginright'] = self._dimension_xml2ods(margin_right)
+                ods_properties['marginright'] = self._dimension_inch2cm(margin_right, True)
         else:
             log.warning('WorksheetOptions PageSetup not define')
         if print_setup:
@@ -1615,6 +1617,14 @@ class icODS(object):
         @param sDimension: Строковое представление размера в дюймах.
         """
         return str(float(sDimension) * DIMENSION_CORRECT)
+
+    def _dimension_inch2cm(self, sDimension, is_postfix=False):
+        """
+        Перевод размеров из представления в дюймах в сантиментры.
+        @param sDimension: Строковое представление размера в дюймах.
+        @param is_postfix: Добавить cm в качестве постфикса в строке?
+        """
+        return str(float(sDimension) * INCH2CM) + (' cm' if is_postfix else '')
 
     def _add_page_break(self, dWorksheet, iRow):
         """
