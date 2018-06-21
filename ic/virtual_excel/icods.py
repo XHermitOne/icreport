@@ -24,7 +24,7 @@ try:
 except ImportError:
     log.error(u'ODFpy Import Error.')
 
-__version__ = (0, 0, 2, 5)
+__version__ = (0, 0, 2, 6)
 
 DIMENSION_CORRECT = 35
 DEFAULT_STYLE_ID = 'Default'
@@ -45,6 +45,12 @@ A4_PAPER_FORMAT = 'A4'
 A3_PAPER_FORMAT = 'A3'
 
 DEFAULT_ENCODE = 'utf-8'
+
+# Поля страницы по умолчанию
+DEFAULT_XML_MARGIN_TOP = 0.75
+DEFAULT_XML_MARGIN_BOTTOM = 0.75
+DEFAULT_XML_MARGIN_LEFT = 0.75
+DEFAULT_XML_MARGIN_RIGHT = 0.75
 
 
 class icODS(object):
@@ -457,10 +463,10 @@ class icODS(object):
                 ods_properties['printorientation'] = orientation.lower()
                 
             page_margins = self.getChildrenByName(page_setup[0], 'PageMargins')
-            margin_top = page_margins[0].get('Top', None) if page_margins else None
-            margin_bottom = page_margins[0].get('Bottom', None) if page_margins else None
-            margin_left = page_margins[0].get('Left', None) if page_margins else None
-            margin_right = page_margins[0].get('Right', None) if page_margins else None
+            margin_top = page_margins[0].get('Top', DEFAULT_XML_MARGIN_TOP) if page_margins else DEFAULT_XML_MARGIN_TOP
+            margin_bottom = page_margins[0].get('Bottom', DEFAULT_XML_MARGIN_BOTTOM) if page_margins else DEFAULT_XML_MARGIN_BOTTOM
+            margin_left = page_margins[0].get('Left', DEFAULT_XML_MARGIN_LEFT) if page_margins else DEFAULT_XML_MARGIN_LEFT
+            margin_right = page_margins[0].get('Right', DEFAULT_XML_MARGIN_RIGHT) if page_margins else DEFAULT_XML_MARGIN_RIGHT
             if margin_top:
                 ods_properties['margintop'] = str(float(margin_top)*DIMENSION_CORRECT) 
             if margin_bottom:
@@ -1427,10 +1433,10 @@ class icODS(object):
                                  'children': [{'name': 'Layout',
                                                'Orientation': PORTRAIT_ORIENTATION},
                                               {'name': 'PageMargins',
-                                               'Top': '0.75',
-                                               'Bottom': '0.75',
-                                               'Left': '0.75',
-                                               'Right': '0.75'},
+                                               'Top': str(DEFAULT_XML_MARGIN_TOP),
+                                               'Bottom': str(DEFAULT_XML_MARGIN_BOTTOM),
+                                               'Left': str(DEFAULT_XML_MARGIN_LEFT),
+                                               'Right': str(DEFAULT_XML_MARGIN_RIGHT)},
                                               ]
                                  },
                                 {'name': 'Print',
