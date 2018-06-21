@@ -24,7 +24,7 @@ try:
 except ImportError:
     log.error(u'ODFpy Import Error.')
 
-__version__ = (0, 0, 2, 6)
+__version__ = (0, 0, 3, 1)
 
 DIMENSION_CORRECT = 35
 DEFAULT_STYLE_ID = 'Default'
@@ -468,13 +468,13 @@ class icODS(object):
             margin_left = page_margins[0].get('Left', DEFAULT_XML_MARGIN_LEFT) if page_margins else DEFAULT_XML_MARGIN_LEFT
             margin_right = page_margins[0].get('Right', DEFAULT_XML_MARGIN_RIGHT) if page_margins else DEFAULT_XML_MARGIN_RIGHT
             if margin_top:
-                ods_properties['margintop'] = str(float(margin_top)*DIMENSION_CORRECT) 
+                ods_properties['margintop'] = self._dimension_xml2ods(margin_top)
             if margin_bottom:
-                ods_properties['marginbottom'] = str(float(margin_bottom)*DIMENSION_CORRECT) 
+                ods_properties['marginbottom'] = self._dimension_xml2ods(margin_bottom)
             if margin_left:
-                ods_properties['marginleft'] = str(float(margin_left)*DIMENSION_CORRECT) 
+                ods_properties['marginleft'] = self._dimension_xml2ods(margin_left)
             if margin_right:
-                ods_properties['marginright'] = str(float(margin_right)*DIMENSION_CORRECT)                 
+                ods_properties['marginright'] = self._dimension_xml2ods(margin_right)
         else:
             log.warning('WorksheetOptions PageSetup not define')
         if print_setup:
@@ -601,7 +601,7 @@ class icODS(object):
         width = dData.get('Width', None)
 
         if width:
-            width = str(float(width)*DIMENSION_CORRECT)
+            width = self._dimension_xml2ods(width)
             # Создать автоматические стили дбя ширин колонок
             ods_col_style = odf.style.Style(name=self._genColumnStyleName(), family='table-column')
             ods_col_properties = odf.style.TableColumnProperties(columnwidth=width, breakbefore='auto')
@@ -639,7 +639,7 @@ class icODS(object):
         height = dData.get('Height', None)
         
         if height:
-            height = str(float(height)*DIMENSION_CORRECT)
+            height = self._dimension_xml2ods(height)
             # Создать автоматические стили дбя высот строк
             style_name = self._genRowStyleName()
             ods_row_style = odf.style.Style(name=style_name, family='table-row')
@@ -1607,7 +1607,14 @@ class icODS(object):
             return str(float(sDimension[:-2]) * 2.8)
         else:
             # Размер указан в точках
-            return str(float(sDimension)/DIMENSION_CORRECT)
+            return str(float(sDimension) / DIMENSION_CORRECT)
+
+    def _dimension_xml2ods(self, sDimension):
+        """
+        Перевод размеров из представления XML в ODS.
+        @param sDimension: Строковое представление размера в дюймах.
+        """
+        return str(float(sDimension) * DIMENSION_CORRECT)
 
     def _add_page_break(self, dWorksheet, iRow):
         """
