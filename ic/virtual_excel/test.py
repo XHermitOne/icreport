@@ -321,6 +321,14 @@ def test_worksheet_options():
     os.system(cmd)
 
 
+def test_schm19():
+    import icexcel
+
+    excel = icexcel.icVExcel()
+    excel.Load('./testfiles/schm/19.ods')
+    excel.SaveAs('./testfiles/schm/result_19.xml')
+
+
 if __name__ == '__main__':
     # test_oc1()
     # test_sum()
@@ -329,4 +337,5 @@ if __name__ == '__main__':
     # test_17()
     # test_ods()
     # test_worksheet_options()
-    test_report()
+    # test_report()
+    test_schm19()

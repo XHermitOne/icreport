@@ -24,7 +24,7 @@ try:
 except ImportError:
     log.error(u'ODFpy Import Error.')
 
-__version__ = (0, 0, 2, 4)
+__version__ = (0, 0, 2, 5)
 
 DIMENSION_CORRECT = 35
 DEFAULT_STYLE_ID = 'Default'
@@ -1416,6 +1416,7 @@ class icODS(object):
         Прочитать из ODS файла данные о параметрах страницы.
         @param ODSPageLayouts: Список найденных параметров страницы.
         """
+        log.debug(u'Чтение данных параметров страницы из ODS')
         if not ODSPageLayouts:
             log.warning(u'Not define page layout')
             return None
@@ -1423,8 +1424,13 @@ class icODS(object):
         log.debug(u'Set default worksheet options')
         options = {'name': 'WorksheetOptions',
                    'children': [{'name': 'PageSetup',
-                                 'children': [{'name': 'Layout'},
-                                              {'name': 'PageMargins'},
+                                 'children': [{'name': 'Layout',
+                                               'Orientation': PORTRAIT_ORIENTATION},
+                                              {'name': 'PageMargins',
+                                               'Top': '0.75',
+                                               'Bottom': '0.75',
+                                               'Left': '0.75',
+                                               'Right': '0.75'},
                                               ]
                                  },
                                 {'name': 'Print',
@@ -1435,20 +1441,34 @@ class icODS(object):
                                 ]
                    }
         
+        # for pagelayout in ODSPageLayouts:
+        #    log.debug(u'Чтение значения параметров страницы <%s> : %s' % (str(pagelayout.getAttribute('name')),
+        #                                                                  str(pagelayout.getAttribute('pageusage'))))
         for pagelayout in ODSPageLayouts:
+            # log.debug(u'Чтение значения параметров страницы <%s>' % str(pagelayout.getAttribute('name')))
             properties = pagelayout.getElementsByType(odf.style.PageLayoutProperties)
+            log.debug(u'Properties: %s' % str(properties))
             if properties:
                 properties = properties[0]
                 orientation = properties.getAttribute('printorientation')
                 margin = properties.getAttribute('margin')
+                log.debug(u'Margin: %s' % margin)
                 margin_top = properties.getAttribute('margintop')
+                log.debug(u'Margin Top: %s' % margin_top)
                 margin_bottom = properties.getAttribute('marginbottom')
+                log.debug(u'Margin Bottom: %s' % margin_bottom)
                 margin_left = properties.getAttribute('marginleft')
+                log.debug(u'Margin Left: %s' % margin_left)
                 margin_right = properties.getAttribute('marginright')
+                log.debug(u'Margin Right: %s' % margin_right)
                 page_width = properties.getAttribute('pagewidth')
+                log.debug(u'Page Width: %s' % page_width)
                 page_height = properties.getAttribute('pageheight')
+                log.debug(u'Page Height: %s' % page_height)
                 fit_to_page = properties.getAttribute('scaletopages')
+                log.debug(u'Fit To Pages: %s' % fit_to_page)
                 scale_to = properties.getAttribute('scaleto')
+                log.debug(u'Scale To: %s' % scale_to)
 
                 if orientation:
                     options['children'][0]['children'][0]['Orientation'] = orientation.title()
