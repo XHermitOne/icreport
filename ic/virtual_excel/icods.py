@@ -1638,7 +1638,7 @@ class icODS(object):
             return str(float(sDimension[:-2]) / INCH2CM)
         elif (len(sDimension) > 2) and (sDimension[-2:] == 'mm'):
             # Размер указан в миллиметрах?
-            return str(float(sDimension[:-2]) * 10.0 / INCH2CM)
+            return str(float(sDimension[:-2]) / 10.0 / INCH2CM)
         else:
             # Размер указан в точках
             return str(float(sDimension) / DIMENSION_CORRECT)
