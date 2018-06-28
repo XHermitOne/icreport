@@ -24,7 +24,7 @@ try:
 except ImportError:
     log.error(u'ODFpy Import Error.')
 
-__version__ = (0, 0, 3, 2)
+__version__ = (0, 0, 3, 3)
 
 DIMENSION_CORRECT = 35
 DEFAULT_STYLE_ID = 'Default'
@@ -1481,18 +1481,18 @@ class icODS(object):
                 if orientation:
                     options['children'][0]['children'][0]['Orientation'] = orientation.title()
                 if margin:
-                    options['children'][0]['children'][1]['Top'] = self._dimension_ods2xml(margin)
-                    options['children'][0]['children'][1]['Bottom'] = self._dimension_ods2xml(margin)
-                    options['children'][0]['children'][1]['Left'] = self._dimension_ods2xml(margin)
-                    options['children'][0]['children'][1]['Right'] = self._dimension_ods2xml(margin)
+                    options['children'][0]['children'][1]['Top'] = self._dimension_cm2inch(margin)
+                    options['children'][0]['children'][1]['Bottom'] = self._dimension_cm2inch(margin)
+                    options['children'][0]['children'][1]['Left'] = self._dimension_cm2inch(margin)
+                    options['children'][0]['children'][1]['Right'] = self._dimension_cm2inch(margin)
                 if margin_top:
-                    options['children'][0]['children'][1]['Top'] = self._dimension_ods2xml(margin_top)
+                    options['children'][0]['children'][1]['Top'] = self._dimension_cm2inch(margin_top)
                 if margin_bottom:
-                    options['children'][0]['children'][1]['Bottom'] = self._dimension_ods2xml(margin_bottom)
+                    options['children'][0]['children'][1]['Bottom'] = self._dimension_cm2inch(margin_bottom)
                 if margin_left:
-                    options['children'][0]['children'][1]['Left'] = self._dimension_ods2xml(margin_left)
+                    options['children'][0]['children'][1]['Left'] = self._dimension_cm2inch(margin_left)
                 if margin_right:
-                    options['children'][0]['children'][1]['Right'] = self._dimension_ods2xml(margin_right)
+                    options['children'][0]['children'][1]['Right'] = self._dimension_cm2inch(margin_right)
                 if fit_to_page or (scale_to == (1, 1)):
                     options['children'].append({'name': 'FitToPage'})
 
@@ -1625,6 +1625,23 @@ class icODS(object):
         @param is_postfix: Добавить cm в качестве постфикса в строке?
         """
         return str(float(sDimension) * INCH2CM) + (' cm' if is_postfix else '')
+
+    def _dimension_cm2inch(self, sDimension):
+        """
+        Перевод размеров из представления в сантиментрах/мм в дюймы.
+        @param sDimension: Строковое представление размера в сантиметрах/мм.
+        """
+        if not sDimension:
+            return None
+        elif (len(sDimension) > 2) and (sDimension[-2:] == 'cm'):
+            # Размер указан в сентиметрах?
+            return str(float(sDimension[:-2]) / INCH2CM)
+        elif (len(sDimension) > 2) and (sDimension[-2:] == 'mm'):
+            # Размер указан в миллиметрах?
+            return str(float(sDimension[:-2]) * 10.0 / INCH2CM)
+        else:
+            # Размер указан в точках
+            return str(float(sDimension) / DIMENSION_CORRECT)
 
     def _add_page_break(self, dWorksheet, iRow):
         """
