@@ -19,7 +19,7 @@ from ic.std.utils import textfunc
 
 from ic.report import icrepgen
 
-__version__ = (0, 0, 2, 3)
+__version__ = (0, 0, 2, 4)
 
 # Константы
 # Теги шаблона
@@ -642,7 +642,8 @@ class icExcelXMLReportTemplate(icReportTemplate):
             что весь шаблон - это  заголовок отчета [header].
         @return: True - колонка тегов бендов есть в шаблоне / False - нет.
         """
-        return self._tag_band_col is None
+        log.info(u'Колонка тегов бендов: %s' % str(self._tag_band_col))
+        return self._tag_band_col is not None
 
     def _getColumnCount(self, Rows_):
         """
