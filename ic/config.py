@@ -15,7 +15,7 @@
 import os.path
 import datetime
 
-__version__ = (0, 0, 7, 6)
+__version__ = (0, 0, 8, 4)
 
 DEFAULT_ENCODING = 'utf-8'
 
