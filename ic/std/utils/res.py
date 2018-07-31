@@ -7,11 +7,13 @@
 
 import os
 import os.path
-import cPickle
+import pickle
 
 from ic.std.log import log
 
 from . import textfunc
+
+__version__ = (0, 1, 1, 1)
 
 # Протокол хранения сериализованных объектов модулем cPickle
 # ВНИМАНИЕ!!! PICKLE_PROTOCOL = 1,2 использовать нельзя - ресурсы не востанавливаются
@@ -37,15 +39,15 @@ def loadResourceFile(filename, dictRpl={}, bRefresh=False, *arg, **kwarg):
     try:
         # Проверяем есть ли в буфферном файле такой объект, если есть, то его и возвращаем
         if not bRefresh and filename in Buff_readAndEvalFile:
-            log.debug(' '*3+'[b] '+'Return from buffer file: <%s>' % filename)
+            log.debug(u' '*3+u'[b] '+u'Возвращение файла <%s> из буфера' % filename)
             return Buff_readAndEvalFile[filename]
 
         nm = os.path.basename(filename)
         pt = nm.find('.')
         if pt >= 0:
-            filepcl = os.path.dirname(filename) + '/' + nm[:pt] + '_pkl' + nm[pt:]
+            filepcl = os.path.join(os.path.dirname(filename), nm[:pt] + '_pkl' + nm[pt:])
         else:
-            filepcl = os.path.dirname(filename) + '/' + nm +'_pkl'
+            filepcl = os.path.join(os.path.dirname(filename), nm +'_pkl')
 
         # Проверяем нужно ли компилировать данную структуру по следующим признакам:
         # наличие скомпилированного файла, по времени последней модификации.
@@ -57,15 +59,15 @@ def loadResourceFile(filename, dictRpl={}, bRefresh=False, *arg, **kwarg):
                 # последней модификации транслированного варианта.
                 fpcl = None
                 try:
-                    fpcl = open(filepcl)
-                    obj = cPickle.load(fpcl)
+                    fpcl = open(filepcl, 'rb')
+                    obj = pickle.load(fpcl)
                     fpcl.close()
                     # Сохраняем объект в буфере
                     Buff_readAndEvalFile[filename] = obj
-                    log.debug('   [+] Load from: %s' % filepcl)
+                    log.debug('\t[+] Загрузка из файла <%s>' % filepcl)
                     return obj
                 except IOError:
-                    log.error('   [-] readAndEvalFile: Open file <%s> error.' % filepcl)
+                    log.error('\t[-] Ошибка открытия файла <%s>' % filepcl)
                 except:
                     if fpcl:
                         fpcl.close()
@@ -76,18 +78,18 @@ def loadResourceFile(filename, dictRpl={}, bRefresh=False, *arg, **kwarg):
         # на диске для последующего использования
         if os.path.isfile(filename):
             try:
-                fpcl = open(filename)
-                obj = cPickle.load(fpcl)
+                fpcl = open(filename, 'rb')
+                obj = pickle.load(fpcl)
                 fpcl.close()
                 # Сохраняем объект в буфере
                 Buff_readAndEvalFile[filename] = obj
-                log.debug('   [+] Load file <%s> cPickle Format.' % filename)
+                log.debug('\t[+] Загружен файл <%s> в PICKLE формате' % filename)
                 return obj
-            except Exception, msg:
-                log.error('   [*] Non cPickle Format file <%s>. Try to compile text' % filename)
+            except Exception as msg:
+                log.error('\t[*] Не PICKLE формат файла <%s>' % filename)
 
         # Открываем текстовое представление, если его нет, то создаем его
-        f = open(filename, 'rb')
+        f = open(filename, 'rt')
         txt = f.read().replace('\r\n', '\n')
         f.close()
         for key in dictRpl:
@@ -99,15 +101,15 @@ def loadResourceFile(filename, dictRpl={}, bRefresh=False, *arg, **kwarg):
         Buff_readAndEvalFile[filename] = obj
 
         # Сохраняем транслированный вариант
-        fpcl = open(filepcl, 'w')
-        log.debug('Create cPickle <%s>' % filepcl)
-        cPickle.dump(obj, fpcl, PICKLE_PROTOCOL)
+        fpcl = open(filepcl, 'wb')
+        log.debug('Создание файла <%s> в PICKLE формате' % filepcl)
+        pickle.dump(obj, fpcl)  # , PICKLE_PROTOCOL)
         fpcl.close()
     except IOError:
-        log.error('   [*] Open file <%s> error.' % filename)
+        log.error('\t[*] Ошибка открытия файла <%s>' % filename)
         obj = None
     except:
-        log.error('   [*] Translation file <%s> error.' % filename)
+        log.error('\t[*] Ошибка загрузки файла <%s>' % filename)
         obj = None
 
     return obj
@@ -136,20 +138,19 @@ def loadResourcePickle(FileName_):
     @param FileName_: Полное имя ресурсного файла.
     """
     if os.path.isfile(FileName_):
+        f = None
         try:
-            f = None
-            f = open(FileName_)
-            struct = cPickle.load(f)
+            f = open(FileName_, 'rb')
+            struct = pickle.load(f)
             f.close()
             return struct
         except:
             if f:
                 f.close()
-            log.error(u'Ошибка чтения файла <%s>.' % FileName_)
-            return None
+            log.fatal(u'Ошибка чтения файла <%s>.' % FileName_)
     else:
         log.warning(u'Файл <%s> не найден.' % FileName_)
-        return None
+    return None
 
 
 def loadResourceText(FileName_):
@@ -158,20 +159,19 @@ def loadResourceText(FileName_):
     @param FileName_: Полное имя ресурсного файла.
     """
     if os.path.isfile(FileName_):
+        f = None
         try:
-            f = None
-            f = open(FileName_)
+            f = open(FileName_, 'rt')
             txt = f.read().replace('\r\n', '\n')
             f.close()
             return eval(txt)
         except:
             if f:
                 f.close()
-            log.error(u'Ошибка чтения файла <%s>.' % FileName_)
-            return None
+            log.fatal(u'Ошибка чтения файла <%s>.' % FileName_)
     else:
         log.warning(u'Файл <%s> не найден.' % FileName_)
-        return None
+    return None
 
 
 def saveResourcePickle(FileName_, Resource_):
@@ -181,9 +181,8 @@ def saveResourcePickle(FileName_, Resource_):
     @param Resource_: Словарно-списковая структура спецификации.
     @return: Возвращает результат выполнения операции True/False.
     """
+    f = None
     try:
-        f = None
-
         # Если необходимые папки не созданы, то создать их
         dir_name = os.path.dirname(FileName_)
         try:
@@ -191,17 +190,17 @@ def saveResourcePickle(FileName_, Resource_):
         except:
             pass
 
-        f = open(FileName_, 'w')
-        cPickle.dump(Resource_, f)
+        f = open(FileName_, 'wb')
+        pickle.dump(Resource_, f)
         f.close()
         log.info(u'Файл <%s> сохранен в формате Pickle.' % FileName_)
         return True
     except:
         if f:
             f.close()
-        log.error(u'Ошибка сохраненения файла <%s> в формате Pickle.' % FileName_)
+        log.fatal(u'Ошибка сохраненения файла <%s> в формате Pickle.' % FileName_)
 
-        return False
+    return False
 
 
 def saveResourceText(FileName_, Resource_):
@@ -211,8 +210,8 @@ def saveResourceText(FileName_, Resource_):
     @param Resource_: Словарно-списковая структура спецификации.
     @return: Возвращает результат выполнения операции True/False.
     """
+    f = None
     try:
-        f = None
         # Если необходимые папки не созданы, то создать их
         dir_name = os.path.dirname(FileName_)
         try:
@@ -220,7 +219,7 @@ def saveResourceText(FileName_, Resource_):
         except:
             pass
 
-        f = open(FileName_, 'w')
+        f = open(FileName_, 'wt')
         text = textfunc.StructToTxt(Resource_)
         f.write(text)
         f.close()
@@ -229,5 +228,5 @@ def saveResourceText(FileName_, Resource_):
     except:
         if f:
             f.close()
-        log.error(u'Ошибка сохраненения файла <%s> в текстовом формате.' % FileName_)
-        return False
+        log.fatal(u'Ошибка сохраненения файла <%s> в текстовом формате.' % FileName_)
+    return False

@@ -72,7 +72,7 @@ def main(argv):
                                        'no_gui'])
     except getopt.error as err:
         log.error(err.msg, bForcePrint=True)
-        log.warning('For help use --help option', bForcePrint=True)
+        log.info(__doc__, bForcePrint=True)
         sys.exit(2)
 
     # Параметры запуска генерации отчета из коммандной строки

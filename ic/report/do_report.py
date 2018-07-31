@@ -20,7 +20,7 @@ from ic.report import report_generator
 from ic.report import icstylelib
 
 
-__version__ = (0, 0, 3, 1)
+__version__ = (0, 1, 1, 1)
 
 DEFAULT_REPORT_FILE_EXT = '.rprt'
 
@@ -175,7 +175,8 @@ def ReportBrowser(parent_form=None, report_dir='', mode=icreportbrowser.IC_REPOR
 
         return True
     except:
-        log.fatal(u'Report browser')
+        log.fatal(u'Ошибка запуска браузера отчетов')
+    return False
 
 
 def ReportEditor(parent_form=None, report_dir=''):
@@ -198,67 +199,6 @@ def ReportViewer(parent_form=None, report_dir=''):
     @return: Возвращает результат выполнения операции True/False.
     """
     return ReportBrowser(parent_form, report_dir, icreportbrowser.IC_REPORT_VIEWER_MODE)
-
-
-def DoReport(report_filename='', report_dir='', parent_form=None):
-    """
-    Функция запускает генератор отчетов.
-    @param report_filename: Файл отчета.
-    @param report_dir: Директорий, где хранятся отчеты.
-    @param parent_form: Родительская форма, если не указана, 
-        то создается новое приложение.
-    @return: Возвращает результат выполнения операции True/False.
-    """
-    try:
-        if not parent_form:
-            # Создать объект приложения
-            # !!! ВНИМАНИЕ: Чтобы закрывалась консоль питона надо
-            # поставить вместо нуля единицу
-            #                            |
-            #                            V
-            application = icRepGenSysApp(0)
-            application.SetReportDir(report_dir)
-            if not report_filename:
-                # Иначе вывести окно выбора отчета
-                application.RunReportGenerator()
-            else:
-                # Если определен отчет, то запустить на выполнение
-                ic_repgen_sys = rg_sys.icRepGenSystem()
-                ic_repgen_sys.icGenerateReport(report_filename)
-            # Запуск главного цикла программы
-            application.MainLoop() 
-        else:
-            # Если форма родительская определена, то приложение не создавать
-            if not report_filename:
-                # Иначе вывести окно выбора отчета
-                rep_gen_form = icRepGenSysDialog(parent_form)
-                # rep_gen_form.SetReportDir(report_dir)
-                rep_gen_form.ShowModal()
-            else:
-                # Если определен отчет, то запустить на выполнение
-                ic_repgen_sys = rg_sys.icRepGenSystem(parent_form=parent_form)
-                ic_repgen_sys.icGenerateReport(report_filename)
-        return True
-    except:
-        log.fatal(u'Do report')
-
-
-def DoReportExcel(report_filename, QueryTable_=None, ToXLSFile_=None, XLSSheetName_=None, parent_form=None):
-    """
-    Функция запускает генератор отчетов для конвертации в Excel.
-    @param report_filename: Файл отчета.
-    @param QueryTable_: Таблица запроса.
-    @param ToXLSFile_: Имя файла, куда необходимо сохранить отчет.
-    @param XLSSheetName_: Имя листа.
-    @param parent_form: Родительская форма, необходима для вывода сообщений.
-    @return: Возвращает результат выполнения операции True/False.
-    """
-    try:
-        i_rg_sys.icGetRepGenSys(report_filename,
-                                QueryTable_, parent_form).Export(None, ToXLSFile_, XLSSheetName_)
-        return True
-    except:
-        log.fatal(u'Ошибка вывода отчета %s в Microsoft Excel.' % report_filename)
 
 
 def ReportPrint(parent_form=None, report_filename='', report_dir='',
@@ -289,9 +229,9 @@ def ReportPrint(parent_form=None, report_filename='', report_dir='',
             return repgen_system.Print(res.loadResourceFile(report_filename),
                                        stylelib=stylelib,
                                        variables=variables)
-        return False
     except:
-        log.fatal(u'Report print <%s>' % report_filename)
+        log.fatal(u'Ошибка печати отчета <%s>' % report_filename)
+    return False
 
 
 def ReportPreview(parent_form=None, report_filename='', report_dir='',
@@ -322,9 +262,9 @@ def ReportPreview(parent_form=None, report_filename='', report_dir='',
             return repgen_system.Preview(res.loadResourceFile(report_filename),
                                          stylelib=stylelib,
                                          variables=variables)
-        return False
     except:
-        log.fatal(u'Report preview <%s>' % report_filename)
+        log.fatal(u'Ошибка предварительного просмотра отчета <%s>' % report_filename)
+    return False
 
 
 def ReportExport(parent_form=None, report_filename='', report_dir='',
@@ -355,9 +295,9 @@ def ReportExport(parent_form=None, report_filename='', report_dir='',
             return repgen_system.Convert(res.loadResourceFile(report_filename),
                                          stylelib=stylelib,
                                          variables=variables)
-        return False
     except:
-        log.fatal(u'Report export <%s>' % report_filename)
+        log.fatal(u'Ошибка экспорта отчета <%s>' % report_filename)
+    return False
 
 
 def ReportSelect(parent_form=None, report_filename='', report_dir='',
@@ -388,9 +328,9 @@ def ReportSelect(parent_form=None, report_filename='', report_dir='',
             return repgen_system.selectAction(res.loadResourceFile(report_filename),
                                               stylelib=stylelib,
                                               variables=variables)
-        return False
     except:
-        log.fatal(u'Report export <%s>' % report_filename)
+        log.fatal(u'Ошибка генерации отчета с выбором действия <%s>' % report_filename)
+    return False
 
 
 # Комманды пост обработки сгенерированног отчета
@@ -447,8 +387,8 @@ def doReport(parent_form=None, report_filename='', report_dir='', db_url='', sql
                 repgen_system.save(data)
         return True
     except:
-        log.fatal(u'Do report <%s>' % report_filename)
+        log.fatal(u'Ошибка запуска генератора отчета <%s>' % report_filename)
 
 
 if __name__ == '__main__':
-    DoReport()
+    doReport()
