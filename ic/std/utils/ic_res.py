@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -102,7 +102,7 @@ def LoadObjStruct(Name_, ResFile_=''):
                              nameRes=os.path.splitext(ResFile_)[0])
     
 
-_InitFileDefault = '''#!/usr/bin/env python
+_InitFileDefault = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 \"\"\"
@@ -153,7 +153,7 @@ def CreatePackage(PackageDir_):
     return CreateInitFile(ic_file.AbsolutePath(PackageDir_))
 
 
-_PyFileDefault = '''#!/usr/bin/env python
+_PyFileDefault = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 \"\"\"
