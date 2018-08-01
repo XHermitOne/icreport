@@ -9,7 +9,7 @@
 import os.path
 import string
 import copy
-import cPickle
+import pickle
 import re
 
 from ic.std.log import log
@@ -19,7 +19,7 @@ from ic.std.utils import textfunc
 
 from ic.report import icrepgen
 
-__version__ = (0, 0, 2, 4)
+__version__ = (0, 1, 1, 1)
 
 # Константы
 # Теги шаблона
@@ -103,8 +103,8 @@ class icReportTemplate:
         pickle_file_name = os.path.splitext(template_filename)[0]+DEFAULT_REPORT_FILE_EXT
         pickle_file = None
         try:
-            pickle_file = open(pickle_file_name, 'w')
-            cPickle.dump(self._rep_template, pickle_file)
+            pickle_file = open(pickle_file_name, 'wb')
+            pickle.dump(self._rep_template, pickle_file)
             pickle_file.close()
         except:
             if pickle_file:
@@ -120,8 +120,8 @@ class icReportTemplate:
         pickle_file_name = os.path.splitext(template_filename)[0]+DEFAULT_REPORT_FILE_EXT
         pickle_file = None
         try:
-            pickle_file = open(pickle_file_name, 'r')
-            self._rep_template = cPickle.load(pickle_file)
+            pickle_file = open(pickle_file_name, 'rb')
+            self._rep_template = pickle.load(pickle_file)
             pickle_file.close()
         except:
             if pickle_file:
@@ -185,6 +185,7 @@ class icReportTemplate:
         borders = [None, None, None, None]
         for border in style_border:
             if 'Position' in border:
+                cur_border = dict()
                 if border['Position'] == 'Left':
                     borders[0] = {}
                     cur_border = borders[0]
@@ -719,7 +720,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
         @param Rep_: Описание данных отчета.
         """
         if Detail_['row_size'] == 1:
-            ok = reduce(lambda cur, cell: cur or bool(cell['value']), Rep_['sheet'][Detail_['row']], False)
+            ok = any([bool(cell['value']) for cell in Rep_['sheet'][Detail_['row']]])
             if not ok:
                 for i_row in range(Detail_['row'], Detail_['row']+Detail_['row_size']):
                     for i_col in range(Detail_['col'], Detail_['col']+Detail_['col_size']):
@@ -758,7 +759,8 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 # Определить имя поля группировки
                 field_name = re.split(icrepgen.REP_FIELD_PATT, BandTag_)[1].strip()[2:-2]
                 # Если такой группы не зарегестрировано, то прописать ее
-                if reduce(lambda x, grp: grp['field'] == field_name or x, rep['groups'], 0) == 0:
+                is_grp = any([grp['field'] == field_name for grp in rep['groups']])
+                if not is_grp:
                     # Записать в соответствии с положением относительно др. групп
                     rep['groups'].append(copy.deepcopy(icrepgen.IC_REP_GRP))
                     rep['groups'][-1]['field'] = field_name
@@ -770,7 +772,8 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 # Определить имя поля группировки
                 field_name = re.split(icrepgen.REP_FIELD_PATT, BandTag_)[1].strip()[2:-2]
                 # Если такой группы не зарегестрировано, то прописать ее
-                if reduce(lambda x, grp: grp['field'] == field_name or x, rep['groups'], 0) == 0:
+                is_grp = any([grp['field'] == field_name for grp in rep['groups']])
+                if not is_grp:
                     # Записать в соответствии с положением относительно др. групп
                     rep['groups'].append(copy.deepcopy(icrepgen.IC_REP_GRP))
                     rep['groups'][-1]['field'] = field_name
@@ -838,7 +841,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
                             rep_under['height'] = footer[0]['Margin']
         return rep_under
         
-    def _getParseRow(self, Row_, CurBand__):
+    def _getParseRow(self, Row_, CurBand_):
         """
         Подготовить для разбора строку шаблона.
         @param Row_: Описание строки.
@@ -1155,9 +1158,9 @@ class icExcelXMLReportTemplate(icReportTemplate):
         try:
             name = ParseRow_[0]['children'][0]['value']
             value = ParseRow_[1]['children'][0]['value']
-            if type(value) in (str, unicode) and value.startswith(CODE_SIGNATURE):
+            if isinstance(value, str) and value.startswith(CODE_SIGNATURE):
                 value = execfunc.exec_code(value.replace(CODE_SIGNATURE, u'').strip())
-            elif type(value) in (str, unicode) and value.startswith(PY_SIGNATURE):
+            elif isinstance(value, str) and value.startswith(PY_SIGNATURE):
                 value = execfunc.exec_code(value.replace(PY_SIGNATURE, u'').strip())
             Rep_['variables'][name] = value
         except:

@@ -5,10 +5,10 @@ import os
 import os.path
 import copy
 
-import icprototype
-import icworkbook
-import icods
-import config
+from . import icprototype
+from . import icworkbook
+from . import icods
+from . import config
 
 try:
     # Если Virtual Excel работает в окружении icReport
@@ -21,7 +21,8 @@ except ImportError:
     from services.convert import dict2xml
     from services.ic_std.log import log
 
-__version__ = (0, 0, 1, 4)
+
+__version__ = (0, 1, 1, 1)
 
 
 class icVExcel(icprototype.icVPrototype):
@@ -144,7 +145,7 @@ class icVExcel(icprototype.icVPrototype):
     def LoadODS(self, ODSFileName=None):
         """
         Загрузить из ODS файла.
-        @param ODSFIleName: Полное имя ODS файла.
+        @param ODSFileName: Полное имя ODS файла.
         """
         if ODSFileName:
             self.SpreadsheetFileName = os.path.abspath(ODSFileName)
@@ -168,7 +169,7 @@ class icVExcel(icprototype.icVPrototype):
             FileName = os.path.abspath(self.SpreadsheetFileName)
             
         if (not FileName) or (not os.path.exists(FileName)):
-            log.warning('Can\'t load file <%s>' % FileName)
+            log.warning(u'Не возможно загрузить файл <%s>' % FileName)
             return None
         
         ext = os.path.splitext(FileName)[1]
@@ -177,7 +178,7 @@ class icVExcel(icprototype.icVPrototype):
         elif ext in ('.XML', '.xml', '.Xml'):
             return self.LoadXML(FileName)
         else:
-            log.warning('Unsupported file type: <%s>' % ext)
+            log.warning(u'Не поддерживаемый тип файла <%s>' % ext)
         return None
             
     def Save(self):
@@ -200,13 +201,13 @@ class icVExcel(icprototype.icVPrototype):
         elif ext in ('.XML', '.xml', '.Xml'):
             return self.SaveAsXML(FileName)
         else:
-            log.warning('Unsupported file type: <%s>' % ext)
+            log.warning(u'Не поддерживаемый тип файла <%s>' % ext)
         return None                
         
     def SaveAsODS(self, ODSFileName=None):
         """
         Сохранить в ODS файле.
-        @param ODSFIleName: Полное имя ODS файла.
+        @param ODSFileName: Полное имя ODS файла.
         """
         if ODSFileName is None:
             ODSFileName = os.path.splitext(self.SpreadsheetFileName)[0]+'.ods'
@@ -274,7 +275,7 @@ class icVExcel(icprototype.icVPrototype):
             xml_copy_name = os.path.splitext(XMLFileName_)[0]+'_'+str(CopyNum_)+'.xml'
             return dict2xml.Dict2XmlssFile(SaveData_, xml_copy_name, encoding=self.encoding)
         except IOError:
-            log.warning('XML COPY: <%s> <%d>' % (XMLFileName_, CopyNum_+1))
+            log.warning(u'XML копия <%s> <%d>' % (XMLFileName_, CopyNum_+1))
             return self.save_copy_xml(SaveData_, XMLFileName_, CopyNum_+1)
 
     def getData(self):
@@ -303,7 +304,8 @@ class icVExcel(icprototype.icVPrototype):
 
     def getWorkbook(self, Name_=None):
         """
-        Книга. Имя книги - имя XML файла.
+        Книга.
+        @param Name_: Имя книги - имя XML файла.
         """
         if Name_ is None:
             if self._data['children']:
@@ -361,16 +363,17 @@ class icVExcel(icprototype.icVPrototype):
         """
         Сделать книгу активной.
         """
+        xml_file_name = u''
         try:
             xml_file_name = os.path.abspath(XMLFileName_)
             if os.path.exists(xml_file_name):
                 self.SpreadsheetFileName = xml_file_name
                 self._data = self._workbooks[xml_file_name]
             else:
-                log.warning('Workbook file <%s> not exists!' % xml_file_name)
+                log.warning(u'Файл <%s> не существует' % xml_file_name)
 
         except KeyError:
-            log.error('Workbook <%s> not registered in <%s>' % (xml_file_name, self._workbooks.keys()))
+            log.error(u'Книга <%s> не зарегистрирована в  <%s>' % (xml_file_name, self._workbooks.keys()))
             raise
 
     def _findWorkbookData(self, XMLFileName_=None):
@@ -387,13 +390,13 @@ class icVExcel(icprototype.icVPrototype):
             try:
                 workbook_data = self._workbooks[xml_file_name]
             except KeyError:
-                log.error('Workbook <%s> not registered in <%s>' % (xml_file_name, self._workbooks.keys()))
+                log.error(u'Книга <%s> не зарегистрирована в <%s>' % (xml_file_name, self._workbooks.keys()))
                 raise
         workbook_data = [data for data in workbook_data['children'] if 'name' in data and data['name'] == 'Workbook']
         if workbook_data:
             workbook_data = workbook_data[0]
         else:
-            log.warning('Workbook in <%s> not defined' % XMLFileName_)
+            log.warning(u'Книга не определена в <%s>' % XMLFileName_)
             return None
         return workbook_data
 
@@ -419,10 +422,10 @@ class icVExcel(icprototype.icVPrototype):
                 if worksheet_data:
                     worksheet_data = worksheet_data[0]
                 else:
-                    log.warning('Worksheet <%s> not found' % SheetName_)
+                    log.warning(u'Книга <%s> не найдена' % SheetName_)
                     return None
         else:
-            log.warning('Worksheets in <%s> not defined' % XMLFileName_)
+            log.warning(u'Книга не определена в <%s>' % XMLFileName_)
             return None
         return worksheet_data
 
@@ -439,7 +442,7 @@ class icVExcel(icprototype.icVPrototype):
         # Определить стили
         styles_data = [data for data in workbook_data['children'] if data['name'] == 'Styles']
         if not styles_data:
-            log.warning('Styles in worksbook <%s> not defined' % XMLFileName_)
+            log.warning(u'Стили в книге <%s> не определены' % XMLFileName_)
             return None
         else:
             styles_data = styles_data[0]
@@ -521,7 +524,7 @@ class icVExcel(icprototype.icVPrototype):
         # Определить книгу
         workbook_data = self._findWorkbookData(XMLFileName_)
         if workbook_data is None:
-            log.warning('Workbook <%s> not found' % XMLFileName_)
+            log.warning(u'Книга <%s> не найдена' % XMLFileName_)
             return False
         # Найти и удалить лист
         result = False
@@ -535,7 +538,7 @@ class icVExcel(icprototype.icVPrototype):
                 else:
                     # Если имя листа определено, то проверить на соответствие имен листов
                     if data['Name'] == SheetName_:
-                        log.info('Delete <%s> worksheet' % SheetName_)
+                        log.info(u'Удаление книги <%s>' % SheetName_)
                         del workbook_data['children'][i]
                         result = True
                         break
@@ -634,7 +637,7 @@ class icVExcel(icprototype.icVPrototype):
                 # Точно такой стиль уже есть и поэтому добавлять его не надо
                 return Style_['ID']
         except:
-            log.error('_pasteStyleIntoWorkbook function')
+            log.error(u'Ошибка в функции _pasteStyleIntoWorkbook')
             raise
         return None
 
@@ -792,8 +795,8 @@ class icVExcel(icprototype.icVPrototype):
         """
         Преобразование unicode строки в обычную строку.
         """
-        if isinstance(UnicodeStr_, unicode):
-            return UnicodeStr_.encode(self.encoding)
+        # if isinstance(UnicodeStr_, unicode):
+        #    return UnicodeStr_.encode(self.encoding)
         return UnicodeStr_
 
     def _unificXMLFileName(self, XMLFileName_):
@@ -885,10 +888,11 @@ class icVExcel(icprototype.icVPrototype):
                     # Непосредственный вызов функции
                     getattr(self, cmd[0])(*args, **kwargs)
                 except:
-                    log.error('Execute command <%s>' % cmd)
+                    log.error(u'Выполнение комманды <%s>' % cmd)
                     raise
         if AutoSave_:
             self.Save()
+
 
 if __name__ == '__main__':
     import tests

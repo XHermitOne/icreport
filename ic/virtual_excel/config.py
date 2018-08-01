@@ -12,7 +12,8 @@ LOG_MODE = True
 # Кодировка консоли по умолчанию
 DEFAULT_ENCODING = 'utf-8'
 
-LOG_FILENAME = '%s/log/virtual_excel.log' % os.path.dirname(__file__)
+LOG_FILENAME = os.path.join(os.path.dirname(__file__),
+                            'log', 'virtual_excel.log')
 
 
 # Определять адресацию внутри объединенной ячейки как ошибку

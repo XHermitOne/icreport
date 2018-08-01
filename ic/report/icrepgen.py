@@ -38,7 +38,7 @@ import copy
 from ic.std.log import log
 from ic.std.utils import textfunc
 
-__version__ = (0, 0, 1, 5)
+__version__ = (0, 1, 1, 1)
 
 # Константы
 # Ключевые теги для обозначения:
@@ -789,7 +789,7 @@ class icReportGenerator:
         try:
             # Проверка на преобразование типов
             cell_val = cell['value']
-            if cell_val is not None and type(cell_val) not in (str, unicode):
+            if cell_val is not None and not isinstance(cell_val, str):
                 cell_val = str(cell_val)
             if cell_val not in self._cellFmt:
                 parsed_fmt = self.funcStrParse(cell_val)
@@ -835,7 +835,7 @@ class icReportGenerator:
                     value = ''
                     exec_func = cur_func[2:-2].strip()
                     try:
-                        exec exec_func
+                        exec(exec_func)
                     except:
                         log.fatal(u'Ошибка выполнения блока кода <%s>' % textfunc.toUnicode(exec_func))
                     
@@ -903,8 +903,8 @@ class icReportGenerator:
         @param DataLst_: Данные, которые нужно поместить в формат.
         @return: Возвращает строку, соответствующую формату.
         """
-        if isinstance(Fmt_, str):
-            Fmt_ = unicode(Fmt_, DEFAULT_ENCODING)
+        # if isinstance(Fmt_, str):
+        #    Fmt_ = unicode(Fmt_, DEFAULT_ENCODING)
 
         # Заполнение формата
         if DataLst_ is []:

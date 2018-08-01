@@ -3,7 +3,7 @@
 
 import re
 
-import icprototype
+from . import icprototype
 
 try:
     # Если Virtual Excel работает в окружении icReport
@@ -12,7 +12,7 @@ except ImportError:
     # Если Virtual Excel работает в окружении icServices
     from services.ic_std.log import log
 
-__version__ = (0, 0, 1, 3)
+__version__ = (0, 1, 1, 1)
 
 
 class icVCell(icprototype.icVIndexedPrototype):
@@ -373,10 +373,10 @@ class icVData(icprototype.icVPrototype):
             # ВНИМАНИЕ! Здесь идет проверка на принадлежность данных к процентному типу
             # т. к. нет возможности отделить проценты от числовых типов
             val_type = DEFAULT_PERCENTAGE_TYPE
-        elif type(Value_) in (int, float, long):
+        elif type(Value_) in (int, float):
             val_type = DEFAULT_NUMBER_TYPE
-        elif type(Value_) == unicode:
-            val = val.encode(self.getApp().encoding)
+        # elif isinstance(Value_, str):
+        #    val = val.encode(self.getApp().encoding)
         
         # Обработка формул
         if self.get_parent().isFormula(Value_):
@@ -394,6 +394,7 @@ class icVData(icprototype.icVPrototype):
         Установить способ форматирования текста в ячейке.
         """
         self._attributes['xmlns'] = str(XMLNS_)
+
 
 if __name__ == '__main__':
     cell = icVCell(None)
