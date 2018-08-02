@@ -12,7 +12,7 @@ from ic.std.utils import res
 from ic.report import icxmlreportgenerator
 from ic.report import icodsreportgenerator
 from ic.report import icxlsreportgenerator
-from ic.report import icreportmangenerator
+# from ic.report import icreportmangenerator
 from ic.report import icrtfreportgenerator
 
 __version__ = (0, 1, 1, 1)
@@ -24,7 +24,7 @@ REP_GEN_SYS = None
 _ReportGeneratorSystemTypes = {'.xml': icxmlreportgenerator.icXMLReportGeneratorSystem,         # Мой XMLSS генератор
                                '.ods': icodsreportgenerator.icODSReportGeneratorSystem,         # Мой ODS генератор
                                '.xls': icxlsreportgenerator.icXLSReportGeneratorSystem,         # Мой XLS генератор
-                               '.rep': icreportmangenerator.icReportManagerGeneratorSystem,     # Report Manager
+                               # '.rep': icreportmangenerator.icReportManagerGeneratorSystem,     # Report Manager
                                '.rtf': icrtfreportgenerator.icRTFReportGeneratorSystem,         # RTF генератор
                                }
 
@@ -84,7 +84,7 @@ def createReportGeneratorSystem(sRepGenSysType, dRep=None, ParentForm_=None):
     @return: Функция возвращает объект-наследник класса icReportGeneratorSystem.
         None - в случае ошибки.
     """
-    rep_gen_sys_type = sRepGenSysType[-4:].lower() if type(sRepGenSysType) in (str, unicode) else None
+    rep_gen_sys_type = sRepGenSysType[-4:].lower() if isinstance(sRepGenSysType, str) else None
     rep_gen_sys = None
     if rep_gen_sys_type:
         rep_gen_sys_class = _ReportGeneratorSystemTypes.setdefault(rep_gen_sys_type, None)

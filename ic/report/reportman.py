@@ -46,7 +46,7 @@ def _rp_lasterror(retval):
     if not retval:
         rp_lasterror = _rp_lib.rp_lasterror
         rp_lasterror.restype = _c.c_char_p
-        raise ValueError, rp_lasterror()
+        raise ValueError(rp_lasterror())
     return retval
 
 
@@ -99,17 +99,17 @@ def rp_setparamvalue(hreport, paramname, paramvalue):
     elif type(paramvalue) is float:
         paramtype = 5
         paramvalue = _c.byref(_c.c_double(paramvalue))
-    elif type(paramvalue) is long:
-        paramtype = 14
-        paramvalue = _c.byref(_c.c_longlong(paramvalue))
-    elif type(paramvalue) is unicode:
-        paramtype = 8
-        paramvalue = _c.c_wchar_p(paramvalue)
+    # elif type(paramvalue) is long:
+    #    paramtype = 14
+    #    paramvalue = _c.byref(_c.c_longlong(paramvalue))
+    # elif type(paramvalue) is unicode:
+    #    paramtype = 8
+    #    paramvalue = _c.c_wchar_p(paramvalue)
     elif type(paramvalue) is str:
         paramtype = 256
         paramvalue = _c.c_char_p(paramvalue)
     else:
-        raise ValueError, 'Unsupported paramater type: %s' % type(paramvalue)
+        raise ValueError(u'Unsupported paramater type: %s' % type(paramvalue))
 
     rp_setparamvalue = _rp_lib.rp_setparamvalue
     rp_setparamvalue.restype = _rp_lasterror
