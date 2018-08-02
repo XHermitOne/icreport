@@ -7,8 +7,6 @@
 
 # --- Подключение библиотек ---
 import sys
-import os
-import os.path
 import inspect
 import wx
 
@@ -20,14 +18,15 @@ try:
     import win32con
     import regutil
 except ImportError:
-    log.error(u'ImportError: PyWin32')
+    log.error(u'Ошибка импорта PyWin32', bForcePrint=True)
 
 try:
     import DevId
 except:
-    log.error(u'ImportError: Recompiled DevId module')
+    log.error(u'Ошибка импорта DevId', bForcePrint=True)
 
-__version__ = (0, 0, 1, 2)
+
+__version__ = (0, 1, 1, 1)
 
 
 # --- Функции ---
@@ -40,33 +39,6 @@ def IsSubClass(Class1_, Class2_):
     @return: Возвращает результат отношения (1/0).
     """
     return issubclass(Class2_, Class1_)
-
-
-def SpcDefStruct(spc, struct):
-    """
-    Дополняет структуру описания объекта до требований спецификации.
-    @type spc: C{dictionary}.
-    @param spc: Словарь описания спецификации.
-    @type struct: C{dictionary}.
-    @param struct: Словарь описания структуры.
-    @rtype: C{dictionary}.
-    @return: Дополненная структура.
-    """
-    try:
-        def_struct = icSpcDefStruct(spc, struct)
-        # Коррекция типов
-        for name, value in def_struct.items():
-            if name in spc and isinstance(def_struct['name'], str) and not isinstance(spc['name'], str):
-                try:
-                    # Возможно это не строка
-                    def_value = eval(value)
-                except:
-                    # Нет наверно это строка
-                    def_value = value
-                def_struct[name] = def_value
-        return def_struct
-    except:
-        return struct
 
 
 def getAttrValue(AttrName_, SPC_):
@@ -98,8 +70,8 @@ def getStrInQuotes(Value_):
     """
     if isinstance(Value_, str):
         return '\'%s\'' % Value_
-    elif isinstance(Value_, unicode):
-        return u'\'%s\'' % Value_
+    # elif isinstance(Value_, unicode):
+    #    return u'\'%s\'' % Value_
     else:
         return str(Value_)
 
@@ -200,6 +172,7 @@ def KeyToText(Key_, Shift_=0, Alt_=0, Ctrl_=0):
             
     return result
 
+
 # Наполнитель позиций при отображении вложенности пунктов в компоненте списка
 PADDING = '    '
 
@@ -242,15 +215,6 @@ def StructToTxt(Struct_, Level_=0):
                                                                            '\\r').replace('\n',
                                                                                           '\\n').replace('\t',
                                                                                                          '\\t')+'\''
-        elif obj_type == unicode:
-            # Появляется косяк с разделителем папок в именах путей
-            # Проверка на кавычки
-            txt = txt+'u\''+Struct_.replace('\'',
-                                            '\\\'').replace('\'',
-                                                            '\\\'').replace('\r',
-                                                                            '\\r').replace('\n',
-                                                                                           '\\n').replace('\t',
-                                                                                                          '\\t')+'\''
         else:
             txt += str(Struct_)
 
@@ -313,31 +277,6 @@ def SetKeyInDictTree(Dict_, Key_, Value_):
         return
 
 
-def icEval(Code_, LogType_=-1, LocalSpace_=None, GlobalSpace_=None, Msg_=''):
-    """
-    Функция выполняет предобработку вычисляемого выражения, вычисляет с
-    использование стандартной, функции eval(...), а также обрабатывает исключения. 
-    В качестве локального пространства имен используется словарь LocalSpace. 
-    В качестве глобального пространства имен берется словарь GlobalSpace.
-    @type Code_: C{string}
-    @param Code_: Вычисляемое выражение.
-    @type LogType_: C{int}
-    @param LogType_: Тип лога (0 - консоль, 1- файл, 2- окно лога)
-    @param LocalSpace_: Пространство имен, необходимых для вычисления выражения
-    @type LocalSpace: C{dictionary}
-    @param GlobalSpace_: Глобальное пространство имен.
-    @type GlobalSpace: C{dictionary}
-    """
-    if LocalSpace_ is None:
-        LocalSpace_ = {}
-
-    ret_val = ic_eval(Code_, LogType_, LocalSpace_, Msg_, GlobalSpace_)
-    # Проверка правильно ли выполнена операция
-    if ret_val[0] == 1:
-        return ret_val[1]
-    return None
-
-
 def icObjToGlob(ObjName_, Obj_):
     """
     Поместить объект в глобальное пространство имен.
@@ -346,25 +285,6 @@ def icObjToGlob(ObjName_, Obj_):
     """
     try:
         globals()[ObjName_] = Obj_
-        return True
-    except:
-        return False
-
-
-def icFilesToGlob(*args):
-    """
-    Поместить структуры, хранящиеся в файлах в глобальное пространство имен.
-    @param args: Имена файлов и имена структур в глобальном пространстве состояний
-        передаются в формате:
-            (ИмяСтруктуры1,ИмяФайла1),(ИмяСтруктуры2,ИмяФайла2),...
-    """
-    try:
-        for cur_arg in args:
-            if os.path.isfile(cur_arg[1]):
-                tmp_buff = ic_res.ReadAndEvalFile(cur_arg[1])
-                icObjToGlob(cur_arg[0], tmp_buff)
-            else:
-                log.warning(u'Не найден файл %s' % cur_arg[1])
         return True
     except:
         return False
@@ -379,10 +299,7 @@ def ReCodeString(String_, StringCP_, NewCP_):
     """
     if NewCP_.upper() == 'UNICODE':
         # Кодировка в юникоде.
-        if isinstance(String_, str):
-            return unicode(String_, StringCP_)
-        else:
-            return String_
+        return String_
 
     if NewCP_.upper() == 'OCT' or NewCP_.upper() == 'HEX':
         # Закодировать строку в восьмеричном/шестнадцатеричном виде.
@@ -390,14 +307,8 @@ def ReCodeString(String_, StringCP_, NewCP_):
 
     string = u''
     if isinstance(String_, str):
-        if StringCP_.upper() != 'UNICODE':
-            string = unicode(String_, StringCP_)
-        else:
-            string = unicode(String_)
-        
-    elif isinstance(String_, unicode):
-        string = String_
-        
+        string = str(String_)   # , StringCP_)
+
     return string.encode(NewCP_)
 
 
@@ -455,7 +366,7 @@ def icListStrRecode(List_, StringCP_, NewCP_):
         elif isinstance(List_[i], tuple):
             # Элемент списка - кортеж
             value = icTupleStrRecode(List_[i], StringCP_, NewCP_)
-        elif isinstance(List_[i], str) or isinstance(List_[i], unicode):
+        elif isinstance(List_[i], str):
             value = ReCodeString(List_[i], StringCP_, NewCP_)
         else:
             value = List_[i]
@@ -502,7 +413,7 @@ def icDictStrRecode(Dict_, StringCP_, NewCP_):
         elif isinstance(value, tuple):
             # Элемент - кортеж
             Dict_[new_key] = icTupleStrRecode(value, StringCP_, NewCP_)
-        elif isinstance(value, str) or isinstance(value, unicode):
+        elif isinstance(value, str):
             Dict_[new_key] = ReCodeString(value, StringCP_, NewCP_)
 
     return Dict_
@@ -542,8 +453,8 @@ def icStructStrRecode(Struct_, StringCP_, NewCP_):
     elif isinstance(Struct_, tuple):
         # Кортеж
         struct = icTupleStrRecode(Struct_, StringCP_, NewCP_)
-    elif isinstance(Struct_, str) or isinstance(Struct_, unicode):
-        #Строка
+    elif isinstance(Struct_, str):
+        # Строка
         struct = ReCodeString(Struct_, StringCP_, NewCP_)
     else:
         # Тип не определен
@@ -576,7 +487,7 @@ def GetHDDSerialNo():
         return hdd_info[2]
     except:
         # Ошибка определения серийного номера HDD.
-        log.fatal(u'Define HDD serial number error.')
+        log.fatal(u'Ошибка определения серийного номера HDD')
         return ''
 
 
@@ -609,7 +520,8 @@ def findChildResByName(ChildrenRes_, ChildName_):
         описания с таким именем не найдено, то возвращается -1.
     """
     try:
-        return map(lambda child: child['name'], ChildrenRes_).index(ChildName_)
+        children_names = [child['name'] for child in ChildrenRes_]
+        return children_names.index(ChildName_)
     except ValueError:
         return -1
 
@@ -641,8 +553,9 @@ def get_encodings_list():
     Список возможных кодировок.
     """
     try:
-        result = reduce(lambda lst, code: lst if code in lst else lst+[code],
-                        aliases.values(), [])
+        encoding_list = [code for code in aliases.values()]
+        encoding_list = [encoding for i, encoding in enumerate(encoding_list) if encoding not in encoding_list[:i]]
+        result = encoding_list
         result.sort()
         return result
     except:

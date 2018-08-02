@@ -131,8 +131,7 @@ def main(argv):
             var_name = arg.split('=')[0].strip()
             var_value = arg.split('=')[-1].strip()
             vars[var_name] = var_value
-            log.debug(u'Дополнительная переменная <%s>. Значение [%s]' % (unicode(var_name, config.DEFAULT_ENCODING) ,
-                                                                          unicode(var_value, config.DEFAULT_ENCODING)))
+            log.debug(u'Дополнительная переменная <%s>. Значение [%s]' % (str(var_name), str(var_value)))
         elif option in ('--path',):
             path = arg
         elif option in ('--no_gui', ):

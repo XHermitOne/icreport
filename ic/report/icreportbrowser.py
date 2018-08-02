@@ -536,7 +536,7 @@ class icReportBrowserPrototype:
             if os.path.isfile(old_rep_pkl_file_name):
                 os.remove(old_rep_pkl_file_name)
             # Поменять имя в файле отчета.
-            report = ic.utils.util.readAndEvalFile(new_rep_file_name, bRefresh=True)
+            report = res.loadResource(new_rep_file_name)
             report['name'] = NewName_
 
             rep_file = None

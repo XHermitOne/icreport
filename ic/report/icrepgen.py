@@ -37,6 +37,7 @@ import copy
 
 from ic.std.log import log
 from ic.std.utils import textfunc
+from ic.std.utils import execfunc
 
 __version__ = (0, 1, 1, 1)
 
@@ -786,6 +787,7 @@ class icReportGenerator:
         @param CellCol_: Номер колонки ячейки в результирующем отчете.
         @return: Возвращает сгенерированное значение.
         """
+        value = u''
         try:
             # Проверка на преобразование типов
             cell_val = cell['value']
@@ -1115,5 +1117,5 @@ class icReportGenerator:
         """
         Выполнить функцию при генерации.
         """
-        re_import = not ic_mode.isRuntimeMode()
-        return ic_exec.execFuncStr(Func_, Locals_, re_import)
+        # re_import = not ic_mode.isRuntimeMode()
+        return execfunc.exec_code(Func_, bReImport=True)

@@ -1,3 +1,1 @@
-# icreport
-
-Генератор отчетов на Python
+# icreport - Генератор отчетов на Python

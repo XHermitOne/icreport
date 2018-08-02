@@ -15,7 +15,7 @@ import fnmatch
 
 from ic.std.log import log
 
-__version__ = (0, 0, 3, 1)
+__version__ = (0, 1, 1, 1)
 
 # Имя папки прфиля программы
 DEFAULT_PROFILE_DIRNAME = '.icreport'
@@ -49,12 +49,12 @@ def getSubDirsFilter(Path_, Filter_=DEFAULT_DIR_FILTER):
     @return: В случае ошибки возвращает None.
     """
     try:
-        dir_list = [os.path.normpath(Path_+'/'+path) for path in os.listdir(Path_)]
+        dir_list = [os.path.normpath(os.path.join(Path_, path)) for path in os.listdir(Path_)]
         dir_list = [path for path in dir_list if os.path.isdir(path)]
         dir_list = [dir for dir in dir_list if _pathFilter(dir, Filter_)]
         return dir_list
     except:
-        log.error('Read subfolder list error <%s>' % Path_)
+        log.fatal(u'Ошибка чтения списка поддиректорий <%s>' % Path_)
         return None
 
 
@@ -65,6 +65,7 @@ def getFilesByExt(Path_, Ext_):
     @param Ext_: Расширение, например '.pro'.
     @return: В случае ошибки возвращает None.
     """
+    file_list = None
     try:
         Path_ = os.path.abspath(os.path.normpath(Path_))
 
@@ -73,12 +74,11 @@ def getFilesByExt(Path_, Ext_):
             Ext_ = '.'+Ext_
         Ext_ = Ext_.lower()
 
-        file_list = None
-        file_list = [os.path.normpath(Path_+'/'+path) for path in os.listdir(Path_)]
+        file_list = [os.path.normpath(os.path.join(Path_, path)) for path in os.listdir(Path_)]
         file_list = [path for path in file_list if os.path.isfile(path) and os.path.splitext(path)[1].lower() == Ext_]
         return file_list
     except:
-        log.error('Read folder file list error. ext: <%s>, path: <%s>, list: <%s>' % (Ext_, Path_, file_list))
+        log.fatal(u'Ошибка чтения списка файлов директории. ext: <%s>, path: <%s>, list: <%s>' % (Ext_, Path_, file_list))
         return None
 
 
@@ -94,7 +94,7 @@ def getHomePath():
     elif os_platform == 'linux':
         home_path = os.environ['HOME']
     else:
-        log.warning(u'Not supported OS platform <%s>' % os_platform)
+        log.warning(u'Не поддерживаемая <%s>' % os_platform)
         return None
     return os.path.normpath(home_path)
 
@@ -115,7 +115,7 @@ def getProfilePath(bAutoCreatePath=True):
             except OSError:
                 log.fatal(u'Ошибка создания пути профиля <%s>' % profile_path)
         return profile_path
-    return '~/' + DEFAULT_PROFILE_DIRNAME
+    return os.path.join('~', DEFAULT_PROFILE_DIRNAME)
 
 
 def get_home_path(UserName_=None):
