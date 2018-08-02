@@ -18,7 +18,7 @@ from ic.std.utils import textfunc
 
 from ic.report import icrepgen
 
-__version__ = (0, 0, 1, 2)
+__version__ = (0, 1, 1, 1)
 
 # Спецификации и структуры
 # Спецификация стиля ячеек
@@ -74,7 +74,7 @@ class icExcelXMLReportFile(icReportFile):
         xml_file = None
         try:
             # Начать запись
-            xml_file = open(RepFileName_, 'w')
+            xml_file = open(RepFileName_, 'wt')
             xml_gen = icXMLSSGenerator(xml_file)
             xml_gen.startDocument()
             xml_gen.startBook()
@@ -89,7 +89,7 @@ class icExcelXMLReportFile(icReportFile):
             # Данные
             xml_gen.startSheet(RepData_['name'], RepData_)
             xml_gen.saveColumns(RepData_['sheet'])
-            for i_row in xrange(len(RepData_['sheet'])):
+            for i_row in range(len(RepData_['sheet'])):
                 xml_gen.startRow(RepData_['sheet'][i_row])
                 # Сбросить индекс ячейки
                 xml_gen.cell_idx = 1
@@ -121,10 +121,10 @@ class icExcelXMLReportFile(icReportFile):
         @return: Функция возвращает имя созданного xml файла, 
             или None в случае ошибки.
         """
+        xml_file = None
         try:
             # Начать запись
-            xml_file = None
-            xml_file = open(RepFileName_, 'w')
+            xml_file = open(RepFileName_, 'wt')
             xml_gen = icXMLSSGenerator(xml_file)
             xml_gen.startDocument()
             xml_gen.startBook()
@@ -138,10 +138,10 @@ class icExcelXMLReportFile(icReportFile):
                 # Данные
                 xml_gen.startSheet(rep_sheet_data['name'], rep_sheet_data)
                 xml_gen.saveColumns(rep_sheet_data['sheet'])
-                for i_row in xrange(len(rep_sheet_data['sheet'])):
+                for i_row in range(len(rep_sheet_data['sheet'])):
                     xml_gen.startRow(rep_sheet_data['sheet'][i_row])
                     # Сбросить индекс ячейки
-                    xml_gen.cell_idx=1
+                    xml_gen.cell_idx = 1
                     for i_col in range(len(rep_sheet_data['sheet'][i_row])):
                         cell = rep_sheet_data['sheet'][i_row][i_col]
                         xml_gen.saveCell(i_row+1, i_col+1, cell, rep_sheet_data['sheet'])
@@ -149,7 +149,7 @@ class icExcelXMLReportFile(icReportFile):
             
                 xml_gen.endSheet(rep_sheet_data)
        
-            #Закончить запись
+            # Закончить запись
             xml_gen.endBook()
             xml_gen.endDocument()
             xml_file.close()
@@ -196,7 +196,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         @attrs: Атрибуты тега (словарь).
         """
         # Дописать новый отступ
-        self._write(unicode('\n'+self.break_line, self._encoding))
+        self._write(u'\n' + str(self.break_line))    # self._encoding
 
         saxutils.XMLGenerator.startElement(self, name, attrs)
         self.break_line += ' '
@@ -207,7 +207,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         @name: Имя, закрываемого тега.
         """
         # Дописать новый отступ
-        self._write(unicode('\n'+self.break_line, self._encoding))
+        self._write(u'\n' + str(self.break_line))    # self._encoding
 
         saxutils.XMLGenerator.endElement(self, name)
 
@@ -221,7 +221,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         @attrs: Атрибуты тега (словарь).
         """
         # Дописать новый отступ
-        self._write(unicode('\n'+self.break_line, self._encoding))
+        self._write(u'\n' + str(self.break_line))    # self._encoding
 
         saxutils.XMLGenerator.startElement(self, name, attrs)
 
@@ -269,7 +269,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         
             # Обработка верхнего колонтитула
             if 'data' in Rep_['upper']:
-                data = unicode(str(Rep_['upper']['data']), 'CP1251').encode('UTF-8')
+                data = str(Rep_['upper']['data'])   # , 'CP1251').encode('UTF-8')
                 self.startElementLevel('Header', 
                                        {'x:Margin': str(Rep_['upper']['height']),
                                         'x:Data': data})
@@ -277,7 +277,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
                 
             # Обработка нижнего колонтитула
             if 'data' in Rep_['under']:
-                data = unicode(str(Rep_['under']['data']), 'CP1251').encode('UTF-8')
+                data = str(Rep_['under']['data'])  # , 'CP1251').encode('UTF-8')
                 self.startElementLevel('Footer', 
                                        {'x:Margin': str(Rep_['under']['height']),
                                         'x:Data': data})
@@ -350,7 +350,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         @param RepName_: Имя отчета.
         @param Rep_: Тело отчета.
         """
-        rep_name = unicode(str(RepName_), self._encoding)
+        rep_name = str(RepName_)    # , self._encoding)
         self.startElementLevel('Worksheet', {'ss:Name': rep_name})
         # Диапазон ячеек верхнего колонтитула
         try:
@@ -389,7 +389,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         """
         Сканирование стилей на листе.
         """
-        for i_row in xrange(len(Sheet_)):
+        for i_row in range(len(Sheet_)):
             for i_col in range(len(Sheet_[i_row])):
                 cell = Sheet_[i_row][i_col]
                 if cell is not None:
@@ -768,11 +768,11 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
             # Это не число
             value = Value_
 
-        if type(value) != type(u''):
+        if not isinstance(value, str):
             try:
-                value = unicode(str(value), self._encoding)
+                value = str(value)  #, self._encoding)
             except:
-                value = unicode(str(value), 'cp1251')
+                value = str(value)  #, 'cp1251')
         if value:
             value = saxutils.escape(value)
             

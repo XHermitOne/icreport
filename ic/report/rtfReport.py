@@ -7,7 +7,7 @@
 
 import copy
 
-__version__ = (0, 0, 1, 2)
+__version__ = (0, 1, 1, 1)
 
 tblDct = {'__fields__': (('n_lot',), ('predmet_lot',), ('cena_lot',)),
           '__name__': 'P1',
@@ -17,23 +17,23 @@ tblDct = {'__fields__': (('n_lot',), ('predmet_lot',), ('cena_lot',)),
                        (4, 'лот 1.4', 300.0)]}
 
 tblDct2 = {'__fields__': (('n_lot',), ('predmet_lot',), ('cena_lot',)),
-          '__name__': 'P2',
-          '__data__': [(1, 'лот 2.1', 500.0),
-                       (2, 'лот 2.2', 510.0),
-                       (3, 'лот 2.3', 520.0)]}
+           '__name__': 'P2',
+           '__data__': [(1, 'лот 2.1', 500.0),
+                        (2, 'лот 2.2', 510.0),
+                        (3, 'лот 2.3', 520.0)]}
 
 tblDct3 = {'__fields__': (('n_lot',), ('predmet_lot',), ('cena_lot',)),
-          '__name__': 'P1',
-          '__data__': [(1, 'лот 3.1', 200.0),
-                       (2, 'лот 3.2', 210.0),
-                       (3, 'лот 3.3', 220.0),
-                       (4, 'лот 3.4', 300.0)]}
+           '__name__': 'P1',
+           '__data__': [(1, 'лот 3.1', 200.0),
+                        (2, 'лот 3.2', 210.0),
+                        (3, 'лот 3.3', 220.0),
+                        (4, 'лот 3.4', 300.0)]}
 
 tblDct4 = {'__fields__': (('n_lot',), ('predmet_lot',), ('cena_lot',)),
-          '__name__': 'P2',
-          '__data__': [(1, 'лот 4.1', 500.0),
-                       (2, 'лот 4.2', 510.0),
-                       (3, 'лот 4.3', 520.0)]}
+           '__name__': 'P2',
+           '__data__': [(1, 'лот 4.1', 500.0),
+                        (2, 'лот 4.2', 510.0),
+                        (3, 'лот 4.3', 520.0)]}
 
 LDct1 = {'__variables__': {'VAR_L': 'Слот 1'},
          '__tables__': [tblDct, tblDct2]}
@@ -44,21 +44,22 @@ LDct3 = {'__variables__': {'VAR_L': 'Слот 3'}}
 
 def SD(var, val):
     return {'__variables__': {var: val}}
-    
-DataDct = {'__variables__': {'form_torg': """Тип торгов
+
+
+DataDct = {'__variables__': {'form_torg': '''Тип торгов
 hjkfdshjkhjksfadhlkhfsa
 sfdjhjkhfajkhfjdskhfhks
     GGGGGGGGGGGGGGGGGg
-""",
+''',
                              'izveschen_url': 'www.abakan.ru',
                              'VAR_L_1': 'Слот 1',
                              'VAR_L_2': 'Слот 2',
                              'VAR_LG': 'Общий текст',
                              'name_torg': 'Имя торгов'},
-            '__loop__': {'L': [LDct1, LDct2],
-                         'I': [SD('I', 1), SD('I', 2), SD('I', 3)],
-                         'J': [SD('J', 1), SD('J', 2), SD('J', 3)]},
-            '__tables__': []}
+           '__loop__': {'L': [LDct1, LDct2],
+                        'I': [SD('I', 1), SD('I', 2), SD('I', 3)],
+                        'J': [SD('J', 1), SD('J', 2), SD('J', 3)]},
+           '__tables__': []}
 
 
 def findNextVar(rep, pos=0):
@@ -368,13 +369,13 @@ def rtfReport(data, repFileName, templFileName):
     """
     Создает rtf отчет по шаблону.
     """
-    f = open(templFileName, 'r')
+    f = open(templFileName, 'rt')
     rep = f.read()
     f.close()
 
     rep = parse_rtf(data, rep)
     
-    f = open(repFileName, 'w')
+    f = open(repFileName, 'wt')
     f.write(rep)
     f.close()
 

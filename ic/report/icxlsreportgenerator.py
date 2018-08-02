@@ -13,7 +13,6 @@ import os.path
 from .dlg import icreportactiondlg
 from ic.std.log import log
 from ic.std.dlg import dlg
-from ic.std.utils import textfunc
 
 from ic.virtual_excel import icexcel
 
@@ -23,7 +22,7 @@ from ic.report import icrepfile
 
 from ic import config
 
-__version__ = (0, 0, 1, 5)
+__version__ = (0, 1, 1, 1)
 
 
 class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
@@ -132,14 +131,14 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             try:
                 os.remove(pdf_filename)
             except:
-                log.error(u'Delete file <%s>' % pdf_filename)
+                log.error(u'Ошибка удаления файла <%s>' % pdf_filename)
 
         cmd = 'unoconv --format=pdf %s' % XLSFileName_
-        log.info(u'UNOCONV. Command <%s>' % cmd)
+        log.info(u'UNOCONV. Выполнения комманды ОС <%s>' % cmd)
         os.system(cmd)
 
         cmd = 'evince %s&' % pdf_filename
-        log.info(u'EVINCE. Command <%s>' % cmd)
+        log.info(u'EVINCE. Выполнения комманды ОС <%s>' % cmd)
         os.system(cmd)
 
     def Print(self, report=None, *args, **kwargs):
@@ -159,7 +158,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         """
         if XLSFileName_ and os.path.exists(XLSFileName_):
             cmd = 'libreoffice -p %s&' % XLSFileName_
-            log.info(u'Command <%s>' % cmd)
+            log.info(u'Выполнения комманды ОС <%s>' % cmd)
             os.system(cmd)
         else:
             log.warning(u'Печать. Файл <%s> не найден.' % XLSFileName_)
@@ -188,7 +187,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         """
         if XLSFileName_ and os.path.exists(XLSFileName_):
             cmd = 'libreoffice %s&' % XLSFileName_
-            log.info('Command <%s>' % cmd)
+            log.info('Выполнения комманды ОС <%s>' % cmd)
             os.system(cmd)
         else:
             log.warning(u'Открытие. Файл <%s> не найден' % XLSFileName_)
@@ -265,7 +264,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             query_tbl = self.getQueryTbl(self._Rep, **_kwargs)
             if self._isEmptyQueryTbl(query_tbl):
                 dlg.getMsgBox(u'Внимание', u'Нет данных, соответствующих запросу: %s' % self._Rep['query'],
-                              self._ParentForm)
+                              parent=self._ParentForm)
                 return None
 
             # 2. Запустить генерацию

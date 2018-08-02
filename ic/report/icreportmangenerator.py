@@ -9,16 +9,22 @@
 import os
 import os.path
 
+
+from ic.report import icrepgensystem
+from ic.std.utils import res
+from ic.std.utils import ic_util
+from ic.std.utils import execfunc
+from ic.std.dlg import dlg
+from ic.std.log import log
+
 # PyReportManager - the ActiveX wrapper code
 try:
     from ic.report import reportman
-except:
-    print('PyReportManager Import Error')
+except ImportError:
+    log.error(u'Ошибка импорта PyReportManager', bForcePrint=True)
 
-from ic.report import icrepgensystem
-from ic.std.log import log
 
-__version__ = (0, 0, 1, 4)
+__version__ = (0, 1, 1, 1)
 
 # --- Константы подсистемы ---
 DEFAULT_REP_FILE_NAME = 'c:/temp/new_report.rep'
@@ -61,8 +67,8 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         if Rep_ is None:
             Rep_ = self._Rep
         # Создание связи с ActiveX
-        report_dir = os.path.abspath(ic.engine.ic_user.icGet('REPORT_DIR'))
-        report_file = os.path.abspath(Rep_['generator'], report_dir)
+        report_dir = os.path.abspath(self.getReportDir())
+        report_file = os.path.join(report_dir, Rep_['generator'])
         try:
             report = reportman.ReportMan(report_file)
             # Параметры отчета
@@ -82,8 +88,8 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         if Rep_ is None:
             Rep_ = self._Rep
         # Создание связи с ActiveX
-        report_dir = os.path.abspath(ic.engine.ic_user.icGet('REPORT_DIR'))
-        report_file = os.path.abspath(Rep_['generator'], report_dir)
+        report_dir = os.path.abspath(self.getReportDir())
+        report_file = os.path.join(report_dir, Rep_['generator'])
         try:
             report = reportman.ReportMan(report_file)
             # Параметры отчета
@@ -110,8 +116,8 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         if Rep_ is None:
             Rep_ = self._Rep
         # Создание связи с ActiveX
-        report_dir = os.path.abspath(ic.engine.ic_user.icGet('REPORT_DIR'))
-        report_file = os.path.abspath(Rep_['generator'], report_dir)
+        report_dir = os.path.abspath(self.getReportDir())
+        report_file = os.path.join(report_dir, Rep_['generator'])
         try:
             report = reportman.ReportMan(report_file)
             # Параметры отчета
@@ -130,11 +136,12 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         """
         # Создание связи с ActiveX
         rprt_file_name = os.path.abspath(RepFileName_)
-        rep = ic_res.LoadResource(rprt_file_name)
-        report_dir = os.path.abspath(ic.engine.ic_user.icGet('REPORT_DIR'))
-        rep_file = os.path.abspath(rep['generator'], report_dir)
+        rep = res.loadResource(rprt_file_name)
+        report_dir = os.path.abspath(self.getReportDir())
+        rep_file = os.path.join(report_dir, rep['generator'])
         
-        reportman_designer_key = ic_util.GetRegValue('Software\\Classes\\Report Manager Designer\\shell\\open\\command', None)
+        reportman_designer_key = ic_util.GetRegValue('Software\\Classes\\Report Manager Designer\\shell\\open\\command',
+                                                     None)
         if reportman_designer_key:
             reportman_designer_run = reportman_designer_key.replace('\'%1\'', '\'%s\'') % rep_file
             cmd = 'start %s' % reportman_designer_run
@@ -144,7 +151,7 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         else:
             msg = u'Не определен дизайнер отчетов Report Manager Designer %s' % reportman_designer_key
             log.warning(msg)
-            ic_dlg.icWarningBox(u'ВНИМАНИЕ!', msg)
+            dlg.getWarningBox(u'ВНИМАНИЕ!', msg)
 
         # Определить файл *.xml
         xml_file = os.path.normpath(os.path.abspath(os.path.splitext(RepFileName_)[0]+'.xml'))
@@ -171,7 +178,7 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                 if self._isQueryFunc(query):
                     query = self._execQueryFunc(query)
                 else:
-                    query = ic_exec.ExecuteMethod(query, self)
+                    query = execfunc.exec_code(query)
                 
             return query
         except:

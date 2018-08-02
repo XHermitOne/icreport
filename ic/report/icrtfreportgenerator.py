@@ -10,12 +10,14 @@ import os
 import os.path
 import copy
 import re
+
 from ic.report import rtfReport
 from ic.report import icrepgensystem
-from ic.report import icreptemplate
+from ic.std.dlg import dlg
+
 from ic.std.log import log
 
-__version__ = (0, 0, 1, 3)
+__version__ = (0, 1, 1, 1)
 
 # --- Константы ---
 RTF_VAR_PATTERN = r'(#.*?#)'
@@ -27,7 +29,6 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     """
     Класс системы генерации отчетов, основанные на генерации RTF файлов.
     """
-
     def __init__(self, Rep_=None, ParentForm_=None):
         """
         Конструктор класса.
@@ -98,7 +99,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # Установить связь с Word
             word_app = win32com.client.Dispatch('Word.Application')
             # Скрыть
-            word_app.Visible=0
+            word_app.Visible = 0
             # Открыть
             rep_tmpl_book = word_app.Documents.Open(RTFFileName_)
             # Показать
@@ -221,9 +222,9 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
 
             query_data = self.GetQueryTbl(self._Rep)
             if not query_data:
-                ic_dlg.icMsgBox(u'Внимание',
-                                u'Нет данных, соответствующих запросу: %s' % self._Rep['query'],
-                                self._ParentForm)
+                dlg.getWarningBox(u'Внимание',
+                                  u'Нет данных, соответствующих запросу: %s' % self._Rep['query'],
+                                  parent=self._ParentForm)
                 return None
 
             # 2. Запустить генерацию
@@ -275,7 +276,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                     else:
                         values.append('')
                 else:
-                    log.warning(u'Unknow tag: <%s>' % cur_var)
+                    log.warning(u'Не известный тег <%s>' % cur_var)
             # Заполнить формат
             val_str = self._valueFormat(parsed['fmt'], values)
             return val_str
@@ -341,7 +342,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         @return: Возвращает строку, соответствующую формату.
         """
         # Заполнение формата
-        if DataLst_ == []:
+        if DataLst_ == list():
             value = Fmt_
         # Обработка значения None
         elif bool(None in DataLst_):

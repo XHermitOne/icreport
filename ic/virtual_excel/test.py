@@ -8,7 +8,7 @@ import os
 
 
 def test_oc1():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/OC1/OC1.ods')
@@ -17,7 +17,7 @@ def test_oc1():
 
 
 def test_oc1_1():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/OC1/oc1.xml')
@@ -25,7 +25,7 @@ def test_oc1_1():
 
 
 def test_oc1_2():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/OC1/oc1.xml')
@@ -33,7 +33,7 @@ def test_oc1_2():
 
 
 def test_2():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/test2.ods')
@@ -41,7 +41,7 @@ def test_2():
 
 
 def test_3():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/test3.ods')
@@ -49,7 +49,7 @@ def test_3():
 
 
 def test_4():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/bpr1137.ods')
@@ -57,7 +57,7 @@ def test_4():
 
 
 def test_5():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/narjad.ods')
@@ -74,7 +74,7 @@ def test_5():
 
 
 def test_6():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/t1.ods')
@@ -87,7 +87,7 @@ def test_6():
 
 
 def test_7():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/tabmilk.ods')
@@ -100,7 +100,7 @@ def test_7():
 
 
 def test_8():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/narjadok.ods')
@@ -113,7 +113,7 @@ def test_8():
 
 
 def test_9():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/narjadpv.ods')
@@ -127,7 +127,7 @@ def test_9():
 
 
 def test_10():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/new/narjadpv.ods')
@@ -141,7 +141,7 @@ def test_10():
 
 
 def test_11():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/tabbnew.ods')
@@ -153,7 +153,7 @@ def test_11():
 
 
 def test_sum():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/test.ods')
@@ -166,7 +166,7 @@ def test_sum():
 
 
 def test_12():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/test.ods')
@@ -188,7 +188,7 @@ def test_13():
     if os.path.exists('./testfiles/test_result.ods'):
         os.remove('./testfiles/test_result.ods')
 
-    import icexcel
+    from . import icexcel
 
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/test.ods')
@@ -203,7 +203,7 @@ def test_14():
     if os.path.exists('./log/virtual_excel.log'):
         os.remove('./log/virtual_excel.log')
 
-    import icexcel
+    from . import icexcel
 
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/report/rep.xml')
@@ -217,7 +217,7 @@ def test_15():
     if os.path.exists('./log/virtual_excel.log'):
         os.remove('./log/virtual_excel.log')
 
-    import icexcel
+    from . import icexcel
 
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/ttn/ttn_original.ods')
@@ -233,7 +233,7 @@ def test_16():
     if os.path.exists('./log/virtual_excel.log'):
         os.remove('./log/virtual_excel.log')
 
-    import icexcel
+    from . import icexcel
 
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/imns/prib101.ods')
@@ -247,7 +247,7 @@ def test_17():
     if os.path.exists('./log/virtual_excel.log'):
         os.remove('./log/virtual_excel.log')
 
-    import icexcel
+    from . import icexcel
 
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/bpr_735u.ods')
@@ -261,7 +261,7 @@ def test_18():
     if os.path.exists('./log/virtual_excel.log'):
         os.remove('./log/virtual_excel.log')
 
-    import icexcel
+    from . import icexcel
 
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/break_page.ods')
@@ -275,7 +275,7 @@ def test_19():
     if os.path.exists('./log/virtual_excel.log'):
         os.remove('./log/virtual_excel.log')
 
-    import icexcel
+    from . import icexcel
 
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/oc1.ods')
@@ -286,7 +286,7 @@ def test_19():
 
 
 def test_ods():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/ods/schm_19.ods')
@@ -297,7 +297,7 @@ def test_ods():
 
 
 def test_report():
-    import icexcel
+    from . import icexcel
 
     excel = icexcel.icVExcel()
     excel.Load('/home/xhermit/.icreport/rep_tmpl_report_result.xml')
@@ -308,7 +308,7 @@ def test_report():
 
 
 def test_worksheet_options():
-    import icexcel
+    from . import icexcel
 
     # if os.path.exists('./log/virtual_excel.log'):
     #     os.remove('./log/virtual_excel.log')
@@ -322,7 +322,7 @@ def test_worksheet_options():
 
 
 def test_schm19():
-    import icexcel
+    from . import icexcel
 
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/schm/19.ods')

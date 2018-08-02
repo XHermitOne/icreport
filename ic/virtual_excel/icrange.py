@@ -3,10 +3,10 @@
 
 import copy
 
-import icprototype
-import iccell
+from . import icprototype
+from . import iccell
 
-__version__ = (0, 0, 1, 2)
+__version__ = (0, 1, 1, 1)
 
 RANGE_ROW_IDX = 0
 RANGE_COL_IDX = 1
@@ -301,12 +301,17 @@ class icVRange(icprototype.icVPrototype):
         for i_row in range(self.height):
             cur_row = {'name': 'Row', 'children': []}
             copy_result['children'].append(cur_row)
+
+            cell = None
             for i_col in range(self.width):
                 cell = self._parent.getCell(self.row+i_row, self.col+i_col)
                 cell_attrs = copy.deepcopy(cell.get_attributes())
                 cur_row['children'].append(cell_attrs)
-            # Переиндексировать все ячейки строки
-            cell._reIndexAllElements(('Cell',))
+
+            if cell:
+                # Переиндексировать все ячейки строки
+                cell._reIndexAllElements(('Cell',))
+
         # Переиндексировать все строки диапазона ячеек
         self._getBasisRow()._reIndexAllElements(('Row',))
 

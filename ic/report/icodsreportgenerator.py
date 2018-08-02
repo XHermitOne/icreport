@@ -23,7 +23,8 @@ from ic.report import icrepfile
 
 from ic import config
 
-__version__ = (0, 0, 1, 7)
+
+__version__ = (0, 1, 1, 1)
 
 
 class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
@@ -135,11 +136,11 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                 log.error(u'Delete file <%s>' % pdf_filename)
 
         cmd = 'unoconv --format=pdf %s' % ODSFileName_
-        log.info(u'UNOCONV. Command <%s>' % cmd)
+        log.info(u'UNOCONV. Выполнение комманды <%s>' % cmd)
         os.system(cmd)
 
         cmd = 'evince %s&' % pdf_filename
-        log.info(u'EVINCE. Command <%s>' % cmd)
+        log.info(u'EVINCE. Выполнение комманды <%s>' % cmd)
         os.system(cmd)
 
     def Print(self, report=None, *args, **kwargs):
@@ -159,7 +160,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         """
         if ODSFileName_ and os.path.exists(ODSFileName_):
             cmd = 'libreoffice -p %s&' % ODSFileName_
-            log.info(u'Command <%s>' % cmd)
+            log.info(u'Выполнение комманды ОС <%s>' % cmd)
             os.system(cmd)
         else:
             log.warning(u'Печать. Файл <%s> не найден.' % ODSFileName_)
@@ -188,7 +189,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         """
         if ODSFileName_ and os.path.exists(ODSFileName_):
             cmd = 'libreoffice %s&' % ODSFileName_
-            log.info('Command <%s>' % cmd)
+            log.info('Выполнение комманды ОС <%s>' % cmd)
             os.system(cmd)
         else:
             log.warning(u'Открытие. Файл <%s> не найден' % ODSFileName_)

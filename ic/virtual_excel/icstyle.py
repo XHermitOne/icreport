@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import md5
-import copy
+import hashlib
 
-import icprototype
+from . import icprototype
 
-__version__ = (0, 0, 1, 2)
+__version__ = (0, 1, 1, 1)
 
 COLOR_ENUM = ('#000000',)
 
@@ -304,7 +303,7 @@ class icVStyles(icprototype.icVPrototype):
         style_str += self._getMD5InteriorStr(Style_)
         # NumberFormat
         style_str += self._getMD5NumberFormatStr(Style_)
-        return md5.new(style_str).hexdigest()        
+        return hashlib.md5(style_str).hexdigest()
 
     def _delMD5Style(self, MD5Style_):
         """
@@ -568,6 +567,7 @@ class icVStyle(icprototype.icVPrototype):
         attrs = fmt.create()
         return fmt
 
+
 HORIZONTAL_ENUM = ('Automatic', 'Left', 'Center', 'Right', 'Fill', 'Justify',
                    'CenterAcrossSelection', 'Distributed', 'JustifyDistributed')
 VERTICAL_ENUM = ('Automatic', 'Top', 'Center', 'Bottom', 'Justify',
@@ -607,6 +607,7 @@ class icVBorders(icprototype.icVPrototype):
         icprototype.icVPrototype.__init__(self, parent, *args, **kwargs)
         self._attributes = {'name': 'Borders', 'children': []}
 
+
 POSITION_ENUM = ('Left', 'Top', 'Right', 'Bottom', 'DiagonalLeft', 'DiagonalRight')
 LINESTYLE_ENUM = ('None', 'Continuous', 'Dash', 'Dot', 'DashDot', 'DashDotDot',
                   'SlantDashDot', 'Double')
@@ -628,6 +629,7 @@ class icVBorder(icprototype.icVPrototype):
         """
         icprototype.icVPrototype.__init__(self, parent, *args, **kwargs)
         self._attributes = {'name': 'Border'}
+
 
 UNDERLINE_ENUM = ('None', 'Single', 'Double',
                   'SingleAccounting', 'DoubleAccounting')
@@ -661,6 +663,7 @@ class icVFont(icprototype.icVPrototype):
         icprototype.icVPrototype.__init__(self, parent, *args, **kwargs)
         self._attributes = {'name': 'Font'}
 
+
 PATTERN_ENUM = ('None', 'Solid',
                 'Gray75', 'Gray50', 'Gray25', 'Gray125', 'Gray0625',
                 'HorizStripe', 'VertStripe', 'ReverseDiagStripe', 'DiagStripe',
@@ -684,6 +687,7 @@ class icVInterior(icprototype.icVPrototype):
         """
         icprototype.icVPrototype.__init__(self, parent, *args, **kwargs)
         self._attributes = {'name': 'Interior'}
+
 
 FORMAT_ENUM = ('General', 'General Number', 'General Date',
                'Long Date', 'Medium Date', 'Short Date',

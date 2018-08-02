@@ -18,13 +18,12 @@ from ic.std.img import bmp
 from ic.std.log import log
 from ic.std.utils import filefunc
 from ic.std.utils import res
-from ic.std.utils import ic_mode
 
 import ic.report
 from ic.report import report_generator
 from ic import config
 
-__version__ = (0, 0, 2, 1)
+__version__ = (0, 1, 1, 1)
 
 # Константы
 # Индексы полей списка кортежей
@@ -80,7 +79,7 @@ def getReportList(ReportDir_, is_sort=True):
         for sub_dir in sub_dirs:
             description_file = None
             try:
-                description_file = open(sub_dir+'/descript.ion', 'r')
+                description_file = open(os.path.join(sub_dir, 'descript.ion'), 'rt')
                 dir_description = description_file.read()
                 description_file.close()
             except:
@@ -109,7 +108,7 @@ def getReportList(ReportDir_, is_sort=True):
                 if rep_struct['generator'][-3:].lower() == 'xml':
                     img_idx = 1
             except:
-                log.warning('Error read report type')
+                log.warning('Ошибка определения типа отчета')
             # Данные
             try:
                 data = [rep_file_name, rep_struct['name'],
@@ -144,14 +143,13 @@ def get_img_dirname():
     cur_dirname = os.path.dirname(__file__)
     if not cur_dirname:
         cur_dirname = os.getcwd()
-    return cur_dirname+'/img/'
+    return os.path.join(cur_dirname, 'img')
 
 
 class icReportBrowserPrototype:
     """
     Форма браузера отчетов.
     """
-
     def __init__(self, Mode_=IC_REPORT_VIEWER_MODE, report_dir=''):
         """
         Конструктор.
@@ -326,7 +324,7 @@ class icReportBrowserPrototype:
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
         item_data = self.rep_tree.GetPyData(item)
-        log.debug(u'Preview <%s>' % item_data[REP_FILE_IDX])
+        log.debug(u'Предварительный просмотр <%s>' % item_data[REP_FILE_IDX])
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
@@ -344,7 +342,7 @@ class icReportBrowserPrototype:
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
         item_data = self.rep_tree.GetPyData(item)
-        log.debug(u'Print <%s>' % item_data[REP_FILE_IDX])
+        log.debug(u'Печать <%s>' % item_data[REP_FILE_IDX])
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
@@ -425,7 +423,7 @@ class icReportBrowserPrototype:
             if rep_generator is not None:
                 rep_generator.Edit(item_data[0])
             else:
-                log.warning('Not defaine Report Generator. Type <%s>' % item_data[REP_FILE_IDX])
+                log.warning(u'Не определен генератор отчета. Тип <%s>' % item_data[REP_FILE_IDX])
 
         event.Skip()
 
@@ -439,7 +437,7 @@ class icReportBrowserPrototype:
         # Если это файл отчета, то запустить обновление шаблона
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Запустить обновление шаблона отчета
-            log.debug('Update <%s> report' % item_data[0])
+            log.debug(u'Обновление отчета <%s>' % item_data[0])
             report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX], ParentForm_=self).Update(item_data[0])
         else:
             report_generator.getCurReportGeneratorSystem(self).Update()
@@ -456,7 +454,7 @@ class icReportBrowserPrototype:
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
         item_data = self.rep_tree.GetPyData(item)
-        log.debug(u'Convert <%s>' % item_data[REP_FILE_IDX])
+        log.debug(u'Конвертация <%s>' % item_data[REP_FILE_IDX])
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
@@ -540,8 +538,10 @@ class icReportBrowserPrototype:
             # Поменять имя в файле отчета.
             report = ic.utils.util.readAndEvalFile(new_rep_file_name, bRefresh=True)
             report['name'] = NewName_
+
+            rep_file = None
             try:
-                rep_file = open(new_rep_file_name, 'w')
+                rep_file = open(new_rep_file_name, 'wt')
                 rep_file.write(str(report))
                 rep_file.close()
             except:

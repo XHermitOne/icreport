@@ -4,11 +4,10 @@
 import copy
 import sys
 
-import icprototype
-import icrange
-import iccell
-import paper_size
-import config
+from . import icprototype
+from . import icrange
+from . import paper_size
+from . import config
 
 try:
     # Если Virtual Excel работает в окружении icReport
@@ -17,7 +16,7 @@ except ImportError:
     # Если Virtual Excel работает в окружении icServices
     from services.ic_std import icexceptions
 
-__version__ = (0, 0, 1, 3)
+__version__ = (0, 1, 1, 1)
 
 
 class icVWorksheet(icprototype.icVPrototype):
@@ -46,8 +45,8 @@ class icVWorksheet(icprototype.icVPrototype):
         Существуют листы с именем Name_?
         """
         for sheet in Worksheets_:
-            if not isinstance(sheet['Name'], unicode):
-                name = unicode(sheet['Name'], 'utf-8')
+            if not isinstance(sheet['Name'], str):
+                name = str(sheet['Name'])   # 'utf-8')
             else:
                 name = sheet['Name']
             if name == Name_:

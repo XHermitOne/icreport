@@ -12,14 +12,14 @@ hotshot2calltree your_project.prof > your_project.out
 
 import os
 import os.path
-import hotshot
+import cProfile
 
 PROF_LOG_FILENAME = './log/virtual_excel_prof.log'
 OUT_LOG_FILENAME = './log/virtual_excel_out.log'
 
 
 def test_1():
-    import icexcel
+    from . import icexcel
     
     excel = icexcel.icVExcel()
     excel.Load('./testfiles/test.ods')
@@ -49,16 +49,12 @@ def do_profiling(testFunction):
         os.remove(OUT_LOG_FILENAME)
         print('INFO. Delete OUT log file <%s>' % OUT_LOG_FILENAME)
     
-    prof = hotshot.Profile(PROF_LOG_FILENAME)
-    prof.start()
-  
+    prof = cProfile.Profile(PROF_LOG_FILENAME)
+
     # your code goes here
     if testFunction:
-        testFunction()
-     
-    prof.stop()
-    prof.close()
-    
+        prof.runcall(testFunction)
+
     # Сконвертировать логи
     if os.path.exists(PROF_LOG_FILENAME):
         cmd = 'hotshot2calltree %s > %s' % (PROF_LOG_FILENAME, OUT_LOG_FILENAME)

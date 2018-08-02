@@ -3,16 +3,19 @@
 """
 Исключения.
 """
-import exceptions
 
-class icMergeCellError(exceptions.Exception):
+__version__ = (0, 1, 1, 1)
+
+
+class icMergeCellError(Exception):
     """
     Ошибка обращения к запрещенной области объединенной ячейки.
     """
     def __init__(self, args=None, user=None):
         self.args = args
 
-class icCellAddressInvalidError(exceptions.Exception):
+
+class icCellAddressInvalidError(Exception):
     """
     Ошибка некорректного адреса ячейки.
     """

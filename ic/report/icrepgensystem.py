@@ -29,10 +29,9 @@ from ic.std.utils import res
 from ic.std.dlg import dlg
 from ic.std.utils import textfunc
 
-from ic.report import icrepgen
 from ic.report import icreptemplate
 
-__version__ = (0, 0, 4, 1)
+__version__ = (0, 1, 1, 1)
 
 # Константы подсистемы
 DEFAULT_REP_TMPL_FILE = os.path.join(os.path.dirname(__file__), 'new_report_template.ods')
@@ -76,6 +75,12 @@ class icReportGeneratorSystem:
         # Предварительный просмотр
         self.PrintPreview = None
 
+    def getReportDir(self):
+        """
+        Папка отчетов.
+        """
+        return DEFAULT_REPORT_DIR
+
     def getProfileDir(self):
         """
         Папка профиля программы.
@@ -89,7 +94,7 @@ class icReportGeneratorSystem:
         my_generator_type = self._Rep.get('generator', None) if self._Rep else None
         if my_generator_type is None:
             log.warning(u'Не удалось определить тип системы генерации отчетов в <%s>' % self.__class__.__name__)
-        elif type(my_generator_type) in (str, unicode):
+        elif isinstance(my_generator_type, str):
             my_generator_type = my_generator_type.lower()
         return my_generator_type
 
@@ -132,7 +137,7 @@ class icReportGeneratorSystem:
         Перегрузить данные отчета.
         @param RepTmplFileName_: Имя файла шаблона отчета.
         """
-        self._Rep = filefunc.loadResourceFile(RepTmplFileName_, bRefresh=True)
+        self._Rep = res.loadResourceFile(RepTmplFileName_, bRefresh=True)
         
     def setRepData(self, report):
         """
@@ -266,7 +271,9 @@ class icReportGeneratorSystem:
                 tmpl_filename = os.path.splitext(filename)[0] + XML_TEMPLATE_EXT
                 template = icreptemplate.icExcelXMLReportTemplate()
             else:
-                log.warning(u'Not find report template for <%s>' % filename)
+                log.warning(u'Не найден шаблон отчета <%s>' % filename)
+
+            new_filename = None
             if template:
                 rep_template = template.read(tmpl_filename)
                 new_filename = os.path.splitext(filename)[0]+DEFAULT_REPORT_TEMPLATE_EXT
@@ -368,12 +375,12 @@ class icReportGeneratorSystem:
                 # БД задается с помощью стандартного DB URL
                 db_url = data_source[4:].lower().strip()
 
-            log.info(u'DB connection <%s>' % db_url)
+            log.info(u'Связь с БД <%s>' % db_url)
             # Установить связь с БД
             db_connection = sqlalchemy.create_engine(db_url)
             # Освободить БД
             # db_connection.dispose()
-            log.info(u'DB SQL <%s>' % textfunc.toUnicode(sql, 'utf-8'))
+            log.info(u'SQL <%s>' % textfunc.toUnicode(sql, 'utf-8'))
             sql_result = db_connection.execute(sql)
             rows = sql_result.fetchall()
             cols = rows[0].keys() if rows else []

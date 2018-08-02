@@ -5,13 +5,16 @@
 Модуль тестов для виртуального Excel.
 """
 
+import time
 import sys
 import os
 import os.path
 
 import unittest
 
-__version__ = (0, 0, 1, 2)
+from . import icexcel
+
+__version__ = (0, 1, 1, 1)
 
 
 class icVirtualExcelTests(unittest.TestCase):
@@ -31,7 +34,6 @@ class icVirtualExcelTests(unittest.TestCase):
         """
         Тестирование генерации XML.
         """
-        import icexcel
         app = icexcel.icVExcel()
 
         app.Load(self.test_path+'/testfiles/example.xml')
@@ -93,7 +95,6 @@ class icVirtualExcelTests(unittest.TestCase):
         """
         Тестирование генерации xml для OpenOffice.org Calc.
         """
-        import icexcel
         app = icexcel.icVExcel()
         work_book = app.getActiveWorkbook()
         work_sheet = work_book.createWorksheet()
@@ -108,7 +109,6 @@ class icVirtualExcelTests(unittest.TestCase):
         """
         Тестирование генерации xml для OpenOffice.org Calc.
         """
-        import icexcel
         app = icexcel.icVExcel()
         work_book = app.getActiveWorkbook()
         work_sheet = work_book.createWorksheet()
@@ -122,7 +122,6 @@ class icVirtualExcelTests(unittest.TestCase):
         """
         Тестирование генерации xml для OpenOffice.org Calc.
         """
-        import icexcel
         app = icexcel.icVExcel()
         work_book = app.getActiveWorkbook()
         work_sheet = work_book.createWorksheet()
@@ -140,7 +139,6 @@ class icVirtualExcelTests(unittest.TestCase):
         """
         Тестирование генерации xml для OpenOffice.org Calc.
         """
-        import icexcel
         app = icexcel.icVExcel()
         work_book = app.getActiveWorkbook()
         work_sheet = work_book.createWorksheet()
@@ -157,8 +155,7 @@ class icVirtualExcelTests(unittest.TestCase):
         """
         Тестирование генерации xml для OpenOffice.org Calc.
         """
-        import icexcel
-        app=icexcel.icVExcel()
+        app = icexcel.icVExcel()
         app.Load(self.test_path+'/testfiles/example.xml')
 
         work_book = app.getActiveWorkbook()
@@ -173,7 +170,6 @@ class icVirtualExcelTests(unittest.TestCase):
         """
         Тестирование поддержки объединенных ячеек.
         """
-        import icexcel
         app = icexcel.icVExcel()
 
         app.Load(self.test_path+'/testfiles/merge0.xml')
@@ -184,12 +180,9 @@ def test_work_sheet():
     """
     Вставка/Удаление/Копирование листов.
     """
-    import time
-    from icexcel import *
-
     start_time = time.time()
     print('test_work_sheet START')
-    v_excel = icVExcel()
+    v_excel = icexcel.icVExcel()
     v_excel.openWorkbook('testfiles/worksheet01.xml')
     print('open...ok','testfiles/worksheet01.xml')
     v_excel.openWorkbook('testfiles/worksheet02.xml')
@@ -210,12 +203,9 @@ def test_work_sheet_list():
     """
     Группавая работа с листами.
     """
-    import time
-    from icexcel import *
-
     start_time = time.time()
     print('test_work_sheet_list START')
-    v_excel = icVExcel()
+    v_excel = icexcel.icVExcel()
     v_excel.openWorkbook('testfiles/worksheet01.xml')
     print('open...ok', 'testfiles/worksheet01.xml')
     v_excel.openWorkbook('testfiles/worksheet02.xml')
@@ -235,12 +225,9 @@ def test_del_work_sheet_list():
     """
     Групповое удаление листов.
     """
-    import time
-    from icexcel import *
-
     start_time = time.time()
     print('test_del_work_sheet_list START')
-    v_excel = icVExcel()
+    v_excel = icexcel.icVExcel()
     v_excel.openWorkbook('testfiles/worksheet03.xml')
     print('open...ok', 'testfiles/worksheet03.xml')
     v_excel.selectWorksheet('testfiles/worksheet03.xml', 'ЛистXXX')
@@ -259,12 +246,9 @@ def test_del_col_row():
     """
     Удаление колонок/строк из листа.
     """
-    import time
-    from icexcel import *
-
     start_time = time.time()
     print('test_del_col_row START')
-    v_excel = icVExcel()
+    v_excel = icexcel.icVExcel()
     v_excel.openWorkbook('testfiles/worksheet02.xml')
     print('open...ok', 'testfiles/worksheet02.xml')
     work_book = v_excel.getActiveWorkbook()
@@ -284,12 +268,9 @@ def test_merge_cell():
     """
     Объединение ячеек.
     """
-    import time
-    from icexcel import *
-
     start_time = time.time()
     print('test_merge_cell START')
-    v_excel = icVExcel()
+    v_excel = icexcel.icVExcel()
     v_excel.openWorkbook('testfiles/worksheet02.xml')
     print('open...ok', 'testfiles/worksheet02.xml')
 

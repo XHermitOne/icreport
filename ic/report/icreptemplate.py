@@ -727,7 +727,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
                         try:
                             Rep_['sheet'][i_row][i_col]['value'] = '[\'%s\']' % (self.FIELD_NAMES[i_col-Detail_['col']])
                         except:
-                            log.fatal('ERROR. _normDetail function')
+                            log.fatal('Ошибка. Функция _normDetail')
         return Rep_
         
     def _defBand(self, BandTag_, Row_, ColCount_, TitleRow_, Rep_):
@@ -1049,7 +1049,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
             row = Rows_[Row_]
             # Проверка корректности описания строки
             if 'children' not in row or not row['children']:
-                log.warning(u'WARNING. _getTagBandRow function <%s>' % row)
+                log.warning(u'Ошибка наличия дочерних объектов строки <%s>' % row)
                 return self.__cur_band
             i_tag = self._getTagBandIdx(Rows_)
 
@@ -1067,7 +1067,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
 
             return self.__cur_band
         except:
-            log.fatal(u'ERROR. _getTagBandRow function')
+            log.fatal(u'Ошибка в функции _getTagBandRow')
             return None
 
     def _findTagBandRow(self, Row_):
@@ -1085,7 +1085,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
                    self._isTag(str(cell['children'][0]['value']).lower().strip()):
                     return i, cell['children'][0]['value'].lower().strip()
         except:
-            log.fatal(u'ERROR. _findTagBandRow function')
+            log.fatal(u'Ошибка в функции _findTagBandRow')
         return -1, None
 
     def _isUpperBand(self, Rows_, Row_):
@@ -1099,7 +1099,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
             tag = self._getTagBandRow(Rows_, Row_)
             return bool(tag == UPPER_TAG)
         except:
-            log.fatal(u'_isUpperBand function')
+            log.fatal(u'Ошибка в функции _isUpperBand')
             return False
     
     def _isUnderBand(self, Rows_, Row_):
@@ -1113,7 +1113,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
             tag = self._getTagBandRow(Rows_, Row_)
             return bool(tag == UNDER_TAG)
         except:
-            log.fatal(u'_isUnderBand function')
+            log.fatal(u'Ошибка в функции _isUnderBand')
             return False
 
     def _isTitleBand(self, Rows_, Row_):
@@ -1126,7 +1126,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
         try:
             return bool(self._getTagBandRow(Rows_, Row_) in TITLE_TAGS)
         except:
-            log.fatal(u'_isTitleBand function')
+            log.fatal(u'Ошибка в функции _isTitleBand')
             return False
 
     def _parseDescriptionTag(self, Rep_, ParseRow_):
@@ -1147,7 +1147,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 else:
                     Rep_['description'] = None
         except:
-            log.fatal(u'_parseDescriptionTag function')
+            log.fatal(u'Ошибка в функции _parseDescriptionTag')
 
     def _parseVarTag(self, Rep_, ParseRow_):
         """
@@ -1164,7 +1164,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 value = execfunc.exec_code(value.replace(PY_SIGNATURE, u'').strip())
             Rep_['variables'][name] = value
         except:
-            log.fatal(u'_parseVarTag function')
+            log.fatal(u'Ошибка в функции _parseVarTag')
 
     def _parseGeneratorTag(self, Rep_, ParseRow_):
         """
@@ -1184,7 +1184,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 else:
                     Rep_['generator'] = None
         except:
-            log.fatal(u'_parseGeneratorTag function')
+            log.fatal(u'Ошибк в функции _parseGeneratorTag')
 
     def _parseDataSrcTag(self, Rep_, ParseRow_):
         """
@@ -1221,7 +1221,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
             xml_style_lib_file_name = ParseRow_[0]['children'][0]['value']
             Rep_['style_lib'] = icstylelib.icXMLRepStyleLib().convert(xml_style_lib_file_name)
         except:
-            log.fatal(u'ERROR. _parseStyleLibTag function')
+            log.fatal(u'Ошибка в функции _parseStyleLibTag')
             
     # Словарь функций разбора заголовочных тегов
     _TitleTagParse = {DESCRIPTION_TAG: _parseDescriptionTag,
@@ -1277,7 +1277,7 @@ class icXLSReportTemplate(icODSReportTemplate):
         try:
             ods_filename = os.path.splitext(TemplateFile_)[0] + '.ods'
             cmd = 'unoconv --format=ods %s' % TemplateFile_
-            log.info(u'Выполнение комманды <%s>' % cmd)
+            log.info(u'Выполнение комманды ОС <%s>' % cmd)
             os.system(cmd)
 
             return icODSReportTemplate.open(self, ods_filename)

@@ -13,7 +13,7 @@ from ic.std.convert import xml2dict
 
 from ic.report import icreptemplate
 
-__version__ = (0, 0, 1, 1)
+__version__ = (0, 1, 1, 1)
 
 # Стиль
 IC_REP_STYLE = {'font': None,   # Шрифт Структура типа ic.components.icfont.SPC_IC_FONT

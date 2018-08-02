@@ -15,7 +15,7 @@ from ic.report import icxlsreportgenerator
 from ic.report import icreportmangenerator
 from ic.report import icrtfreportgenerator
 
-__version__ = (0, 0, 2, 1)
+__version__ = (0, 1, 1, 1)
 
 # Константы подсистемы
 REP_GEN_SYS = None

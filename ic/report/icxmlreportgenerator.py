@@ -19,14 +19,13 @@ from ic.report import icrepfile
 
 from ic import config
 
-__version__ = (0, 0, 1, 6)
+__version__ = (0, 1, 1, 1)
 
 
 class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     """
     Класс системы генерации отчетов, основанные на генерации XML файлов.
     """
-
     def __init__(self, Rep_=None, ParentForm_=None):
         """
         Конструктор класса.

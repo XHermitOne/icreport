@@ -44,9 +44,9 @@ import string
 
 from ic.std.log import log
 
-from ic.convert import xml2dict
+from ic.std.convert import xml2dict
 
-__version__ = (0, 0, 1, 1)
+__version__ = (0, 1, 1, 1)
 
 # --- Константы ---
 # --- Спецификации и структуры ---

@@ -3,12 +3,12 @@
 
 import os.path
 
-import icprototype
+from . import icprototype
 
-import icworksheet
-import icstyle
+from . import icworksheet
+from . import icstyle
 
-__version__ = (0, 0, 1, 2)
+__version__ = (0, 1, 1, 1)
 
 
 class icVWorkbook(icprototype.icVPrototype):
@@ -90,12 +90,12 @@ class icVWorkbook(icprototype.icVPrototype):
         """
         work_sheet_attr = None
 
-        if not isinstance(Name_, unicode):
-            Name_ = unicode(Name_, 'utf-8')
+        if not isinstance(Name_, str):
+            Name_ = str(Name_)  # 'utf-8')
             
         for sheet in Worksheets_:
-            if not isinstance(sheet['Name'], unicode):
-                name = unicode(sheet['Name'], 'utf-8')
+            if not isinstance(sheet['Name'], str):
+                name = str(sheet['Name'])   #  'utf-8')
             else:
                 name = sheet['Name']
             if name == Name_:
