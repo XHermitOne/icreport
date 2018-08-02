@@ -20,9 +20,9 @@ try:
 except ImportError:
     print('Pywin32 import error')
 
-import xml2dict
+from . import xml2dict
 
-__version__ = (0, 1, 1, 2)
+__version__ = (1, 1, 1, 1)
 
 # --- Константы ---
 # XML формат файла Excel
@@ -64,6 +64,7 @@ def XlsFile2Dict(XLSFileName_):
         info = sys.exc_info()[1]
         win32api.MessageBox(0, 'Ошибка чтения файла %s : %s.' % (XLSFileName_, info))
         return None
+
 
 if __name__ == '__main__':
     print(XlsFile2Dict('num_formats.xls'))

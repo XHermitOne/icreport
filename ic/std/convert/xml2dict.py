@@ -16,7 +16,7 @@ from xml.sax import xmlreader
 import xml.sax.handler
 # import xml.sax.saxutils
 
-__version__ = (0, 1, 1, 2)
+__version__ = (1, 1, 1, 1)
 
 
 # Описания функций
@@ -86,8 +86,8 @@ class icXML2DICTReader(xml.sax.handler.ContentHandler):
         """
         Попытка приведения типов данных.
         """
-        if type(value) is unicode:
-            value = value.encode(self.encoding)
+        # if type(value) is unicode:
+        #    value = value.encode(self.encoding)
             
         try:
             # Попытка приведения типа
@@ -181,8 +181,7 @@ def create_pkl_files_test():
     """
     import pickle
     import time
-    import cPickle
-    
+
     start_time = time.time()
     print('START Pickle file create test')
     
@@ -190,21 +189,21 @@ def create_pkl_files_test():
     print('READ ... ok Time(s):', time.time()-start_time)
     
     start_time = time.time()
-    f_out = open('./testfiles/SF02.txt','wt')
+    f_out = open('./testfiles/SF02.txt', 'wt')
     f_out.write(str(data))
     f_out.close()
     print('WRITE text ... ok Time(s):', time.time()-start_time)
     
     start_time = time.time()
-    f_out = open('./testfiles/SF02.pkl','w')
+    f_out = open('./testfiles/SF02.pkl', 'wb')
     pkl = pickle.Pickler(f_out)
     pkl.dump(data)
     f_out.close()
     print('WRITE pickle ... ok Time(s):', time.time()-start_time)
     
     start_time = time.time()
-    f_out = open('./testfiles/SF02.cpk','w')
-    pkl = cPickle.dump(data, f_out)
+    f_out = open('./testfiles/SF02.cpk', 'wb')
+    pkl = pickle.dump(data, f_out)
     f_out.close()
     print('WRITE cPickle ... ok Time(s):', time.time()-start_time)
 
