@@ -460,8 +460,6 @@ class icODS(object):
             layout = self.getChildrenByName(page_setup[0], 'Layout')
             orientation = layout[0].get('Orientation', None) if layout else None
             if orientation:
-                # if type(orientation) == unicode:
-                #    orientation = orientation.encode(DEFAULT_ENCODE)
                 ods_properties['printorientation'] = orientation.lower()
                 
             page_margins = self.getChildrenByName(page_setup[0], 'PageMargins')
@@ -845,8 +843,6 @@ class icODS(object):
         @param sFormula: Формула в строковом представлении.
         @return: True/False.
         """
-        # if isinstance(sFormula, str):
-        #    sFormula = unicode(sFormula, DEFAULT_ENCODE)
         if sAddress in sFormula:
             i = sFormula.index(sAddress)
             if i > 0:
@@ -989,10 +985,6 @@ class icODS(object):
         @param sFileName: Имя ODS файла.
         @return: Словарь данных или None в случае ошибки.
         """
-        # if isinstance(sFileName, str):
-        #    # ВНИМАНИЕ! Перед загрузкой надо имя файла сделать
-        #    # Юникодной иначе падает по ошибке в функции load
-        #    sFileName = unicode(sFileName, DEFAULT_ENCODE)
         self.ods_document = odf.opendocument.load(sFileName)
         
         self.xmlss_data = {'name': 'Calc', 'children': []}
@@ -1370,7 +1362,7 @@ class icODS(object):
             result['weight'] = weight_pt[0]
         elif weight_cm:
             # Ширина может задаватся в см поэтому нужно преобразовать в пт
-            result['weight'] = unicode(float(weight_cm[0])*CM2PT_CORRECT)
+            result['weight'] = str(float(weight_cm[0])*CM2PT_CORRECT)
             
         line_style = re.findall(line_style_pattern, sData)
         if line_style:
@@ -1528,10 +1520,10 @@ class icODS(object):
         @param fPageHeight: Высота листа в см.
         @return: A4 или A3.
         """
-        if type(fPageWidth) in (str, unicode):
+        if isinstance(fPageWidth, str):
             page_width_txt = fPageWidth.replace('cm', '').replace('mm', '')
             fPageWidth = float(page_width_txt)
-        if type(fPageHeight) in (str, unicode):
+        if isinstance(fPageHeight, str):
             page_height_txt = fPageHeight.replace('cm', '').replace('mm', '')
             fPageHeight = float(page_height_txt)
 
@@ -1820,7 +1812,7 @@ class icODS(object):
         if sValue and sValue != 'None':
             data['value'] = sValue
         else:
-            txt = u''.join([unicode(child) for child in ODSElement.childNodes])
+            txt = u''.join([str(child) for child in ODSElement.childNodes])
             value = txt.encode(DEFAULT_ENCODE)
             data['value'] = value
 

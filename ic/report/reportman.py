@@ -99,12 +99,6 @@ def rp_setparamvalue(hreport, paramname, paramvalue):
     elif type(paramvalue) is float:
         paramtype = 5
         paramvalue = _c.byref(_c.c_double(paramvalue))
-    # elif type(paramvalue) is long:
-    #    paramtype = 14
-    #    paramvalue = _c.byref(_c.c_longlong(paramvalue))
-    # elif type(paramvalue) is unicode:
-    #    paramtype = 8
-    #    paramvalue = _c.c_wchar_p(paramvalue)
     elif type(paramvalue) is str:
         paramtype = 256
         paramvalue = _c.c_char_p(paramvalue)

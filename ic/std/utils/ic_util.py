@@ -70,8 +70,6 @@ def getStrInQuotes(Value_):
     """
     if isinstance(Value_, str):
         return '\'%s\'' % Value_
-    # elif isinstance(Value_, unicode):
-    #    return u'\'%s\'' % Value_
     else:
         return str(Value_)
 

@@ -905,9 +905,6 @@ class icReportGenerator:
         @param DataLst_: Данные, которые нужно поместить в формат.
         @return: Возвращает строку, соответствующую формату.
         """
-        # if isinstance(Fmt_, str):
-        #    Fmt_ = unicode(Fmt_, DEFAULT_ENCODING)
-
         # Заполнение формата
         if DataLst_ is []:
             if Fmt_:

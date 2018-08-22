@@ -37,7 +37,7 @@ class icReportActionDialog(report_dlg_proto.icReportActionDialogProto):
         @param report_name: Имя отчета
         @return: True/False.
         """
-        if not isinstance(report_name, unicode):
+        if not isinstance(report_name, str):
             report_name = unicode(str(report_name), DEFAULT_UNICODE)
         title = u'Отчет: %s' % report_name
         self.SetLabel(title)

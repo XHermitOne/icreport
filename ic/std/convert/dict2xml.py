@@ -82,8 +82,6 @@ class icDICT2XMLWriter(saxutils.XMLGenerator):
             # ВНИМАНИЕ! Записываться в файл должен только unicode иначе падает
             # при сохранении русских букв
             if sys.platform[:3].lower() == 'win':
-                # if isinstance(value, unicode):
-                #    value = value.encode(self._encoding)
                 txt = ' %s=%s' % (name, saxutils.quoteattr(value))
             else:
                 txt = u' %s=%s' % (name, saxutils.quoteattr(value))

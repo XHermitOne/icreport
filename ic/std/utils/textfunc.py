@@ -5,6 +5,10 @@
 Модуль функций обработки текста.
 """
 
+from ..log import log
+
+__version__ = (0, 1, 1, 1)
+
 # Наполнитель позиций при отображении вложенности пунктов в компоненте списка
 PADDING = '    '
 
@@ -44,10 +48,6 @@ def StructToTxt(Struct_, Level_=0):
             # Появляется косяк с разделителем папок в именах путей
             # Проверка на кавычки
             txt = txt+'\''+Struct_.replace('\'', '\\\'').replace('\'', '\\\'').replace('\r', '\\r').replace('\n', '\\n').replace('\t', '\\t')+'\''
-        elif isinstance(obj_type, unicode):
-            # Появляется косяк с разделителем папок в именах путей
-            # Проверка на кавычки
-            txt = txt+'u\''+Struct_.replace('\'', '\\\'').replace('\'', '\\\'').replace('\r', '\\r').replace('\n', '\\n').replace('\t', '\\t')+'\''
         else:
             txt += str(Struct_)
 
@@ -56,8 +56,9 @@ def StructToTxt(Struct_, Level_=0):
             txt = txt[1:]
         return txt
     except:
-        log.error(u'Ошибка перевода структуры в форматированный текст. Уровень <%d>' % Level_)
-        raise
+        log.fatal(u'Ошибка перевода структуры в форматированный текст. Уровень <%d>' % Level_)
+    return u''
+
 
 rusRegUpperDict = {'а': 'А', 'б': 'Б', 'в': 'В', 'г': 'Г', 'д': 'Д', 'е': 'Е', 'ё': 'Ё', 'ж': 'Ж',
                    'з': 'З', 'и': 'И', 'й': 'Й', 'к': 'К', 'л': 'Л', 'м': 'М', 'н': 'Н', 'о': 'О', 'п': 'П',
@@ -144,7 +145,7 @@ def cmpLowerU(str1, str2):
     """
     Сравнивает два символа в нижнем регистре.
     """
-    for i in xrange(min(len(str1), len(str2))):
+    for i in range(min(len(str1), len(str2))):
         s1 = str1[i]
         s2 = str2[i]
         if s1 in u_rusRegLowerLst and s2 in u_rusRegLowerLst:
@@ -177,35 +178,32 @@ def str2unicode(String_, CP_=DEFAULT_ENCODING):
     @param CP_: Кодовая страница строки.
     @return: Строка в юникоде.
     """
-    if isinstance(String_, unicode):
+    if isinstance(String_, str):
         return String_
-    else:
-        return unicode(str(String_), CP_)
+    elif isinstance(String_, bytes):
+        return String_.decode(CP_)
+    return str(String_)
 
 
 def isLATText(Text_):
     """
     Текст написан в латинице?
     """
-    if type(Text_) in (str, unicode):
+    if isinstance(Text_, str):
         rus_chr = [c for c in Text_ if ord(c) > 128]
         return not bool(rus_chr)
-    else:
-        # Это не строка
-        return False
-    return True
+    # Это не строка
+    return False
 
 
 def isRUSText(Text_):
     """
     Строка с рускими буквами?
     """
-    if type(Text_) in (str, unicode):
+    if isinstance(Text_, str):
         rus_chr = [c for c in Text_ if ord(c) > 128]
         return bool(rus_chr)
-    else:
-        # Это не строка
-        return False
+    # Это не строка
     return False
 
 
@@ -213,9 +211,9 @@ def _rus2lat(Text_, TranslateDict_):
     """
     Перевод русских букв в латинские по словарю замен.
     """
-    if not isinstance(Text_, unicode):
+    if isinstance(Text_, bytes):
         # Привести к юникоду
-        Text_ = unicode(Text_, DEFAULT_ENCODING)
+        Text_ = Text_.decode(DEFAULT_ENCODING)
 
     txt_list = list(Text_)
     txt_list = [TranslateDict_.setdefault(ch, ch) for ch in txt_list]
@@ -237,6 +235,7 @@ def rus2lat(Text_):
     Перевод русских букв в латинские.
     """
     return _rus2lat(Text_, RUS2LATDict)
+
 
 RUS2LATKeyboardDict = {u'а': 'f', u'б': '_', u'в': 'd', u'г': 'u', u'д': 'l', u'е': 't', u'ё': '_', u'ж': '_',
                        u'з': 'p', u'и': 'b', u'й': 'q', u'к': 'r', u'л': 'k', u'м': 'v', u'н': 'y', u'о': 'j',
@@ -349,13 +348,11 @@ def toUnicode(Value_, CP_=DEFAULT_ENCODING):
     @param Value_: Значение.
     @param CP_: Кодовая страница для строк.
     """
-    if isinstance(Value_, unicode):
+    if isinstance(Value_, str):
         return Value_
-    elif isinstance(Value_, str):
-        return unicode(Value_, CP_)
-    else:
-        return unicode(str(Value_), CP_)
-    return None
+    elif isinstance(Value_, bytes):
+        return Value_.decode(CP_)
+    return str(Value_)
 
 
 def txt_find_words(txt, *words):
@@ -366,7 +363,7 @@ def txt_find_words(txt, *words):
     @param words: Искомые слова.
     @return: True (есть такие слова в тексте)/False (слова не найдены).
     """
-    if not isinstance(txt, unicode):
+    if not isinstance(txt, str):
         txt = toUnicode(txt)
     find = False
     for word in words:
