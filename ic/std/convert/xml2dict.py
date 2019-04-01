@@ -85,9 +85,6 @@ class icXML2DICTReader(xml.sax.handler.ContentHandler):
         """
         Попытка приведения типов данных.
         """
-        # if type(value) is unicode:
-        #    value = value.encode(self.encoding)
-            
         try:
             # Попытка приведения типа
             return eval(value)
@@ -103,7 +100,7 @@ class icXML2DICTReader(xml.sax.handler.ContentHandler):
             if content.strip():
                 if self._cur_value is None:
                     self._cur_value = ''
-                self._cur_value += content.encode(self.encoding)
+                self._cur_value += content
         except:
             print('ERROR characters')
             raise
@@ -117,7 +114,7 @@ class icXML2DICTReader(xml.sax.handler.ContentHandler):
             if type(name) is tuple:
 
                 # Имя элемента
-                element_name = name[1].encode(self.encoding)
+                element_name = name[1]
 
                 # Создать структуру,  соответствующую элементу
                 self._cur_path[-1]['children'].append({'name': element_name, 'children': []})
@@ -130,9 +127,9 @@ class icXML2DICTReader(xml.sax.handler.ContentHandler):
                     # Разбор параметров элемента
                     for cur_qname in element_qnames:
                         # Имя параметра
-                        element_qname = attrs.getNameByQName(cur_qname)[1].encode(self.encoding)
+                        element_qname = attrs.getNameByQName(cur_qname)[1]
                         # Значение параметра
-                        element_value = attrs.getValueByQName(cur_qname).encode(self.encoding)
+                        element_value = attrs.getValueByQName(cur_qname)
                         cur_node[element_qname] = element_value
         except:
             print('ERROR startElementNS::', name, qname, attrs)

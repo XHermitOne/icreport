@@ -25,7 +25,7 @@ try:
 except ImportError:
     log.error(u'Ошибка импорта ODFpy')
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 DIMENSION_CORRECT = 35
 DEFAULT_STYLE_ID = 'Default'
@@ -1380,8 +1380,8 @@ class icODS(object):
         @param ODSElement: ODS элемент соответствующий листу.
         """
         data = {'name': 'Worksheet', 'children': []}
-        name = ODSElement.getAttribute('name').encode(DEFAULT_ENCODE)
-        
+        name = ODSElement.getAttribute('name')
+
         log.debug('WORKSHEET: <%s : %s>' % (type(name), name))
         
         data['Name'] = name
@@ -1813,7 +1813,7 @@ class icODS(object):
             data['value'] = sValue
         else:
             txt = u''.join([str(child) for child in ODSElement.childNodes])
-            value = txt.encode(DEFAULT_ENCODE)
+            value = txt
             data['value'] = value
 
         if sValueType:
