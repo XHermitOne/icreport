@@ -20,13 +20,12 @@ from ic.report import report_generator
 from ic.report import icstylelib
 
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 DEFAULT_REPORT_FILE_EXT = '.rprt'
 
+
 # Функции управления
-
-
 def getReportResourceFilename(report_filename='', report_dir=''):
     """
     Получить полное имя файла шаблона отчета.
@@ -166,7 +165,7 @@ def ReportBrowser(parent_form=None, report_dir='', mode=icreportbrowser.IC_REPOR
     try:
         app = None
         if parent_form is None:
-            app = wx.PySimpleApp()
+            app = wx.App()
 
         # Иначе вывести окно выбора отчета
         rep_gen_dlg = icreportbrowser.icReportBrowserDialog(parent_form, mode,
