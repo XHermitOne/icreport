@@ -13,7 +13,7 @@ import sys
 import time
 from xml.sax import saxutils
 
-__version__ = (1, 1, 1, 1)
+__version__ = (1, 1, 1, 2)
 
 # Удалять 'Cyr' из имен шрифтов для Linux систем
 # т.к. в Linux все шрифты unicode
@@ -27,7 +27,7 @@ def Dict2XmlssFile(Data_, XmlFileName_, encoding='utf-8'):
     xml_file = None
     try:
         # Начать запись
-        xml_file = open(XmlFileName_, 'wt')
+        xml_file = open(XmlFileName_, 'wt', encoding=encoding)
         xml_writer = icDict2XmlssWriter(Data_, xml_file, encoding=encoding)
         xml_writer.startDocument()
         xml_writer.setBook()

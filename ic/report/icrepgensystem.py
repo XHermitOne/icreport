@@ -266,7 +266,6 @@ class icReportGeneratorSystem:
             filename = os.path.abspath(os.path.normpath(RepTemplateFileName_))
 
         if os.path.isfile(filename):
-
             # Конвертация
             log.debug(u'Начало конвертации <%s>' % filename)
             tmpl_filename = None

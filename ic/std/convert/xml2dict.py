@@ -14,9 +14,8 @@ import sys
 
 from xml.sax import xmlreader
 import xml.sax.handler
-# import xml.sax.saxutils
 
-__version__ = (1, 1, 1, 1)
+__version__ = (1, 1, 1, 2)
 
 
 # Описания функций
@@ -30,7 +29,7 @@ def XmlFile2Dict(XMLFileName_, encoding='utf-8'):
     """
     xml_file = None
     try:
-        xml_file = open(XMLFileName_, 'r')
+        xml_file = open(XMLFileName_, 'rt', encoding=encoding)
 
         input_source = xmlreader.InputSource()
         input_source.setByteStream(xml_file)
@@ -161,7 +160,7 @@ def default_test():
     """
     rep_file = None
     xml_file = None
-    xml_file = open(sys.argv[1], 'r')
+    xml_file = open(sys.argv[1], 'rt', encoding='utf-8')
 
     input_source = xmlreader.InputSource()
     input_source.setByteStream(xml_file)
