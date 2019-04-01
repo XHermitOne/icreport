@@ -9,6 +9,11 @@ import datetime
 import wx
 from . import std_dialogs_proto
 
+__version__ = (0, 0, 2, 1)
+
+MIN_YEAR = 1940
+MAX_YEAR = MIN_YEAR + 100
+
 
 class icYearDialog(std_dialogs_proto.yearDialogProto):
     """
@@ -23,8 +28,34 @@ class icYearDialog(std_dialogs_proto.yearDialogProto):
 
         self._selected_year = None
 
+    def init_year_choice(self):
+        """
+        Инициализация контрола выбора годов.
+        """
+        # Заполнить список выбора
+        year_choices = [str(i_year) for i_year in range(MIN_YEAR, MAX_YEAR)]
+        self.year_choice.AppendItems(year_choices)
+
+        if not self._selected_year:
+            # Выбрать текущий системный год
+            today = datetime.date.today()
+            cur_year_idx = year_choices.index(str(today.year))
+        else:
+            cur_year_idx = year_choices.index(str(self._selected_year))
+
+        self.year_choice.SetSelection(cur_year_idx)
+
     def getSelectedYear(self):
         return self._selected_year
+
+    def setSelectedYear(self, selected_year):
+        if isinstance(selected_year, datetime.datetime) or isinstance(selected_year, datetime.date):
+            self._selected_year = selected_year.year
+            return
+        if not isinstance(selected_year, int):
+            self._selected_year = int(selected_year)
+            return
+        self._selected_year = selected_year
 
     def getSelectedYearAsDatetime(self):
         if self._selected_year:
@@ -37,7 +68,8 @@ class icYearDialog(std_dialogs_proto.yearDialogProto):
         event.Skip()
 
     def onOkButtonClick(self, event):
-        self._selected_year = self.yearChoiceControl.get_selected_year()
+        year_idx = self.year_choice.GetSelection()
+        self._selected_year = int(self.year_choice.GetString(year_idx))
         self.EndModal(wx.ID_OK)
         event.Skip()
 

@@ -3,8 +3,10 @@
 
 """
 Диалоговое окно выбора элемента wxRadioBox.
+Элементы расположены вертикально.
+За счет этого можно использовать большее количество элементов.
 
-Максимальное количество элементов выбора 5.
+Максимальное количество элементов выбора 15.
 При большем количестве элементов необходимо использовать 
 другую диалоговую форму выбора.
 """
@@ -19,10 +21,10 @@ except ValueError:
 __version__ = (0, 0, 1, 1)
 
 # Максимальное количество элементов выбора
-MAX_ITEM_COUNT = 5
+MAX_ITEM_COUNT = 15
 
 
-class icRadioChoiceDialog(std_dialogs_proto.radioChoiceDialogProto):
+class icRadioChoiceMaxiDialog(std_dialogs_proto.radioChoiceMaxiDialogProto):
     """
     Диалоговое окно выбора элемента wxRadioBox.
     """
@@ -31,7 +33,7 @@ class icRadioChoiceDialog(std_dialogs_proto.radioChoiceDialogProto):
         """
         Конструктор.
         """
-        std_dialogs_proto.radioChoiceDialogProto.__init__(self, *args, **kwargs)
+        std_dialogs_proto.radioChoiceMaxiDialogProto.__init__(self, *args, **kwargs)
 
         # Выбранный элемент
         self._item_idx = None
@@ -39,7 +41,8 @@ class icRadioChoiceDialog(std_dialogs_proto.radioChoiceDialogProto):
     def getValue(self):
         return self._item_idx
 
-    def init(self, title=None, label=None, choices=(), do_fit_dlg=True):
+    def init(self, title=None, label=None, choices=(), do_fit_dlg=True,
+             default=None):
         """
         Инициализация диалогового окна.
         @param title: Заголовок окна.
@@ -50,6 +53,7 @@ class icRadioChoiceDialog(std_dialogs_proto.radioChoiceDialogProto):
             другую диалоговую форму выбора.
         @param do_fit_dlg: Переразмерить диалоговое окно для удаления
             не заполненной области отсутствующих элементов?
+        @param default: ИНдекс выставляемый по умолчанию.
         """
         if title:
             self.SetTitle(title)
@@ -64,11 +68,20 @@ class icRadioChoiceDialog(std_dialogs_proto.radioChoiceDialogProto):
                     self.choice_radioBox.SetItemLabel(i, choices[i])
                 else:
                     self.choice_radioBox.ShowItem(i, False)
+            if default is not None:
+                self.choice_radioBox.SetSelection(default)
 
         # Т.к не все элементы отображаются переразмерить окно для того чтобы
         # не было пустого места
         if do_fit_dlg:
-            self.Fit()
+            self.doFit()
+
+    def doFit(self):
+        """
+        Образмерить диалоговое окно.
+        """
+        self.choice_radioBox.Layout()
+        self.Fit()
 
     def onCancelButtonClick(self, event):
         self._item_idx = -1
@@ -96,9 +109,15 @@ def test():
 
     frame = wx.Frame(None, -1)
 
-    dlg = icRadioChoiceDialog(frame)
+    dlg = icRadioChoiceMaxiDialog(frame)
     dlg.init(u'Заголовок окна', u'Выбор:',
-             (u'Элемент 1', u'Элемент 2', u'Элемент 3'))
+             (u'Элемент 1 Бла-Бла-Бла-Бла-Бла-Бла',
+              u'Элемент 2 Бла-Бла-Бла-Бла-Бла-Бла',
+              u'Элемент 3 Бла-Бла-Бла-Бла-Бла-Бла',
+              u'Элемент 4 Бла-Бла-Бла-Бла-Бла-Бла',
+              u'Элемент 5 Бла-Бла-Бла-Бла-Бла-Бла',
+              u'Элемент 6 Бла-Бла-Бла-Бла-Бла-Бла'),
+             default=5)
 
     dlg.ShowModal()
 

@@ -22,8 +22,46 @@ except ImportError:
     pass
 
 from . import icnsilistdlg
+from . import icintegerdlg
+from . import icradiochoicedlg
+from . import icintrangedlg
+from . import iccheckboxdlg
+from . import icradiochoicemaxidlg
+from . import iccheckboxmaxidlg
 
-__version__ = (0, 1, 1, 2)
+try:
+    from ic.log import log
+except ImportError:
+    pass
+
+__version__ = (0, 1, 7, 1)
+
+
+def getIntegerDlg(parent=None, title=None, label=None, min_value=0, max_value=100):
+    """
+    Ввод целого числа в диалоговом окне.
+    @param parent: Родительское окно. Если не определено, то
+        береться wx.GetApp().GetTopWindow()
+    @param title: Заголовок окна.
+    @param label: Текст приглашения ввода.
+    @param min_value: Минимально-допустимое значение.
+    @param max_value: Максимально-допустимое значение.
+    @return: Введенное значение или None если нажата <отмена>.
+    """
+    value = None
+
+    if parent is None:
+        parent = wx.GetApp().GetTopWindow()
+
+    dlg = icintegerdlg.icIntegerDialog(parent)
+    dlg.init(title=title, label=label, min_value=min_value, max_value=max_value)
+    dlg.Centre()
+
+    if dlg.ShowModal() == wx.ID_OK:
+        value = dlg.getValue()
+    dlg.Destroy()
+
+    return value
 
 
 def getDateDlg(parent=None):
@@ -48,11 +86,13 @@ def getDateDlg(parent=None):
     return selected_date
 
 
-def getYearDlg(parent=None):
+def getYearDlg(parent=None, title=None, default_year=None):
     """
     Выбор года в диалоговом окне.
     @param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
+    @param title: Заоголовок диалогового окна.
+    @param default_year: Устанавлемое здачение по умолчанию.
     @return: Выбранный год (datetime) или None если нажата <отмена>.
     """
     selected_year = None
@@ -62,6 +102,15 @@ def getYearDlg(parent=None):
 
     dlg = icyeardlg.icYearDialog(parent)
     dlg.Centre()
+
+    if title:
+        # Если определен заголовок, то установить в диалоговом окне
+        dlg.SetTitle(title)
+
+    if default_year:
+        # Выбран год по умолчанию
+        dlg.setSelectedYear(default_year)
+    dlg.init_year_choice()
 
     if dlg.ShowModal() == wx.ID_OK:
         selected_year = dlg.getSelectedYearAsDatetime()
@@ -75,7 +124,7 @@ def getMonthDlg(parent=None):
     Выбор месяца в диалоговом окне.
     @param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
-    @return: Выбранный месяц (datetime) или None если нажата <отмена>.
+    @return: Первый день выбранного месяца (datetime) или None если нажата <отмена>.
     """
     selected_month = None
 
@@ -114,11 +163,12 @@ def getMonthRangeDlg(parent=None):
     return selected_range
 
 
-def getDateRangeDlg(parent=None):
+def getDateRangeDlg(parent=None, is_concrete_date=False):
     """
     Выбор периода по датам в диалоговом окне.
     @param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
+    @param is_concrete_date: Вкл. режим ввода конкретной даты?
     @return: Кортеж периода по датам (datetime) или None если нажата <отмена>.
     """
     selected_range = None
@@ -127,12 +177,19 @@ def getDateRangeDlg(parent=None):
         parent = wx.GetApp().GetTopWindow()
 
     dlg = icdaterangedlg.icDateRangeDialog(parent)
+    dlg.setConcreteDateCheck(is_concrete_date)
+
     dlg.Centre()
 
     if dlg.ShowModal() == wx.ID_OK:
         selected_range = dlg.getSelectedDateRangeAsDatetime()
     dlg.Destroy()
 
+    if selected_range:
+        try:
+            log.debug(u'Выбранный диапазон дат: <%s> - <%s>' % selected_range)
+        except:
+            pass
     return selected_range
 
 
@@ -200,6 +257,155 @@ def getStdDlgQueue(*dlgs):
 
     frame.Destroy()
     return result
+
+
+def getRadioChoiceDlg(parent=None, title=None, label=None, choices=()):
+    """
+    Выбор элемента wxRadioBox.
+    @param parent: Родительское окно. Если не определено, то
+        береться wx.GetApp().GetTopWindow()
+    @param title: Заголовок окна.
+    @param label: Текст приглашения ввода.
+    @param choices: Список выбора.
+        Максимальное количество элементов выбора 5.
+        При большем количестве элементов необходимо использовать 
+        другую диалоговую форму выбора.    
+    @return: Индекс выбранного эдемента или None если нажата <отмена>.
+    """
+    value = None
+
+    if parent is None:
+        parent = wx.GetApp().GetTopWindow()
+
+    dlg = icradiochoicedlg.icRadioChoiceDialog(parent)
+    dlg.init(title=title, label=label, choices=choices)
+    dlg.Centre()
+
+    if dlg.ShowModal() == wx.ID_OK:
+        value = dlg.getValue()
+    dlg.Destroy()
+
+    return value
+
+
+def getIntRangeDlg(parent=None, title=None, label_begin=None, label_end=None, min_value=0, max_value=100):
+    """
+    Ввод целого числа в диалоговом окне.
+    @param parent: Родительское окно. Если не определено, то
+        береться wx.GetApp().GetTopWindow()
+    @param title: Заголовок окна.
+    @param label_begin: Текст приглашения ввода первого номера диапазона.
+    @param label_end: Текст приглашения ввода последнего номера диапазона.
+    @param min_value: Минимально-допустимое значение.
+    @param max_value: Максимально-допустимое значение.
+    @return: Введенное значение или None если нажата <отмена>.
+    """
+    value = None
+
+    if parent is None:
+        parent = wx.GetApp().GetTopWindow()
+
+    dlg = icintrangedlg.icIntRangeDialog(parent)
+    dlg.init(title=title, label_begin=label_begin, label_end=label_end,
+             min_value=min_value, max_value=max_value)
+    dlg.Centre()
+
+    if dlg.ShowModal() == wx.ID_OK:
+        value = dlg.getValue()
+    dlg.Destroy()
+
+    return value
+
+
+def getCheckBoxDlg(parent=None, title=None, label=None, choices=(), defaults=()):
+    """
+    Выбор элементов wxCheckBox.
+    @param parent: Родительское окно. Если не определено, то
+        береться wx.GetApp().GetTopWindow()
+    @param title: Заголовок окна.
+    @param label: Текст приглашения ввода.
+    @param choices: Список выбора.
+        Максимальное количество элементов выбора 7.
+        При большем количестве элементов необходимо использовать
+        другую диалоговую форму выбора.
+    @param defaults: Список отметок по умолчанию.
+    @return: Признак выбранного элемента True-выбран/False-нет или None если нажата <отмена>.
+    """
+    value = None
+
+    if parent is None:
+        parent = wx.GetApp().GetTopWindow()
+
+    dlg = iccheckboxdlg.icCheckBoxDialog(parent)
+    dlg.init(title=title, label=label, choices=choices, defaults=defaults)
+    dlg.Centre()
+
+    if dlg.ShowModal() == wx.ID_OK:
+        value = dlg.getValue()
+    dlg.Destroy()
+
+    return value
+
+
+def getRadioChoiceMaxiDlg(parent=None, title=None, label=None,
+                          choices=(), default=None):
+    """
+    Выбор элемента wxRadioBox.
+    @param parent: Родительское окно. Если не определено, то
+        береться wx.GetApp().GetTopWindow()
+    @param title: Заголовок окна.
+    @param label: Текст приглашения ввода.
+    @param choices: Список выбора.
+        Максимальное количество элементов выбора 5.
+        При большем количестве элементов необходимо использовать
+        другую диалоговую форму выбора.
+    @param default: Индекс выбранного элемента по умолчанию.
+    @return: Индекс выбранного эдемента или None если нажата <отмена>.
+    """
+    value = None
+
+    if parent is None:
+        parent = wx.GetApp().GetTopWindow()
+
+    dlg = icradiochoicemaxidlg.icRadioChoiceMaxiDialog(parent)
+    dlg.init(title=title, label=label, choices=choices, default=default)
+    dlg.Centre()
+
+    if dlg.ShowModal() == wx.ID_OK:
+        value = dlg.getValue()
+    dlg.Destroy()
+
+    return value
+
+
+def getCheckBoxMaxiDlg(parent=None, title=None, label=None, choices=(), defaults=()):
+    """
+    Выбор элементов wxCheckBox.
+    @param parent: Родительское окно. Если не определено, то
+        береться wx.GetApp().GetTopWindow()
+    @param title: Заголовок окна.
+    @param label: Текст приглашения ввода.
+    @param choices: Список выбора.
+        Максимальное количество элементов выбора 7.
+        При большем количестве элементов необходимо использовать
+        другую диалоговую форму выбора.
+    @param defaults: Список отметок по умолчанию.
+    @return: Признак выбранного элемента True-выбран/False-нет или None если нажата <отмена>.
+    """
+    value = None
+
+    if parent is None:
+        parent = wx.GetApp().GetTopWindow()
+
+    dlg = iccheckboxmaxidlg.icCheckBoxMaxiDialog(parent)
+    dlg.init(title=title, label=label, choices=choices, defaults=defaults)
+    dlg.Centre()
+
+    if dlg.ShowModal() == wx.ID_OK:
+        value = dlg.getValue()
+    dlg.Destroy()
+
+    return value
 
 
 def test():

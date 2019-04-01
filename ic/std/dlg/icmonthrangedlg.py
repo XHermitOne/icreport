@@ -9,6 +9,8 @@ import datetime
 import wx
 from . import std_dialogs_proto
 
+__version__ = (0, 0, 1, 2)
+
 
 class icMonthRangeDialog(std_dialogs_proto.monthRangeDialogProto):
     """

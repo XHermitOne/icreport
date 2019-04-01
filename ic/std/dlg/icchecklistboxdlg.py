@@ -2,46 +2,32 @@
 # -*- coding: utf-8 -*-
 
 """
-Диалоговое окно календаря.
+Диалоговое окно выбора элементов из списка.
 """
 
 import wx
 from . import std_dialogs_proto
 
-try:
-    from ic.std.utils import ic_time
-except ImportError:
-    from ic.utils import ic_time
 
-__version__ = (0, 0, 1, 2)
+__version__ = (0, 1, 1, 1)
 
 
-class icCalendarDialog(std_dialogs_proto.calendarDialogProto):
+class icCheckListBoxDialog(std_dialogs_proto.checkListBoxDialogProto):
     """
-    Диалоговое окно календаря.
+    Диалоговое окно выбора элементов из списка.
     """
 
     def __init__(self, *args, **kwargs):
         """
         Конструктор.
         """
-        std_dialogs_proto.calendarDialogProto.__init__(self, *args, **kwargs)
-
-        self._selected_date = None
-
-    def getSelectedDate(self):
-        return self._selected_date
-
-    def getSelectedDateAsDatetime(self):
-        return ic_time.wxdate2pydate(self._selected_date)
+        std_dialogs_proto.checkListBoxDialogProto.__init__(self, *args, **kwargs)
 
     def onCancelButtonClick(self, event):
-        self._selected_date = None
         self.EndModal(wx.ID_CANCEL)
         event.Skip()
 
     def onOkButtonClick(self, event):
-        self._selected_date = self.calendarCtrl.GetDate()
         self.EndModal(wx.ID_OK)
         event.Skip()
 
@@ -61,7 +47,7 @@ def test():
 
     frame = wx.Frame(None, -1)
 
-    dlg = icCalendarDialog(frame, -1)
+    dlg = icCheckListBoxDialog(frame, -1)
 
     dlg.ShowModal()
 
