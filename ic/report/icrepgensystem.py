@@ -31,7 +31,7 @@ from ic.std.utils import textfunc
 
 from ic.report import icreptemplate
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 # Константы подсистемы
 DEFAULT_REP_TMPL_FILE = os.path.join(os.path.dirname(__file__), 'new_report_template.ods')
@@ -260,7 +260,7 @@ class icReportGeneratorSystem:
         """
         if RepTemplateFileName_ is None:
             filename = dlg.getFileDlg(self._ParentForm, u'Выберите шаблон отчета:',
-                                      u'Microsoft Excel 2003 XML (*.xml)|*.xml|Электронные таблицы ODF (*.ods)|*.ods',
+                                      u'Электронные таблицы ODF (*.ods)|*.ods|Microsoft Excel 2003 XML (*.xml)|*.xml',
                                       self.getReportDir())
         else:
             filename = os.path.abspath(os.path.normpath(RepTemplateFileName_))
