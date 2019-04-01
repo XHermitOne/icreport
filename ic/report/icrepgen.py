@@ -446,7 +446,7 @@ class icReportGenerator:
         @return: Возвращает результат выполнения операции True/False.
         """
         try:
-            log.debug(u'Генерация заголовка')
+            # log.debug(u'Генерация заголовка')
             # Добавлять будем в конец отчета,
             # поэтому опреелить максимальную строчку
             max_row = len(self._Rep['sheet'])
@@ -755,6 +755,8 @@ class icReportGenerator:
                 # Перенести все ячейки из шаблона в выходной отчет
                 cell['value'] = self._genTxt(cell, record, ToRow_, ToCol_)
 
+            # log.debug(u'Значение <%s>' % str(cell['value']))
+
             # Установка атирибутов ячейки по умолчанию
             # Заполнение некоторых атрибутов ячейки по умолчанию
             if self.AttrDefault and isinstance(self.AttrDefault, dict):
@@ -807,7 +809,16 @@ class icReportGenerator:
 
                 # Функция
                 if re.search(REP_FUNC_PATT, cur_func):
-                    value = str(self._execFuncGen(cur_func[2:-2], locals()))
+                    # ВНИМАНИЕ: Функция в шаблоне может иметь
+                    #     1 аргумент это словарь записи.
+                    #     Например:
+                    #         [@rec['name']@]
+                    value = u''
+                    func_body = cur_func[2:-2]
+                    try:
+                        value = str(self._execFuncGen(func_body, locals()))
+                    except:
+                        log.fatal(u'Ошибка выполнения функции <%s>' % func_body)
                     
                 # Ламбда-выражение
                 elif re.search(REP_LAMBDA_PATT, cur_func):
@@ -835,13 +846,14 @@ class icReportGenerator:
                     #     Например:
                     #         [=if record['name']=='Петров':
                     #             value='-'=]
-                    value = ''
+                    value = u''
                     exec_func = cur_func[2:-2].strip()
                     try:
                         exec(exec_func)
                     except:
                         log.fatal(u'Ошибка выполнения блока кода <%s>' % textfunc.toUnicode(exec_func))
-                    
+                    log.debug(u'Выполнение блока кода <%s>. Значение <%s>' % (exec_func, str(value)))
+
                 # Системная функция
                 elif re.search(REP_SYS_PATT, cur_func):
                     # Функция суммирования
