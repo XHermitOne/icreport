@@ -43,7 +43,7 @@ REP_BROWSER_BUTTONS_POS_X = 780
 REP_BROWSER_BUTTONS_WIDTH = 200
 REP_BROWSER_BUTTONS_HEIGHT = 30
 
-# Не обрабатываемый имена папок
+# Не обрабатываемые имена папок
 NOT_WORK_DIRNAMES = ('__pycache__',)
 
 
