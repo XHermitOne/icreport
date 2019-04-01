@@ -43,6 +43,9 @@ REP_BROWSER_BUTTONS_POS_X = 780
 REP_BROWSER_BUTTONS_WIDTH = 200
 REP_BROWSER_BUTTONS_HEIGHT = 30
 
+# Не обрабатываемый имена папок
+NOT_WORK_DIRNAMES = ('__pycache__',)
+
 
 def getReportList(ReportDir_, is_sort=True):
     """
@@ -77,6 +80,11 @@ def getReportList(ReportDir_, is_sort=True):
         # то записать информацию в выходной список о директории
         img_idx = 0
         for sub_dir in sub_dirs:
+
+            # Исключить не обрабатываемые папки
+            if os.path.basename(sub_dir) in NOT_WORK_DIRNAMES:
+                continue
+
             description_file = None
             try:
                 description_file = open(os.path.join(sub_dir, 'descript.ion'), 'rt')
