@@ -23,7 +23,7 @@ import ic.report
 from ic.report import report_generator
 from ic import config
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 # Константы
 # Индексы полей списка кортежей
@@ -323,7 +323,7 @@ class icReportBrowserPrototype:
         """
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
-        item_data = self.rep_tree.GetPyData(item)
+        item_data = self.rep_tree.GetItemData(item)
         log.debug(u'Предварительный просмотр <%s>' % item_data[REP_FILE_IDX])
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
@@ -341,7 +341,7 @@ class icReportBrowserPrototype:
         """
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
-        item_data = self.rep_tree.GetPyData(item)
+        item_data = self.rep_tree.GetItemData(item)
         log.debug(u'Печать <%s>' % item_data[REP_FILE_IDX])
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
@@ -360,7 +360,7 @@ class icReportBrowserPrototype:
         """
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
-        item_data = self.rep_tree.GetPyData(item)
+        item_data = self.rep_tree.GetItemData(item)
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
@@ -415,7 +415,7 @@ class icReportBrowserPrototype:
         """
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
-        item_data = self.rep_tree.GetPyData(item)
+        item_data = self.rep_tree.GetItemData(item)
         # Если это файл отчета, то запустить на редактирование
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Запустить на редактирование
@@ -433,7 +433,7 @@ class icReportBrowserPrototype:
         """
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
-        item_data = self.rep_tree.GetPyData(item)
+        item_data = self.rep_tree.GetItemData(item)
         # Если это файл отчета, то запустить обновление шаблона
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Запустить обновление шаблона отчета
@@ -453,7 +453,7 @@ class icReportBrowserPrototype:
         """
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
-        item_data = self.rep_tree.GetPyData(item)
+        item_data = self.rep_tree.GetItemData(item)
         log.debug(u'Конвертация <%s>' % item_data[REP_FILE_IDX])
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
@@ -472,7 +472,7 @@ class icReportBrowserPrototype:
         """
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
-        item_data = self.rep_tree.GetPyData(item)
+        item_data = self.rep_tree.GetItemData(item)
         # Если это файл отчета, то запустить открытие модуля отчета
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX],
@@ -499,7 +499,7 @@ class icReportBrowserPrototype:
         """
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
-        item_data = self.rep_tree.GetPyData(item)
+        item_data = self.rep_tree.GetItemData(item)
         # Если это файл отчета, то переименовать его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             old_rep_name = os.path.splitext(os.path.split(item_data[REP_FILE_IDX])[1])[0]
@@ -590,7 +590,7 @@ class icReportBrowserPrototype:
         self.rep_tree.DeleteAllItems()
         # Корень
         root = self.rep_tree.AddRoot(u'Отчеты', image=0)
-        self.rep_tree.SetPyData(root, None)
+        self.rep_tree.SetItemData(root, None)
         # Добавить пункты дерева по полученному описанию отчетов
         self._appendItemsReportTree(root, rep_data)
         # Развернуть дерево
@@ -616,7 +616,7 @@ class icReportBrowserPrototype:
                 self.rep_tree.SetItemImage(item, item_data[REP_IMG_IDX], wx.TreeItemIcon_Normal)
                 self.rep_tree.SetItemImage(item, item_data[REP_IMG_IDX], wx.TreeItemIcon_Selected)
             # Добавить связь с данными
-            self.rep_tree.SetPyData(item, item_data)
+            self.rep_tree.SetItemData(item, item_data)
 
     def SetReportDir(self, Dir_):
         """
