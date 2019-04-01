@@ -12,7 +12,7 @@ import os.path
 import wx
 import wx.lib.imagebrowser
 
-__version__ = (0, 0, 1, 3)
+__version__ = (0, 1, 1, 1)
 
 
 # ДИАЛОГОВЫЕ ФУНКЦИИ
@@ -35,7 +35,7 @@ def getFileDlg(parent=None, title='', wildcard='', default_path=''):
             win_clear = True
 
         wildcard += '|All Files (*.*)|*.*'
-        dlg = wx.FileDialog(parent, title, '', '', wildcard, wx.OPEN)
+        dlg = wx.FileDialog(parent, title, '', '', wildcard, wx.FD_OPEN)
         if default_path:
             dlg.SetDirectory(os.path.normpath(default_path))
         else:

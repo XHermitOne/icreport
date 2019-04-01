@@ -245,6 +245,19 @@ class icReportGeneratorSystem:
             Если None, то должен производиться запрос на выбор этого файла.
         @return: Имя файла файла шаблона или None в случае ошибки.
         """
+        try:
+            return self._Update(RepTemplateFileName_)
+        except:
+            log.fatal(u'Ошибка обновления шаблона <%s>' % RepTemplateFileName_)
+        return None
+
+    def _Update(self, RepTemplateFileName_=None):
+        """
+        Обновить шаблон отчета в системе генератора отчетов.
+        @param RepTemplateFileName_: Имя файла шаблона отчета.
+            Если None, то должен производиться запрос на выбор этого файла.
+        @return: Имя файла файла шаблона или None в случае ошибки.
+        """
         if RepTemplateFileName_ is None:
             filename = dlg.getFileDlg(self._ParentForm, u'Выберите шаблон отчета:',
                                       u'Microsoft Excel 2003 XML (*.xml)|*.xml|Электронные таблицы ODF (*.ods)|*.ods',
