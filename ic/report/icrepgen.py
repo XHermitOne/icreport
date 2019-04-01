@@ -39,7 +39,7 @@ from ic.std.log import log
 from ic.std.utils import textfunc
 from ic.std.utils import execfunc
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 # Константы
 # Ключевые теги для обозначения:
@@ -302,7 +302,8 @@ class icReportGenerator:
             self._NameSpace.update(self._Template['variables'])
             if QueryTable_ and '__variables__' in QueryTable_:
                 self._NameSpace.update(QueryTable_['__variables__'])
-            log.debug(u'Переменные отчета: %s' % self._NameSpace.keys())
+            if self._NameSpace:
+                log.debug(u'Переменные отчета: %s' % self._NameSpace.keys())
 
             # Библиотека стилей
             self._StyleLib = None
@@ -885,6 +886,8 @@ class icReportGenerator:
                         log.warning(u'В строке (%s) поле <%s> не найдено' % (textfunc.toUnicode(record),
                                                                              textfunc.toUnicode(field_name)))
                         value = ''
+                else:
+                    log.warning(u'Не обрабатываемая функция <%s>' % str(cur_func))
 
                 # ВНИМАНИЕ! В значении ячейки тоже могут быть управляющие коды
                 value = self._genTxt({'value': value}, record)
