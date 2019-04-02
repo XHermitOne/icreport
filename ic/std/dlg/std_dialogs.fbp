@@ -829,7 +829,7 @@
             <property name="minimum_size"></property>
             <property name="name">monthDialogProto</property>
             <property name="pos"></property>
-            <property name="size">390,110</property>
+            <property name="size">390,130</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP</property>
             <property name="subclass"></property>
             <property name="title">Выбор месяца</property>
@@ -1355,7 +1355,7 @@
             <property name="minimum_size"></property>
             <property name="name">monthRangeDialogProto</property>
             <property name="pos"></property>
-            <property name="size">393,165</property>
+            <property name="size">393,179</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP</property>
             <property name="subclass"></property>
             <property name="title">Выбор периода</property>
@@ -2147,7 +2147,7 @@
             <property name="minimum_size"></property>
             <property name="name">dateRangeDialogProto</property>
             <property name="pos"></property>
-            <property name="size">391,184</property>
+            <property name="size">391,193</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP</property>
             <property name="subclass"></property>
             <property name="title">Выбор периода</property>

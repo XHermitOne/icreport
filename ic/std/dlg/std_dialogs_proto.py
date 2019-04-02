@@ -130,7 +130,7 @@ class yearDialogProto ( wx.Dialog ):
 class monthDialogProto ( wx.Dialog ):
 	
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Выбор месяца", pos = wx.DefaultPosition, size = wx.Size( 390,110 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Выбор месяца", pos = wx.DefaultPosition, size = wx.Size( 390,130 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -196,7 +196,7 @@ class monthDialogProto ( wx.Dialog ):
 class monthRangeDialogProto ( wx.Dialog ):
 	
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Выбор периода", pos = wx.DefaultPosition, size = wx.Size( 393,165 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Выбор периода", pos = wx.DefaultPosition, size = wx.Size( 393,179 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
@@ -282,7 +282,7 @@ class monthRangeDialogProto ( wx.Dialog ):
 class dateRangeDialogProto ( wx.Dialog ):
 	
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Выбор периода", pos = wx.DefaultPosition, size = wx.Size( 391,184 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Выбор периода", pos = wx.DefaultPosition, size = wx.Size( 391,193 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
 		
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
