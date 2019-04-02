@@ -39,7 +39,7 @@ from ic.std.log import log
 from ic.std.utils import textfunc
 from ic.std.utils import execfunc
 
-__version__ = (0, 1, 1, 2)
+__version__ = (0, 1, 2, 1)
 
 # Константы
 # Ключевые теги для обозначения:
@@ -47,6 +47,8 @@ __version__ = (0, 1, 1, 2)
 REP_FIELD_PATT = r'(\[\'.*?\'\])'
 # функционала
 REP_FUNC_PATT = r'(\[@.*?@\])'
+# выражения
+REP_EXP_PATT = r'(\[#.*?#\])'
 # ламбда-выражения
 REP_LAMBDA_PATT = r'(\[~.*?~\])'
 # переменной
@@ -820,6 +822,19 @@ class icReportGenerator:
                     except:
                         log.fatal(u'Ошибка выполнения функции <%s>' % func_body)
                     
+                # Исполняемое выражение
+                elif re.search(REP_EXP_PATT, cur_func):
+                    # ВНИМАНИЕ: Исполняемое выражение в шаблоне должно иметь
+                    #     вид получения значения value.
+                    #     Например:
+                    #         [#record["dt"].strftime("%B")#]
+                    value = u''
+                    exp_body = cur_func[2:-2]
+                    try:
+                        value = eval(exp_body)
+                    except:
+                        log.fatal(u'Ошибка выполнения исполняемого выражения <%s>' % exp_body)
+
                 # Ламбда-выражение
                 elif re.search(REP_LAMBDA_PATT, cur_func):
                     # ВНИМАНИЕ: Лямбда-выражение в шаблоне должно иметь
