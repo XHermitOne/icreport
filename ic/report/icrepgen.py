@@ -67,6 +67,7 @@ REP_SUBREPORT_PATT = r'(\[$.*?$\])'
 # Список всех патернов используемых при разборе значений ячеек
 ALL_PATTERNS = [REP_FIELD_PATT,
                 REP_FUNC_PATT,
+                REP_EXP_PATT,
                 REP_LAMBDA_PATT,
                 REP_VAR_PATT,
                 REP_EXEC_PATT,
@@ -305,7 +306,7 @@ class icReportGenerator:
             if QueryTable_ and '__variables__' in QueryTable_:
                 self._NameSpace.update(QueryTable_['__variables__'])
             if self._NameSpace:
-                log.debug(u'Переменные отчета: %s' % self._NameSpace.keys())
+                log.debug(u'Переменные отчета: %s' % str(list(self._NameSpace.keys())))
 
             # Библиотека стилей
             self._StyleLib = None
@@ -834,6 +835,7 @@ class icReportGenerator:
                         value = eval(exp_body)
                     except:
                         log.fatal(u'Ошибка выполнения исполняемого выражения <%s>' % exp_body)
+                    log.debug(u'Выполнение исполняемого выражения <%s>. Значение <%s>' % (exp_body, str(value)))
 
                 # Ламбда-выражение
                 elif re.search(REP_LAMBDA_PATT, cur_func):
