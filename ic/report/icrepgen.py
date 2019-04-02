@@ -812,64 +812,23 @@ class icReportGenerator:
 
                 # Функция
                 if re.search(REP_FUNC_PATT, cur_func):
-                    # ВНИМАНИЕ: Функция в шаблоне может иметь
-                    #     1 аргумент это словарь записи.
-                    #     Например:
-                    #         [@rec['name']@]
-                    value = u''
-                    func_body = cur_func[2:-2]
-                    try:
-                        value = str(self._execFuncGen(func_body, locals()))
-                    except:
-                        log.fatal(u'Ошибка выполнения функции <%s>' % func_body)
-                    
+                    value = self._exec_function(cur_func, locals(), globals())
+
                 # Исполняемое выражение
                 elif re.search(REP_EXP_PATT, cur_func):
-                    # ВНИМАНИЕ: Исполняемое выражение в шаблоне должно иметь
-                    #     вид получения значения value.
-                    #     Например:
-                    #         [#record["dt"].strftime("%B")#]
-                    value = u''
-                    exp_body = cur_func[2:-2]
-                    try:
-                        value = eval(exp_body)
-                    except:
-                        log.fatal(u'Ошибка выполнения исполняемого выражения <%s>' % exp_body)
-                    log.debug(u'Выполнение исполняемого выражения <%s>. Значение <%s>' % (exp_body, str(value)))
+                    value = self._exec_expression(cur_func, locals(), globals())
 
                 # Ламбда-выражение
                 elif re.search(REP_LAMBDA_PATT, cur_func):
-                    # ВНИМАНИЕ: Лямбда-выражение в шаблоне должно иметь
-                    #     1 аргумент это словарь записи.
-                    #     Например:
-                    #         [~rec: rec['name']=='Петров'~]
-                    lambda_func = eval('lambda '+cur_func[2:-2])
-                    value = str(lambda_func(record))
-                    
+                    value = self._exec_lambda(cur_func, locals(), globals())
+
                 # Переменная
                 elif re.search(REP_VAR_PATT, cur_func):
-                    var_name = cur_func[2:-2]
-                    if var_name in self._NameSpace:
-                        log.debug(u'Обработка переменной <%s>' % var_name)
-                    else:
-                        log.warning(u'Переменная <%s> не найдена в пространстве имен' % var_name)
-                    value = str(self._NameSpace.setdefault(var_name, u''))
-                    
+                    value = self._get_variable(cur_func, locals(), globals())
+
                 # Блок кода
                 elif re.search(REP_EXEC_PATT, cur_func):
-                    # ВНИМАНИЕ: В блоке кода доступны объекты cell и record.
-                    #     Если надо вывести информацию, то ее надо выводить в
-                    #     переменную value.
-                    #     Например:
-                    #         [=if record['name']=='Петров':
-                    #             value='-'=]
-                    value = u''
-                    exec_func = cur_func[2:-2].strip()
-                    try:
-                        exec(exec_func)
-                    except:
-                        log.fatal(u'Ошибка выполнения блока кода <%s>' % textfunc.toUnicode(exec_func))
-                    log.debug(u'Выполнение блока кода <%s>. Значение <%s>' % (exec_func, str(value)))
+                    value = self._exec_code(cur_func, locals(), globals())
 
                 # Системная функция
                 elif re.search(REP_SYS_PATT, cur_func):
@@ -896,25 +855,16 @@ class icReportGenerator:
                         
                 # Стиль
                 elif re.search(REP_STYLE_PATT, cur_func):
-                    value = ''
-                    style_name = cur_func[2:-2]
-                    self._setStyleAttr(style_name)
-                    
-                # Под-отчеты
-                elif re.search(REP_SUBREPORT_PATT, cur_func):
-                    value = ''
-                    subreport_name = cur_func[2:-2]
-                    self._genSubReport(subreport_name, CellRow_)
+                    value = self._set_style(cur_func, locals(), globals())
 
                 # Поле
                 elif re.search(REP_FIELD_PATT, cur_func):
-                    field_name = str((cur_func[2:-2]))
-                    try:
-                        value = record[field_name]
-                    except KeyError:
-                        log.warning(u'В строке (%s) поле <%s> не найдено' % (textfunc.toUnicode(record),
-                                                                             textfunc.toUnicode(field_name)))
-                        value = ''
+                    value = self._get_field_value(cur_func, locals(), globals())
+
+                # Под-отчеты
+                elif re.search(REP_SUBREPORT_PATT, cur_func):
+                    value = self._gen_subreport(cur_func, locals(), globals())
+
                 else:
                     log.warning(u'Не обрабатываемая функция <%s>' % str(cur_func))
 
@@ -929,6 +879,157 @@ class icReportGenerator:
             log.fatal(u'Ошибка генерации текста ячейки <%s> шаблона <%s>.' % (textfunc.toUnicode(cell['value']),
                                                                               self._RepName))
             return None
+
+    def _exec_function(self, cur_func, locals, globals):
+        """
+        Выполнить вызов внешней функции.
+        ВНИМАНИЕ: Функция в шаблоне может иметь 1 аргумент это словарь записи.
+            Например:
+                [@package_name.module_name.function_name(record)@]
+        @param cur_func: Текст вызова функции с тегами.
+        @param locals: Словарь локального пространства имен.
+        @param globals: Словарь глобального пространства имен.
+        @return: Вычисленное значение в виде строки или пустая строка в случае ошибки.
+        """
+        value = u''
+        func_body = cur_func[2:-2]
+        try:
+            value = str(self._execFuncGen(func_body, locals))
+        except:
+            log.fatal(u'Ошибка выполнения функции <%s>' % func_body)
+        return value
+
+    def _exec_expression(self, cur_func, locals, globals):
+        """
+        Выполнить исполняемое выражение.
+        ВНИМАНИЕ: Исполняемое выражение в шаблоне должно иметь
+            вид получения значения value.
+            Например:
+                [#record["dt"].strftime("%B")#]
+        @param cur_func: Текст исполняемого выражения с тегами.
+        @param locals: Словарь локального пространства имен.
+        @param globals: Словарь глобального пространства имен.
+        @return: Вычисленное значение в виде строки или пустая строка в случае ошибки.
+        """
+        value = u''
+        exp_body = cur_func[2:-2]
+        try:
+            value = eval(exp_body, globals, locals)
+        except:
+            log.fatal(u'Ошибка выполнения исполняемого выражения <%s>' % exp_body)
+        log.debug(u'Выполнение исполняемого выражения <%s>. Значение <%s>' % (exp_body, str(value)))
+        return value
+
+    def _exec_lambda(self, cur_func, locals, globals):
+        """
+        Выполнение lambda выражения.
+            ВНИМАНИЕ: Лямбда-выражение в шаблоне должно иметь 1 аргумент это словарь записи.
+                Например:
+                    [~rec: rec['name']=='Петров'~]
+        @param cur_func: Вызов lambda выражения с тегами.
+        @param locals: Словарь локального пространства имен.
+        @param globals: Словарь глобального пространства имен.
+        @return: Вычисленное значение в виде строки или пустая строка в случае ошибки.
+        """
+        value = u''
+        lambda_body = cur_func[2:-2]
+        lambda_func = None
+        try:
+            lambda_func = eval('lambda ' + cur_func[2:-2])
+        except:
+            log.fatal(u'Ошибка определения lambda выражения <%s>' % lambda_body)
+
+        if lambda_func:
+            try:
+                record = locals['record'] if 'record' in locals else globals.get('record', dict())
+                value = str(lambda_func(record))
+            except:
+                log.fatal(u'Ошибка выполнения lambda выражения <%s>' % lambda_body)
+
+        return value
+
+    def _exec_code(self, cur_func, locals, globals):
+        """
+        Выполнить блок кода.
+        ВНИМАНИЕ: В блоке кода доступны объекты cell и record.
+            Если надо вывести информацию, то ее надо выводить в
+            переменную value.
+            Например:
+            [=value = '-' if record['name']=='Петров' else ''=]
+        @param cur_func: Текст блока кода с тегами.
+        @param locals: Словарь локального пространства имен.
+        @param globals: Словарь глобального пространства имен.
+        @return: Вычисленное значение в виде строки или пустая строка в случае ошибки.
+        """
+        value = u''
+        exec_func = cur_func[2:-2].strip()
+        try:
+            exec(exec_func, globals, locals)
+        except:
+            log.fatal(u'Ошибка выполнения блока кода <%s>' % textfunc.toUnicode(exec_func))
+        log.debug(u'Выполнение блока кода <%s>. Значение <%s>' % (exec_func, str(value)))
+        return str(value)
+
+    def _get_variable(self, cur_func, locals, globals):
+        """
+        Получить переменную из пространства имен отчета.
+        @param cur_func: Текст блока обращения к переменной с тегами.
+        @param locals: Словарь локального пространства имен.
+        @param globals: Словарь глобального пространства имен.
+        @return: Переменная в строковом виде.
+        """
+        var_name = cur_func[2:-2]
+        if var_name in self._NameSpace:
+            log.debug(u'Обработка переменной <%s>' % var_name)
+        else:
+            log.warning(u'Переменная <%s> не найдена в пространстве имен' % var_name)
+        value = str(self._NameSpace.setdefault(var_name, u''))
+        return value
+
+    def _set_style(self, cur_func, locals, globals):
+        """
+        Установить стиль.
+        @param cur_func: Текст блока указания имени стиля с тегами.
+        @param locals: Словарь локального пространства имен.
+        @param globals: Словарь глобального пространства имен.
+        @return: Переменная в строковом виде.
+        """
+        value = u''
+        style_name = cur_func[2:-2]
+        self._setStyleAttr(style_name)
+        return value
+
+    def _get_field_value(self, cur_func, locals, globals):
+        """
+        Получить значение поля текущей записи.
+        @param cur_func: Текст блока обращения к полю с тегами.
+        @param locals: Словарь локального пространства имен.
+        @param globals: Словарь глобального пространства имен.
+        @return: Переменная в строковом виде.
+        """
+        value = u''
+        field_name = str((cur_func[2:-2]))
+        record = locals['record'] if 'record' in locals else globals.get('record', dict())
+        try:
+            value = record[field_name]
+        except KeyError:
+            log.warning(u'В строке (%s) поле <%s> не найдено' % (textfunc.toUnicode(record),
+                                                                 textfunc.toUnicode(field_name)))
+        return value
+
+    def _gen_subreport(self, cur_func, locals, globals):
+        """
+        Запуск генерации подъотчета.
+        @param cur_func: Текст ссылки на подъотчет с тегами.
+        @param locals: Словарь локального пространства имен.
+        @param globals: Словарь глобального пространства имен.
+        @return: Переменная в строковом виде.
+        """
+        value = u''
+        subreport_name = cur_func[2:-2]
+        cell_row = locals['CellRow_'] if 'CellRow_' in locals else globals.get('CellRow_', dict())
+        self._genSubReport(subreport_name, cell_row)
+        return value
 
     def _valueFormat(self, Fmt_, DataLst_):
         """
