@@ -12,12 +12,12 @@ import os.path
 import wx
 import wx.lib.buttons
 
-from ic.std.utils import ini
+from ic.std.utils import inifunc
 from ic.std.dlg import dlg
 from ic.std.img import bmp
 from ic.std.log import log
 from ic.std.utils import filefunc
-from ic.std.utils import res
+from ic.std.utils import resfunc
 
 import ic.report
 from ic.report import report_generator
@@ -109,7 +109,7 @@ def getReportList(ReportDir_, is_sort=True):
 
         for rep_file_name in file_rep_list:
             # записать данные о этом файле в выходной список
-            rep_struct = res.loadResourceFile(rep_file_name, bRefresh=True)
+            rep_struct = resfunc.loadResourceFile(rep_file_name, bRefresh=True)
             # Определение образа
             img_idx = 2
             try:
@@ -177,14 +177,14 @@ class icReportBrowserPrototype:
         # Если папки отчетов не определена или не существует, то ...
         if not self._ReportDir or not os.path.exists(self._ReportDir):
             # ... считать путь к папке отчетов из файла настройки
-            self._ReportDir = ini.loadParamINI(self.getReportSettingsINIFile(), 'REPORTS', 'report_dir')
+            self._ReportDir = inifunc.loadParamINI(self.getReportSettingsINIFile(), 'REPORTS', 'report_dir')
             if not self._ReportDir or not os.path.exists(self._ReportDir):
                 self._ReportDir = dlg.getDirDlg(self,
                                                 u'Папка отчетов <%s> не найдена. Выберите папку отчетов.' %  self._ReportDir)
                 # Сохранить сразу в конфигурационном файле
                 if self._ReportDir:
                     self._ReportDir = os.path.normpath(self._ReportDir)
-                    ini.saveParamINI(self.getReportSettingsINIFile(),
+                    inifunc.saveParamINI(self.getReportSettingsINIFile(),
                                      'REPORTS', 'report_dir', self._ReportDir)
         # Отобразить новый путь в окне
         self.dir_txt.SetLabel(self._ReportDir)
@@ -382,7 +382,7 @@ class icReportBrowserPrototype:
         Обработчик нажатия кнопки 'Папка отчетов'.
         """
         # Считать путь к папке отчетов из файла настройки
-        self._ReportDir = ini.loadParamINI(self.getReportSettingsINIFile(), 'REPORTS', 'report_dir')
+        self._ReportDir = inifunc.loadParamINI(self.getReportSettingsINIFile(), 'REPORTS', 'report_dir')
         # Выбрать папку отчетов
         dir_dlg = wx.DirDialog(self, u'Выберите путь к папке отчетов:',
                                style=wx.DD_DEFAULT_STYLE | wx.DD_NEW_DIR_BUTTON)
@@ -395,7 +395,7 @@ class icReportBrowserPrototype:
         dir_dlg.Destroy()        
 
         # Сохранить новую выбранную папку
-        ok = ini.saveParamINI(self.getReportSettingsINIFile(), 'REPORTS', 'report_dir', self._ReportDir)
+        ok = inifunc.saveParamINI(self.getReportSettingsINIFile(), 'REPORTS', 'report_dir', self._ReportDir)
             
         if ok is True:
             # Отобразить новый путь в окне
@@ -544,7 +544,7 @@ class icReportBrowserPrototype:
             if os.path.isfile(old_rep_pkl_file_name):
                 os.remove(old_rep_pkl_file_name)
             # Поменять имя в файле отчета.
-            report = res.loadResource(new_rep_file_name)
+            report = resfunc.loadResource(new_rep_file_name)
             report['name'] = NewName_
 
             rep_file = None

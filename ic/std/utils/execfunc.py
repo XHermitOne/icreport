@@ -117,8 +117,8 @@ def exec_code(sCode='', bReImport=False, name_space=None, kwargs=None):
 
 # Словарь ассоциаций вызова внешних просмотрщиков по расширению файла
 ASSOCIATION_VIEW_FILE = {
-    ('.pdf',): 'evince %s&',
-    ('.jpg', '.jpeg', '.bmp', '.tiff', '.png'): 'eog %s&',
+    ('.pdf',): 'evince %text&',
+    ('.jpg', '.jpeg', '.bmp', '.tiff', '.png'): 'eog %text&',
 }
 
 

@@ -11,7 +11,7 @@ import wx
 
 # Подключение библиотек
 from ic.std.log import log
-from ic.std.utils import res
+from ic.std.utils import resfunc
 from ic.std.utils import textfunc
 from ic.std.utils import filefunc
 
@@ -225,7 +225,7 @@ def ReportPrint(parent_form=None, report_filename='', report_dir='',
             stylelib = loadStyleLib(stylelib_filename)
             # Если определен отчет, то запустить на выполнение
             repgen_system = report_generator.getReportGeneratorSystem(report_filename, parent_form)
-            return repgen_system.Print(res.loadResourceFile(report_filename),
+            return repgen_system.Print(resfunc.loadResourceFile(report_filename),
                                        stylelib=stylelib,
                                        variables=variables)
     except:
@@ -258,7 +258,7 @@ def ReportPreview(parent_form=None, report_filename='', report_dir='',
             stylelib = loadStyleLib(stylelib_filename)
             # Если определен отчет, то запустить на выполнение
             repgen_system = report_generator.getReportGeneratorSystem(report_filename, parent_form)
-            return repgen_system.Preview(res.loadResourceFile(report_filename),
+            return repgen_system.Preview(resfunc.loadResourceFile(report_filename),
                                          stylelib=stylelib,
                                          variables=variables)
     except:
@@ -291,7 +291,7 @@ def ReportExport(parent_form=None, report_filename='', report_dir='',
             stylelib = loadStyleLib(stylelib_filename)
             # Если определен отчет, то запустить на выполнение
             repgen_system = report_generator.getReportGeneratorSystem(report_filename, parent_form)
-            return repgen_system.Convert(res.loadResourceFile(report_filename),
+            return repgen_system.Convert(resfunc.loadResourceFile(report_filename),
                                          stylelib=stylelib,
                                          variables=variables)
     except:
@@ -324,7 +324,7 @@ def ReportSelect(parent_form=None, report_filename='', report_dir='',
             stylelib = loadStyleLib(stylelib_filename)
             # Если определен отчет, то запустить на выполнение
             repgen_system = report_generator.getReportGeneratorSystem(report_filename, parent_form)
-            return repgen_system.selectAction(res.loadResourceFile(report_filename),
+            return repgen_system.selectAction(resfunc.loadResourceFile(report_filename),
                                               stylelib=stylelib,
                                               variables=variables)
     except:
@@ -367,7 +367,7 @@ def doReport(parent_form=None, report_filename='', report_dir='', db_url='', sql
             repgen_system = report_generator.getReportGeneratorSystem(report_filename, parent_form)
             stylelib = loadStyleLib(stylelib_filename)
 
-            data = repgen_system.generate(res.loadResourceFile(report_filename), db_url, sql,
+            data = repgen_system.generate(resfunc.loadResourceFile(report_filename), db_url, sql,
                                           stylelib=stylelib, vars=variables)
 
             if command:

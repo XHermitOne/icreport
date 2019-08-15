@@ -880,7 +880,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
                             cell_style = Styles_['Default']
                     else:
                         cell_style = Styles_['Default']
-            # log.debug('Get cell style <%s>' % cell_style)
+            # log.debug('Get cell style <%text>' % cell_style)
             return cell_style
         except:
             log.fatal(u'Ошибка определения стиля ячейки шаблона отчета')

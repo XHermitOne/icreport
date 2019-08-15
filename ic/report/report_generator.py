@@ -7,7 +7,7 @@
 
 # Подключение библиотек
 from ic.std.log import log
-from ic.std.utils import res
+from ic.std.utils import resfunc
 
 from ic.report import icxmlreportgenerator
 from ic.report import icodsreportgenerator
@@ -44,7 +44,7 @@ def getReportGeneratorSystem(RepFileName_, ParentForm_=None, bRefresh=True):
     """
     try:
         # Прочитать шаблон отчета
-        rep = res.loadResourceFile(RepFileName_, bRefresh=True)
+        rep = resfunc.loadResourceFile(RepFileName_, bRefresh=True)
         
         global REP_GEN_SYS
 

@@ -659,7 +659,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         row = [row for row in Sheet_ if len(row) == col_count][0] if Sheet_ else list()
         for cell in row:
             if cell:
-                # log.debug('Column width <%s>' % cell['width'])
+                # log.debug('Column width <%text>' % cell['width'])
                 col_width.append(cell['width'])
             else:
                 # log.debug('Column default width')

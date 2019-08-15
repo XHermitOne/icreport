@@ -375,7 +375,7 @@ class icVData(icprototype.icVPrototype):
             val_type = DEFAULT_PERCENTAGE_TYPE
         elif type(Value_) in (int, float):
             val_type = DEFAULT_NUMBER_TYPE
-        # elif isinstance(Value_, str):
+        # elif isinstance(value, text):
         #    val = val.encode(self.getApp().encoding)
         
         # Обработка формул

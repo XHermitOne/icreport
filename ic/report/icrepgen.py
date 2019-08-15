@@ -758,7 +758,7 @@ class icReportGenerator:
                 # Перенести все ячейки из шаблона в выходной отчет
                 cell['value'] = self._genTxt(cell, record, ToRow_, ToCol_)
 
-            # log.debug(u'Значение <%s>' % str(cell['value']))
+            # log.debug(u'Значение <%text>' % text(cell['value']))
 
             # Установка атирибутов ячейки по умолчанию
             # Заполнение некоторых атрибутов ячейки по умолчанию
@@ -1044,7 +1044,7 @@ class icReportGenerator:
                 value = Fmt_
             else:
                 return None
-        elif DataLst_ == [None] and Fmt_ == '%s':
+        elif DataLst_ == [None] and Fmt_ == '%text':
             return None
         # Обработка значения None
         elif bool(None in DataLst_):
@@ -1201,7 +1201,7 @@ class icReportGenerator:
             начала и конца функционала.
         @return: Возвращает словарь следующей структуры:
             {
-            'fmt': Формат строки без строк исполняемого кода вместо него стоит %s;
+            'fmt': Формат строки без строк исполняемого кода вместо него стоит %text;
             'func': Список строк исполняемого кода.
             }
             В случае ошибки возвращает None.
@@ -1231,8 +1231,8 @@ class icReportGenerator:
                     # Какой-то функционал
                     if re.search(cur_patt, parsed_str[i_parse]):
                         ret['func'].append(parsed_str[i_parse])
-                        # И добавить в формат %s
-                        ret['fmt'] += '%s'
+                        # И добавить в формат %text
+                        ret['fmt'] += '%text'
                         func_find = True
                         break
                 # Обычная строка

@@ -431,7 +431,7 @@ class icVStyle(icprototype.icVPrototype):
         max_style_id = self._parent.getMaxStyleID()
         max_str_i = ''.join([symb for symb in max_style_id if symb.isdigit()])
         i = int(max_str_i)+1 if max_str_i else 0
-        new_id = 's' + str(i)
+        new_id = 'text' + str(i)
 
         # Запомнить максимальный идентификатор стиля
         self._parent.max_style_id = new_id
@@ -443,10 +443,10 @@ class icVStyle(icprototype.icVPrototype):
         """
         styles_id = self._parent.getStylesID()
         i = 1
-        while ('s'+str(i)) in styles_id:
+        while ('text'+str(i)) in styles_id:
             i += 1
         
-        return 's'+str(i)
+        return 'text'+str(i)
 
     def _delAttr(self, name):
         """

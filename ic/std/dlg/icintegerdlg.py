@@ -12,7 +12,7 @@ try:
 except ValueError:
     import std_dialogs_proto
 
-__version__ = (0, 0, 2, 1)
+__version__ = (0, 1, 1, 1)
 
 DEFAULT_MIN_VALUE = 0
 DEFAULT_MAX_VALUE = 500

@@ -13,7 +13,7 @@ from ic.std.log import log
 
 from . import textfunc
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 # Протокол хранения сериализованных объектов модулем cPickle
 # ВНИМАНИЕ!!! PICKLE_PROTOCOL = 1,2 использовать нельзя - ресурсы не востанавливаются
@@ -23,13 +23,13 @@ PICKLE_PROTOCOL = 0
 Buff_readAndEvalFile = {}
 
 
-def loadResourceFile(filename, dictRpl={}, bRefresh=False, *arg, **kwarg):
+def loadResourceFile(filename, replace_dict={}, bRefresh=False, *arg, **kwarg):
     """
     Загрузить ресурс из файла. Функция читает файл и выполняет его.
     @type filename: C{string}
     @param filename: Имя ресурсного файла.
-    @type dictRpl: C{dictionary}
-    @param dictRpl: Словарь замен.
+    @type replace_dict: C{dictionary}
+    @param replace_dict: Словарь замен.
     @type bRefresh: C{bool}
     @param bRefresh: Признак того, что файл надо перечитать даже если он
         буферезирован.
@@ -92,8 +92,8 @@ def loadResourceFile(filename, dictRpl={}, bRefresh=False, *arg, **kwarg):
         f = open(filename, 'rt')
         txt = f.read().replace('\r\n', '\n')
         f.close()
-        for key in dictRpl:
-            txt = txt.replace(key, dictRpl[key])
+        for key in replace_dict:
+            txt = txt.replace(key, replace_dict[key])
 
         # Выполняем
         obj = eval(txt)
@@ -115,118 +115,118 @@ def loadResourceFile(filename, dictRpl={}, bRefresh=False, *arg, **kwarg):
     return obj
 
 
-def loadResource(FileName_):
+def loadResource(filename):
     """
     Получить ресурс в ресурсном файле.
-    @param FileName_: Полное имя ресурсного файла.
+    @param filename: Полное имя ресурсного файла.
     """
     # Сначала предположим что файл в формате Pickle.
-    struct = loadResourcePickle(FileName_)
+    struct = loadResourcePickle(filename)
     if struct is None:
         # Но если он не в формате Pickle, то скорее всего в тексте.
-        struct = loadResourceText(FileName_)
+        struct = loadResourceText(filename)
     if struct is None:
         # Но если не в тексте но ошибка!
-        log.warning(u'Ошибка формата файла %s.' % FileName_)
+        log.warning(u'Ошибка формата файла %s.' % filename)
         return None
     return struct
 
 
-def loadResourcePickle(FileName_):
+def loadResourcePickle(filename):
     """
     Получить ресурс из ресурсного файла в формате Pickle.
-    @param FileName_: Полное имя ресурсного файла.
+    @param filename: Полное имя ресурсного файла.
     """
-    if os.path.isfile(FileName_):
+    if os.path.isfile(filename):
         f = None
         try:
-            f = open(FileName_, 'rb')
+            f = open(filename, 'rb')
             struct = pickle.load(f)
             f.close()
             return struct
         except:
             if f:
                 f.close()
-            log.fatal(u'Ошибка чтения файла <%s>.' % FileName_)
+            log.fatal(u'Ошибка чтения файла <%s>.' % filename)
     else:
-        log.warning(u'Файл <%s> не найден.' % FileName_)
+        log.warning(u'Файл <%s> не найден.' % filename)
     return None
 
 
-def loadResourceText(FileName_):
+def loadResourceText(filename):
     """
     Получить ресурс из ресурсного файла в текстовом формате.
-    @param FileName_: Полное имя ресурсного файла.
+    @param filename: Полное имя ресурсного файла.
     """
-    if os.path.isfile(FileName_):
+    if os.path.isfile(filename):
         f = None
         try:
-            f = open(FileName_, 'rt')
+            f = open(filename, 'rt')
             txt = f.read().replace('\r\n', '\n')
             f.close()
             return eval(txt)
         except:
             if f:
                 f.close()
-            log.fatal(u'Ошибка чтения файла <%s>.' % FileName_)
+            log.fatal(u'Ошибка чтения файла <%s>.' % filename)
     else:
-        log.warning(u'Файл <%s> не найден.' % FileName_)
+        log.warning(u'Файл <%s> не найден.' % filename)
     return None
 
 
-def saveResourcePickle(FileName_, Resource_):
+def saveResourcePickle(filename, resource):
     """
     Сохранить ресурс в файле в формате Pickle.
-    @param FileName_: Полное имя ресурсного файла.
-    @param Resource_: Словарно-списковая структура спецификации.
+    @param filename: Полное имя ресурсного файла.
+    @param resource: Словарно-списковая структура спецификации.
     @return: Возвращает результат выполнения операции True/False.
     """
     f = None
     try:
         # Если необходимые папки не созданы, то создать их
-        dir_name = os.path.dirname(FileName_)
+        dir_name = os.path.dirname(filename)
         try:
             os.makedirs(dir_name)
         except:
             pass
 
-        f = open(FileName_, 'wb')
-        pickle.dump(Resource_, f)
+        f = open(filename, 'wb')
+        pickle.dump(resource, f)
         f.close()
-        log.info(u'Файл <%s> сохранен в формате Pickle.' % FileName_)
+        log.info(u'Файл <%s> сохранен в формате Pickle.' % filename)
         return True
     except:
         if f:
             f.close()
-        log.fatal(u'Ошибка сохраненения файла <%s> в формате Pickle.' % FileName_)
+        log.fatal(u'Ошибка сохраненения файла <%s> в формате Pickle.' % filename)
 
     return False
 
 
-def saveResourceText(FileName_, Resource_):
+def saveResourceText(filename, resource):
     """
     Сохранить ресурс в файле в текстовом формате.
-    @param FileName_: Полное имя ресурсного файла.
-    @param Resource_: Словарно-списковая структура спецификации.
+    @param filename: Полное имя ресурсного файла.
+    @param resource: Словарно-списковая структура спецификации.
     @return: Возвращает результат выполнения операции True/False.
     """
     f = None
     try:
         # Если необходимые папки не созданы, то создать их
-        dir_name = os.path.dirname(FileName_)
+        dir_name = os.path.dirname(filename)
         try:
             os.makedirs(dir_name)
         except:
             pass
 
-        f = open(FileName_, 'wt')
-        text = textfunc.StructToTxt(Resource_)
+        f = open(filename, 'wt')
+        text = textfunc.StructToTxt(resource)
         f.write(text)
         f.close()
-        log.info(u'Файл <%s> сохранен в текстовом формате.' % FileName_)
+        log.info(u'Файл <%s> сохранен в текстовом формате.' % filename)
         return True
     except:
         if f:
             f.close()
-        log.fatal(u'Ошибка сохраненения файла <%s> в текстовом формате.' % FileName_)
+        log.fatal(u'Ошибка сохраненения файла <%s> в текстовом формате.' % filename)
     return False

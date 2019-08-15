@@ -128,7 +128,7 @@ def rp_getparamname(hreport, index):
     """ 
     Wrapper for: int rp_getparamname(int hreport,int index,char *abuffer); 
     
-    returns paramater name as str on success or ValueError on error.    
+    returns paramater name as text on success or ValueError on error.
     """
     hreport = _c.c_int(hreport)
     index = _c.c_int(index)
@@ -277,7 +277,7 @@ class ReportMan(object):
             None:       Sets paramater to SQL NULL - c-void*    (None)
             int:        Sets paramater using c-int              (1,2,3)
             long:       Sets paramater using c-longlong         (1L,2L)
-            str:        Sets paramater to string                ('string')
+            text:        Sets paramater to string                ('string')
             unicode:    Sets paramater to unicode string        (u'Unicode')
             float:      Sets paramater using c-double           (12.54321)
             

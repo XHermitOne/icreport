@@ -15,21 +15,21 @@ import sys
 from xml.sax import xmlreader
 import xml.sax.handler
 
-__version__ = (1, 1, 1, 2)
+__version__ = (1, 1, 1, 3)
 
 
 # Описания функций
-def XmlFile2Dict(XMLFileName_, encoding='utf-8'):
+def XmlFile2Dict(xml_filename, encoding='utf-8'):
     """
     Функция конвертации файлов Excel в xml формате в словарь Python.
-    @param XMLFileName_: Имя xml файла.
+    @param xml_filename: Имя xml файла.
     @param encoding: Кодировка XML файла.
     @return: Функция возвращает заполненный словарь, 
         или None в случае ошибки.
     """
     xml_file = None
     try:
-        xml_file = open(XMLFileName_, 'rt', encoding=encoding)
+        xml_file = open(xml_filename, 'rt', encoding=encoding)
 
         input_source = xmlreader.InputSource()
         input_source.setByteStream(xml_file)
@@ -48,7 +48,7 @@ def XmlFile2Dict(XMLFileName_, encoding='utf-8'):
         if xml_file:
             xml_file.close()
         info = str(sys.exc_info()[1])
-        print('Error read file <%s> : %s.' % (XMLFileName_, info))
+        print('Error read file <%s> : %s.' % (xml_filename, info))
         return None
 
 
@@ -182,26 +182,26 @@ def create_pkl_files_test():
     print('START Pickle file create test')
     
     data = XmlFile2Dict('./testfiles/SF02.xml')
-    print('READ ... ok Time(s):', time.time()-start_time)
+    print('READ ... ok Time(text):', time.time()-start_time)
     
     start_time = time.time()
     f_out = open('./testfiles/SF02.txt', 'wt')
     f_out.write(str(data))
     f_out.close()
-    print('WRITE text ... ok Time(s):', time.time()-start_time)
+    print('WRITE text ... ok Time(text):', time.time()-start_time)
     
     start_time = time.time()
     f_out = open('./testfiles/SF02.pkl', 'wb')
     pkl = pickle.Pickler(f_out)
     pkl.dump(data)
     f_out.close()
-    print('WRITE pickle ... ok Time(s):', time.time()-start_time)
+    print('WRITE pickle ... ok Time(text):', time.time()-start_time)
     
     start_time = time.time()
     f_out = open('./testfiles/SF02.cpk', 'wb')
     pkl = pickle.dump(data, f_out)
     f_out.close()
-    print('WRITE cPickle ... ok Time(s):', time.time()-start_time)
+    print('WRITE cPickle ... ok Time(text):', time.time()-start_time)
 
 
 if __name__ == '__main__':

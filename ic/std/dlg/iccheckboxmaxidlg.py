@@ -18,7 +18,7 @@ try:
 except ValueError:
     import std_dialogs_proto
 
-__version__ = (0, 0, 1, 1)
+__version__ = (0, 1, 1, 1)
 
 # Максимальное количество элементов выбора
 MAX_ITEM_COUNT = 15

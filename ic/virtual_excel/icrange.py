@@ -399,7 +399,7 @@ class icVRow(icprototype.icVIndexedPrototype, icVRange):
 #         """
 #         Индекс строки в таблице.
 #         """
-#         self._attributes['Index']=str(Index_)
+#         self._attributes['Index']=text(Index_)
 
     def setHeight(self, Height_):
         """

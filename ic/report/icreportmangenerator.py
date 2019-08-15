@@ -11,8 +11,8 @@ import os.path
 
 
 from ic.report import icrepgensystem
-from ic.std.utils import res
-from ic.std.utils import ic_util
+from ic.std.utils import resfunc
+from ic.std.utils import utilfunc
 from ic.std.utils import execfunc
 from ic.std.dlg import dlg
 from ic.std.log import log
@@ -136,14 +136,14 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         """
         # Создание связи с ActiveX
         rprt_file_name = os.path.abspath(RepFileName_)
-        rep = res.loadResource(rprt_file_name)
+        rep = resfunc.loadResource(rprt_file_name)
         report_dir = os.path.abspath(self.getReportDir())
         rep_file = os.path.join(report_dir, rep['generator'])
         
-        reportman_designer_key = ic_util.GetRegValue('Software\\Classes\\Report Manager Designer\\shell\\open\\command',
-                                                     None)
+        reportman_designer_key = utilfunc.getRegValue('Software\\Classes\\Report Manager Designer\\shell\\open\\command',
+                                                      None)
         if reportman_designer_key:
-            reportman_designer_run = reportman_designer_key.replace('\'%1\'', '\'%s\'') % rep_file
+            reportman_designer_run = reportman_designer_key.replace('\'%1\'', '\'%text\'') % rep_file
             cmd = 'start %s' % reportman_designer_run
             log.debug(u'Запуск команды ОС: <%s>' % cmd)
             # и запустить Report Manager Designer

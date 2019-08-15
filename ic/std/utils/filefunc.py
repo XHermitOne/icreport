@@ -15,22 +15,22 @@ import fnmatch
 
 from ic.std.log import log
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 # Имя папки прфиля программы
 DEFAULT_PROFILE_DIRNAME = '.icreport'
 
 
-def _pathFilter(Path_, Filter_):
+def _pathFilter(path, path_filter):
     """
     Фильтрация путей.
     @return: Возвращает True если папок с указанными имена в фильтре нет в пути и
         False если наоборот.
     """
-    path = os.path.normpath(Path_).replace('\\', '/')
+    path = os.path.normpath(path).replace('\\', '/')
     path_lst = path.split('/')
     filter_result = True
-    for cur_filter in Filter_:
+    for cur_filter in path_filter:
         if cur_filter in path_lst:
             filter_result = False
             break
@@ -41,44 +41,44 @@ def _pathFilter(Path_, Filter_):
 DEFAULT_DIR_FILTER = ('.svn', '.SVN', '.Svn', '.idea', '.Idea', '.IDEA')
 
 
-def getSubDirsFilter(Path_, Filter_=DEFAULT_DIR_FILTER):
+def getSubDirsFilter(path, dir_filter=DEFAULT_DIR_FILTER):
     """
     Функция возвращает список поддиректорий с отфильтрованными папками.
-    @param Path_: Дeрикторий.
-    @param Filter_: Список недопустимых имен папок.
+    @param path: Дeрикторий.
+    @param dir_filter: Список недопустимых имен папок.
     @return: В случае ошибки возвращает None.
     """
     try:
-        dir_list = [os.path.normpath(os.path.join(Path_, path)) for path in os.listdir(Path_)]
+        dir_list = [os.path.normpath(os.path.join(path, path)) for path in os.listdir(path)]
         dir_list = [path for path in dir_list if os.path.isdir(path)]
-        dir_list = [dir for dir in dir_list if _pathFilter(dir, Filter_)]
+        dir_list = [dir for dir in dir_list if _pathFilter(dir, dir_filter)]
         return dir_list
     except:
-        log.fatal(u'Ошибка чтения списка поддиректорий <%s>' % Path_)
+        log.fatal(u'Ошибка чтения списка поддиректорий <%s>' % path)
         return None
 
 
-def getFilesByExt(Path_, Ext_):
+def getFilesByExt(path, ext):
     """
     Функция возвращает список всех файлов в директории с указанным расширением.
-    @param Path_: Путь.
-    @param Ext_: Расширение, например '.pro'.
+    @param path: Путь.
+    @param ext: Расширение, например '.pro'.
     @return: В случае ошибки возвращает None.
     """
     file_list = None
     try:
-        Path_ = os.path.abspath(os.path.normpath(Path_))
+        path = os.path.abspath(os.path.normpath(path))
 
         # Приведение расширения к надлежащему виду
-        if Ext_[0] != '.':
-            Ext_ = '.'+Ext_
-        Ext_ = Ext_.lower()
+        if ext[0] != '.':
+            ext = '.' + ext
+        ext = ext.lower()
 
-        file_list = [os.path.normpath(os.path.join(Path_, path)) for path in os.listdir(Path_)]
-        file_list = [path for path in file_list if os.path.isfile(path) and os.path.splitext(path)[1].lower() == Ext_]
+        file_list = [os.path.normpath(os.path.join(path, path)) for path in os.listdir(path)]
+        file_list = [path for path in file_list if os.path.isfile(path) and os.path.splitext(path)[1].lower() == ext]
         return file_list
     except:
-        log.fatal(u'Ошибка чтения списка файлов директории. ext: <%s>, path: <%s>, list: <%s>' % (Ext_, Path_, file_list))
+        log.fatal(u'Ошибка чтения списка файлов директории. ext: <%s>, path: <%s>, list: <%s>' % (ext, path, file_list))
         return None
 
 
@@ -118,17 +118,17 @@ def getProfilePath(bAutoCreatePath=True):
     return os.path.join('~', DEFAULT_PROFILE_DIRNAME)
 
 
-def get_home_path(UserName_=None):
+def get_home_path(username=None):
     """
     Определить домашнюю папку пользователя.
     """
     if sys.platform[:3].lower() == 'win':
         home = os.path.join(os.environ['HOMEDRIVE'], os.environ['HOMEPATH'])
     else:
-        if UserName_ is None:
+        if username is None:
             home = os.environ['HOME']
         else:
-            user_struct = pwd.getpwnam(UserName_)
+            user_struct = pwd.getpwnam(username)
             home = user_struct.pw_dir
     return home
 
@@ -136,13 +136,13 @@ def get_home_path(UserName_=None):
 HOME_PATH_SIGN = '~'
 
 
-def normal_path(path, sUserName=None):
+def normal_path(path, username=None):
     """
     Нормировать путь.
     @param path: Путь.
-    @param sUserName: Имя пользователя.
+    @param username: Имя пользователя.
     """
-    home_dir = get_home_path(sUserName)
+    home_dir = get_home_path(username)
     return os.path.abspath(os.path.normpath(path.replace(HOME_PATH_SIGN, home_dir)))
 
 

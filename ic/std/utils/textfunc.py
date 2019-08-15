@@ -7,7 +7,7 @@
 
 from ..log import log
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 # Наполнитель позиций при отображении вложенности пунктов в компоненте списка
 PADDING = '    '
@@ -15,48 +15,48 @@ PADDING = '    '
 DEFAULT_ENCODING = 'utf-8'
 
 
-def StructToTxt(Struct_, Level_=0):
+def StructToTxt(struct, level=0):
     """
     Перевод словарно-списковой структуры в форматированный текст.
-    @param Struct_ : словарно-списковая структура.
-    @param Level_: уровень вложенности (д.б. 0).
+    @param struct : словарно-списковая структура.
+    @param level: уровень вложенности (д.б. 0).
     """
     try:
         txt = ''
-        obj_type = type(Struct_)
+        obj_type = type(struct)
         if isinstance(obj_type, list):
-            txt = txt+'\n'+Level_*PADDING+'[\n'
-            for obj in Struct_:
-                txt += Level_*PADDING
-                txt += StructToTxt(obj, Level_+1)
+            txt = txt +'\n' + level * PADDING + '[\n'
+            for obj in struct:
+                txt += level * PADDING
+                txt += StructToTxt(obj, level + 1)
                 txt += ',\n'
-            if len(Struct_) != 0:
+            if len(struct) != 0:
                 txt = txt[:-2]
-            txt = txt+'\n'+Level_*PADDING+']'
+            txt = txt +'\n' + level * PADDING + ']'
         elif isinstance(obj_type, dict):
-            txt = txt+'\n'+Level_*PADDING+'{\n'
-            keys = Struct_.keys()
-            values = Struct_.values()
+            txt = txt +'\n' + level * PADDING + '{\n'
+            keys = struct.keys()
+            values = struct.values()
             for key in keys:
-                txt = txt+Level_*PADDING+'\''+key+'\':'
-                txt += StructToTxt(Struct_[key], Level_+1)
+                txt = txt + level * PADDING + '\'' + key + '\':'
+                txt += StructToTxt(struct[key], level + 1)
                 txt += ',\n'
             if len(keys) != 0:
                 txt = txt[:-2]
-            txt = txt+'\n'+Level_*PADDING+'}'
+            txt = txt +'\n' + level * PADDING + '}'
         elif isinstance(obj_type, str):
             # Появляется косяк с разделителем папок в именах путей
             # Проверка на кавычки
-            txt = txt+'\''+Struct_.replace('\'', '\\\'').replace('\'', '\\\'').replace('\r', '\\r').replace('\n', '\\n').replace('\t', '\\t')+'\''
+            txt = txt +'\'' + struct.replace('\'', '\\\'').replace('\'', '\\\'').replace('\r', '\\r').replace('\n', '\\n').replace('\t', '\\t') + '\''
         else:
-            txt += str(Struct_)
+            txt += str(struct)
 
         # Убрать первый перевод каретки
-        if txt[0] == '\n' and (not Level_):
+        if txt[0] == '\n' and (not level):
             txt = txt[1:]
         return txt
     except:
-        log.fatal(u'Ошибка перевода структуры в форматированный текст. Уровень <%d>' % Level_)
+        log.fatal(u'Ошибка перевода структуры в форматированный текст. Уровень <%d>' % level)
     return u''
 
 
@@ -66,11 +66,11 @@ rusRegUpperDict = {'а': 'А', 'б': 'Б', 'в': 'В', 'г': 'Г', 'д': 'Д', '
                    'ш': 'Ш', 'щ': 'Щ', 'ь': 'Ь', 'ы': 'Ы', 'ъ': 'Ъ', 'э': 'Э', 'ю': 'Ю', 'я': 'Я'}
 
 
-def icUpper(str):
+def toUpper(text):
     """
     Тупой перевод к верхнему регистру русских букв.
     """
-    pyUpper = str.upper()
+    pyUpper = text.upper()
     upper_str = list(pyUpper)
     upper_str = [rusRegUpperDict.setdefault(pyUpper[ch[0]], ch[1]) for ch in enumerate(upper_str)]
     return ''.join(upper_str)
@@ -108,23 +108,23 @@ u_rusRegUpperLst = [u'А', u'Б', u'В', u'Г', u'Д', u'Е', u'Ё', u'Ж',
                     u'Ш', u'Щ', u'Ь', u'Ы', u'Ъ', u'Э', u'Ю', u'Я']
 
 
-def icLower(s):
+def toLower(text):
     """
     Тупой перевод к нижнему регистру русских букв.
     """
-    pyLower = s.lower()
+    pyLower = text.lower()
     lower_str = list(pyLower)
     lower_str = [rusRegLowerDict.setdefault(pyLower[ch[0]], ch[1]) for ch in enumerate(lower_str)]
     return ''.join(lower_str)
 
 
-def cmpLower(s1, s2):
+def cmpLower(text1, text2):
     """
     Сравнивает два символа в нижнем регистре.
     """
-    if s1 in rusRegLowerLst and s2 in rusRegLowerLst:
-        p1 = rusRegLowerLst.index(s1)
-        p2 = rusRegLowerLst.index(s2)
+    if text1 in rusRegLowerLst and text2 in rusRegLowerLst:
+        p1 = rusRegLowerLst.index(text1)
+        p2 = rusRegLowerLst.index(text2)
 
         if p1 > p2:
             return -1
@@ -133,9 +133,9 @@ def cmpLower(s1, s2):
         else:
             return 0
     else:
-        if s1 > s2:
+        if text1 > text2:
             return -1
-        elif s1 < s2:
+        elif text1 < text2:
             return 1
         else:
             return 0
@@ -171,58 +171,58 @@ def cmpLowerU(str1, str2):
     return 0
 
 
-def str2unicode(String_, CP_=DEFAULT_ENCODING):
+def text2unicode(text, txt_codepage=DEFAULT_ENCODING):
     """
     Перекодировка строки в юникод с проверкой типа входного аргумента.
-    @param String_: Строка.
-    @param CP_: Кодовая страница строки.
+    @param text: Строка.
+    @param txt_codepage: Кодовая страница строки.
     @return: Строка в юникоде.
     """
-    if isinstance(String_, str):
-        return String_
-    elif isinstance(String_, bytes):
-        return String_.decode(CP_)
-    return str(String_)
+    if isinstance(text, str):
+        return text
+    elif isinstance(text, bytes):
+        return text.decode(txt_codepage)
+    return str(text)
 
 
-def isLATText(Text_):
+def isLATText(text):
     """
     Текст написан в латинице?
     """
-    if isinstance(Text_, str):
-        rus_chr = [c for c in Text_ if ord(c) > 128]
+    if isinstance(text, str):
+        rus_chr = [c for c in text if ord(c) > 128]
         return not bool(rus_chr)
     # Это не строка
     return False
 
 
-def isRUSText(Text_):
+def isRUSText(text):
     """
     Строка с рускими буквами?
     """
-    if isinstance(Text_, str):
-        rus_chr = [c for c in Text_ if ord(c) > 128]
+    if isinstance(text, str):
+        rus_chr = [c for c in text if ord(c) > 128]
         return bool(rus_chr)
     # Это не строка
     return False
 
 
-def _rus2lat(Text_, TranslateDict_):
+def _rus2lat(text, translate_dict):
     """
     Перевод русских букв в латинские по словарю замен.
     """
-    if isinstance(Text_, bytes):
+    if isinstance(text, bytes):
         # Привести к юникоду
-        Text_ = Text_.decode(DEFAULT_ENCODING)
+        text = text.decode(DEFAULT_ENCODING)
 
-    txt_list = list(Text_)
-    txt_list = [TranslateDict_.setdefault(ch, ch) for ch in txt_list]
+    txt_list = list(text)
+    txt_list = [translate_dict.setdefault(ch, ch) for ch in txt_list]
     return ''.join(txt_list)
 
 
 RUS2LATDict = {u'а': 'a', u'б': 'b', u'в': 'v', u'г': 'g', u'д': 'd', u'е': 'e', u'ё': 'yo', u'ж': 'j',
                u'з': 'z', u'и': 'i', u'й': 'y', u'к': 'k', u'л': 'l', u'м': 'm', u'н': 'n', u'о': 'o', u'п': 'p',
-               u'р': 'r', u'с': 's', u'т': 't', u'у': 'u', u'ф': 'f', u'х': 'h', u'ц': 'c', u'ч': 'ch',
+               u'р': 'r', u'с': 'text', u'т': 't', u'у': 'u', u'ф': 'f', u'х': 'h', u'ц': 'c', u'ч': 'ch',
                u'ш': 'sh', u'щ': 'sch', u'ь': '', u'ы': 'y', u'ъ': '', u'э': 'e', u'ю': 'yu', u'я': 'ya',
                u'А': 'A', u'Б': 'B', u'В': 'V', u'Г': 'G', u'Д': 'D', u'Е': 'E', u'Ё': 'YO', u'Ж': 'J',
                u'З': 'Z', u'И': 'I', u'Й': 'Y', u'К': 'K', u'Л': 'L', u'М': 'M', u'Н': 'N', u'О': 'O', u'П': 'P',
@@ -230,17 +230,17 @@ RUS2LATDict = {u'а': 'a', u'б': 'b', u'в': 'v', u'г': 'g', u'д': 'd', u'е'
                u'Ш': 'SH', u'Щ': 'SCH', u'Ь': '', u'Ы': 'Y', u'Ъ': '', u'Э': 'E', u'Ю': 'YU', u'Я': 'YA'}
 
 
-def rus2lat(Text_):
+def rus2lat(text):
     """
     Перевод русских букв в латинские.
     """
-    return _rus2lat(Text_, RUS2LATDict)
+    return _rus2lat(text, RUS2LATDict)
 
 
 RUS2LATKeyboardDict = {u'а': 'f', u'б': '_', u'в': 'd', u'г': 'u', u'д': 'l', u'е': 't', u'ё': '_', u'ж': '_',
                        u'з': 'p', u'и': 'b', u'й': 'q', u'к': 'r', u'л': 'k', u'м': 'v', u'н': 'y', u'о': 'j',
                        u'п': 'g', u'р': 'h', u'с': 'c', u'т': 'n', u'у': 'e', u'ф': 'a', u'х': '_', u'ц': 'w',
-                       u'ч': 'x', u'ш': 'i', u'щ': 'o', u'ь': 'm', u'ы': 's', u'ъ': '_', u'э': '_', u'ю': '_',
+                       u'ч': 'x', u'ш': 'i', u'щ': 'o', u'ь': 'm', u'ы': 'text', u'ъ': '_', u'э': '_', u'ю': '_',
                        u'я': 'z', u'А': 'F', u'Б': '_', u'В': 'D', u'Г': 'U', u'Д': 'L', u'Е': 'T', u'Ё': '_',
                        u'Ж': '_', u'З': 'P', u'И': 'B', u'Й': 'Q', u'К': 'R', u'Л': 'K', u'М': 'V', u'Н': 'Y',
                        u'О': 'J', u'П': 'G', u'Р': 'H', u'С': 'C', u'Т': 'N', u'У': 'E', u'Ф': 'A', u'Х': '_',
@@ -248,11 +248,11 @@ RUS2LATKeyboardDict = {u'а': 'f', u'б': '_', u'в': 'd', u'г': 'u', u'д': 'l
                        u'Ю': '_', u'Я': 'Z'}
 
 
-def rus2lat_keyboard(Text_):
+def rus2lat_keyboard(text):
     """
     Перевод русских букв в латинские по раскладке клавиатуры.
     """
-    return _rus2lat(Text_, RUS2LATKeyboardDict)
+    return _rus2lat(text, RUS2LATKeyboardDict)
 
 
 rus_encodings = {'UTF-8':      'utf-8',
@@ -342,17 +342,17 @@ def get_codepage(text=None):
         return idx
 
 
-def toUnicode(Value_, CP_=DEFAULT_ENCODING):
+def toUnicode(value, txt_codepage=DEFAULT_ENCODING):
     """
     Преобразовать любое значение в юникод.
-    @param Value_: Значение.
-    @param CP_: Кодовая страница для строк.
+    @param value: Значение.
+    @param txt_codepage: Кодовая страница для строк.
     """
-    if isinstance(Value_, str):
-        return Value_
-    elif isinstance(Value_, bytes):
-        return Value_.decode(CP_)
-    return str(Value_)
+    if isinstance(value, str):
+        return value
+    elif isinstance(value, bytes):
+        return value.decode(txt_codepage)
+    return str(value)
 
 
 def txt_find_words(txt, *words):
@@ -412,25 +412,25 @@ def is_serial_zero(txt):
     return is_serial_symbol(txt, '0')
 
 
-def getNumEnding(iNumber, aEndings):
+def getNumEnding(number, endings):
     """
     Функция возвращает окончание для множественного числа слова на основании числа и
     массива окончаний.
     Функция взята с https://habrahabr.ru/post/105428/.
-    @param iNumber: Число на основе которого нужно сформировать окончание
-    @param aEndings: Массив слов или окончаний для чисел(1, 4, 5),
+    @param number: Число на основе которого нужно сформировать окончание
+    @param endings: Массив слов или окончаний для чисел(1, 4, 5),
         например ['яблоко', 'яблока', 'яблок']
     @return: Строку.
     """
-    iNumber %= 100
-    if 11 <= iNumber <= 19:
-        sEnding = aEndings[2]
+    number %= 100
+    if 11 <= number <= 19:
+        sEnding = endings[2]
     else:
-        i = iNumber % 10
+        i = number % 10
         if i == 1:
-           sEnding = aEndings[0]
+           sEnding = endings[0]
         elif i in (2, 3, 4):
-            sEnding = aEndings[1]
+            sEnding = endings[1]
         else:
-            sEnding = aEndings[2]
+            sEnding = endings[2]
     return sEnding

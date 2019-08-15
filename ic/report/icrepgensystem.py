@@ -25,7 +25,7 @@ import sqlalchemy
 from ic.std.utils import execfunc
 from ic.std.log import log
 from ic.std.utils import filefunc
-from ic.std.utils import res
+from ic.std.utils import resfunc
 from ic.std.dlg import dlg
 from ic.std.utils import textfunc
 
@@ -36,7 +36,7 @@ __version__ = (0, 1, 1, 2)
 # Константы подсистемы
 DEFAULT_REP_TMPL_FILE = os.path.join(os.path.dirname(__file__), 'new_report_template.ods')
 
-OFFICE_OPEN_CMD_FORMAT = 'libreoffice %s'
+OFFICE_OPEN_CMD_FORMAT = 'libreoffice %text'
 
 ODS_TEMPLATE_EXT = '.ods'
 XLS_TEMPLATE_EXT = '.xls'
@@ -137,7 +137,7 @@ class icReportGeneratorSystem:
         Перегрузить данные отчета.
         @param RepTmplFileName_: Имя файла шаблона отчета.
         """
-        self._Rep = res.loadResourceFile(RepTmplFileName_, bRefresh=True)
+        self._Rep = resfunc.loadResourceFile(RepTmplFileName_, bRefresh=True)
         
     def setRepData(self, report):
         """
@@ -289,7 +289,7 @@ class icReportGeneratorSystem:
             if template:
                 rep_template = template.read(tmpl_filename)
                 new_filename = os.path.splitext(filename)[0]+DEFAULT_REPORT_TEMPLATE_EXT
-                res.saveResourcePickle(new_filename, rep_template)
+                resfunc.saveResourcePickle(new_filename, rep_template)
             log.info(u'Конец конвертации')
             return new_filename
         else:
@@ -345,7 +345,7 @@ class icReportGeneratorSystem:
         self._QueryTab = QueryTab_
 
         # 3. Скорректировать шаблон для нормальной обработки генератором
-        self._Rep = self.RepSQLObj2SQLite(self._Rep, res.loadResourceFile(res.icGetTabResFileName()))
+        self._Rep = self.RepSQLObj2SQLite(self._Rep, resfunc.loadResourceFile(resfunc.icGetTabResFileName()))
 
         # 5. Коррекция параметров БД и запроса
         # self._Rep['data_source'] = ic_exec.ExecuteMethod(self._Rep['data_source'], self)

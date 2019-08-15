@@ -22,7 +22,7 @@ except ImportError:
 
 from . import xml2dict
 
-__version__ = (1, 1, 1, 1)
+__version__ = (1, 1, 1, 2)
 
 # --- Константы ---
 # XML формат файла Excel
@@ -30,16 +30,16 @@ xlXMLSpreadsheet = 46
 
 
 # --- Описания функций ---
-def XlsFile2Dict(XLSFileName_):
+def XlsFile2Dict(xls_filename):
     """
     Функция конвертации файлов Excel в xls формате в формат словаря Python.
-    @param XLSFileName_: Имя xls файла. 
+    @param xls_filename: Имя xls файла.
     @return: Функция возвращает заполненный словарь, 
         или None в случае ошибки.
     """
     try:
-        XLSFileName_ = os.path.abspath(XLSFileName_)
-        xml_file_name = os.path.splitext(XLSFileName_)[0]+'.xml'
+        xls_filename = os.path.abspath(xls_filename)
+        xml_file_name = os.path.splitext(xls_filename)[0] + '.xml'
         # Установить связь с Excel
         excel_app = win32com.client.Dispatch("Excel.Application")
         # Сделать приложение невидимым
@@ -47,7 +47,7 @@ def XlsFile2Dict(XLSFileName_):
         # Закрыть все книги
         excel_app.Workbooks.Close()
         # Загрузить *.xls файл
-        excel_app.Workbooks.Open(XLSFileName_)
+        excel_app.Workbooks.Open(xls_filename)
         # Сохранить в xml файле
         excel_app.ActiveWorkbook.SaveAs(xml_file_name, FileFormat=xlXMLSpreadsheet)
         # Выйти из Excel
@@ -57,12 +57,12 @@ def XlsFile2Dict(XLSFileName_):
     except pythoncom.com_error:
         # Вывести сообщение об ошибке в лог
         info = sys.exc_info()[1].args[2][2]
-        win32api.MessageBox(0, 'Ошибка чтения файла %s : %s.' % (XLSFileName_, info))
+        win32api.MessageBox(0, 'Ошибка чтения файла %s : %s.' % (xls_filename, info))
         return None
 
     except:
         info = sys.exc_info()[1]
-        win32api.MessageBox(0, 'Ошибка чтения файла %s : %s.' % (XLSFileName_, info))
+        win32api.MessageBox(0, 'Ошибка чтения файла %s : %s.' % (xls_filename, info))
         return None
 
 

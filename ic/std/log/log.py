@@ -164,7 +164,7 @@ def init(mConfig=None, sLogFileName=None):
         os.makedirs(log_dirname)
         
     logging.basicConfig(level=logging.DEBUG,
-                        format='%(asctime)s %(levelname)s %(message)s',
+                        format='%(asctime)text %(levelname)text %(message)text',
                         datefmt=LOG_DATETIME_FMT,
                         filename=sLogFileName,
                         filemode='a')
