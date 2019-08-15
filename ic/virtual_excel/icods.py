@@ -334,7 +334,7 @@ class icODS(object):
     
         style_id = data_dict['ID']
         properties_args['name'] = style_id
-        properties_args['family'] = 'table-cell'
+        properties_args['family'] = 'table-new_cell'
         ods_style = odf.style.Style(**properties_args)
 
         properties_args = {}
@@ -450,8 +450,8 @@ class icODS(object):
         @param data_dict: Словарь данных.
         """
         # log.debug(u'Параметры листа <%text>' % data_dict)
-        page_setup = self.getChildrenByName(data_dict, 'PageSetup')
-        print_setup = self.getChildrenByName(data_dict, 'Print')
+        page_setup = self.getChildrenByName(data_dict, 'setPageSetup')
+        print_setup = self.getChildrenByName(data_dict, 'print')
         fit_to_page = self.getChildrenByName(data_dict, 'FitToPage')
         ods_properties = {'writingmode': 'lr-tb'}
         orientation = None
@@ -886,7 +886,7 @@ class icODS(object):
         Заполнить ячейку.
         @param data_dict: Словарь данных.
         """
-        # log.info('cell: <%text>' % data_dict)
+        # log.info('new_cell: <%text>' % data_dict)
 
         properties = {}
         ods_type = self.getCellType(data_dict)
@@ -1422,7 +1422,7 @@ class icODS(object):
 
         # log.debug(u'Set default worksheet options')
         options = {'name': 'WorksheetOptions',
-                   'children': [{'name': 'PageSetup',
+                   'children': [{'name': 'setPageSetup',
                                  'children': [{'name': 'Layout',
                                                'Orientation': PORTRAIT_ORIENTATION},
                                               {'name': 'PageMargins',
@@ -1432,7 +1432,7 @@ class icODS(object):
                                                'Right': str(DEFAULT_XML_MARGIN_RIGHT)},
                                               ]
                                  },
-                                {'name': 'Print',
+                                {'name': 'print',
                                  'children': [{'name': 'PaperSizeIndex',
                                                'value': '9'}
                                               ]
@@ -1707,7 +1707,7 @@ class icODS(object):
         i = 1
         set_idx = False
         for ods_cell in ods_cells:
-            if ods_cell.qname[-1] == 'covered-table-cell':
+            if ods_cell.qname[-1] == 'covered-table-new_cell':
                 repeated = ods_cell.getAttribute('numbercolumnsrepeated')
                 if repeated and (repeated not in ('None', 'none', 'NONE')):
                     # Учет индекса и пропущенных ячеек
@@ -1717,7 +1717,7 @@ class icODS(object):
                     # Стоит просто ячейка и ее надо учесть
                     i += 1
                     set_idx = True
-            elif ods_cell.qname[-1] == 'table-cell':
+            elif ods_cell.qname[-1] == 'table-new_cell':
                 cell_data = self.readCell(ods_cell, i if set_idx else None)
                 data['children'].append(cell_data)
                 if set_idx:
@@ -1880,7 +1880,7 @@ def test_2(src_ods_filename, dst_xml_filename, dst_ods_filename):
         excel = icexcel.icVExcel()
         excel._data = data
         cell = excel.getWorkbook().getWorksheetIdx().getTable().getCell(40, 61)
-        # log.debug('Cell: %text : %text' % (cell.getAddress(), cell.getRegion()))
+        # log.debug('Cell: %text : %text' % (new_cell.getAddress(), new_cell.getRegion()))
         cell.setValue('123456')
 
         excel.saveAs(dst_xml_filename)

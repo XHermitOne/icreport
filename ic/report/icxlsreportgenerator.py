@@ -22,7 +22,7 @@ from ic.report import icrepfile
 
 from ic import config
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 
 class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
@@ -30,14 +30,14 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     Класс системы генерации отчетов, основанные на генерации XLS файлов.
     """
 
-    def __init__(self, report=None, ParentForm_=None):
+    def __init__(self, report=None, parent=None):
         """
         Конструктор класса.
         @param report: Шаблон отчета.
-        @param ParentForm_: Родительская форма, необходима для вывода сообщений.
+        @param parent: Родительская форма, необходима для вывода сообщений.
         """
         # вызов конструктора предка
-        icrepgensystem.icReportGeneratorSystem.__init__(self, report, ParentForm_)
+        icrepgensystem.icReportGeneratorSystem.__init__(self, report, parent)
 
         # Имя файла шаблона отчета
         self.RepTmplFileName = None
@@ -45,16 +45,16 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         # Папка отчетов.
         self._report_dir = None
         if self._ParentForm:
-            self._report_dir = os.path.abspath(self._ParentForm.GetReportDir())
+            self._report_dir = os.path.abspath(self._ParentForm.getReportDir())
         
-    def reloadRepData(self, RepTmplFileName_=None):
+    def reloadRepData(self, tmpl_filename=None):
         """
         Перегрузить данные отчета.
-        @param RepTmplFileName_: Имя файла шаблона отчета.
+        @param tmpl_filename: Имя файла шаблона отчета.
         """
-        if RepTmplFileName_ is None:
-            RepTmplFileName_ = self.RepTmplFileName
-        icrepgensystem.icReportGeneratorSystem.reloadRepData(self, RepTmplFileName_)
+        if tmpl_filename is None:
+            tmpl_filename = self.RepTmplFileName
+        icrepgensystem.icReportGeneratorSystem.reloadRepData(self, tmpl_filename)
         
     def getReportDir(self):
         """
@@ -62,7 +62,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         """
         if self._report_dir is None:
             if self._ParentForm:
-                self._report_dir = os.path.abspath(self._ParentForm.GetReportDir())
+                self._report_dir = os.path.abspath(self._ParentForm.getReportDir())
             else:
                 log.warning(u'Не определена папка отчетов!')
                 self._report_dir = ''
@@ -98,16 +98,16 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         """
         action = icreportactiondlg.getReportActionDlg(title=self.getReportDescription())
         if action == icreportactiondlg.PRINT_ACTION_ID:
-            return self.PrintOffice(data)
+            return self.printOffice(data)
         elif action == icreportactiondlg.PREVIEW_ACTION_ID:
-            return self.PreviewOffice(data)
+            return self.previewOffice(data)
         elif action == icreportactiondlg.EXPORT_ACTION_ID:
-            return self.OpenOffice(data)
+            return self.openOffice(data)
         else:
             log.warning(u'Не определено действие над отчетом')
         return None
 
-    def Preview(self, report=None, *args, **kwargs):
+    def preview(self, report=None, *args, **kwargs):
         """
         Предварительный просмотр.
         @param report: Полное описание шаблона отчета.
@@ -115,25 +115,25 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         xls_rep_file_name = self._genXLSReport(report, *args, **kwargs)
         if xls_rep_file_name and os.path.exists(xls_rep_file_name):
             # Открыть в режиме просмотра
-            self.PreviewOffice(xls_rep_file_name)
+            self.previewOffice(xls_rep_file_name)
             
-    def PreviewOffice(self, XLSFileName_):
+    def previewOffice(self, xls_filename):
         """
         Открыть отчет в режиме предварительного просмотра.
-        @param XLSFileName_: Имя xls файла, содержащего сгенерированный отчет.
+        @param xls_filename: Имя xls файла, содержащего сгенерированный отчет.
         """
-        if not os.path.exists(XLSFileName_):
-            log.warning(u'Предварительный просмотр. Файл <%s> не найден' % XLSFileName_)
+        if not os.path.exists(xls_filename):
+            log.warning(u'Предварительный просмотр. Файл <%s> не найден' % xls_filename)
             return
 
-        pdf_filename = os.path.splitext(XLSFileName_)[0]+'.pdf'
+        pdf_filename = os.path.splitext(xls_filename)[0] + '.pdf'
         if os.path.exists(pdf_filename):
             try:
                 os.remove(pdf_filename)
             except:
                 log.error(u'Ошибка удаления файла <%s>' % pdf_filename)
 
-        cmd = 'unoconv --format=pdf %s' % XLSFileName_
+        cmd = 'unoconv --format=pdf %s' % xls_filename
         log.info(u'UNOCONV. Выполнения комманды ОС <%s>' % cmd)
         os.system(cmd)
 
@@ -141,7 +141,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         log.info(u'EVINCE. Выполнения комманды ОС <%s>' % cmd)
         os.system(cmd)
 
-    def Print(self, report=None, *args, **kwargs):
+    def print(self, report=None, *args, **kwargs):
         """
         Печать.
         @param report: Полное описание шаблона отчета.
@@ -149,56 +149,56 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         xls_rep_file_name = self._genXLSReport(report, *args, **kwargs)
         if xls_rep_file_name and os.path.exists(xls_rep_file_name):
             # Открыть печать в CALC
-            self.PrintOffice(xls_rep_file_name)
+            self.printOffice(xls_rep_file_name)
 
-    def PrintOffice(self, XLSFileName_):
+    def printOffice(self, xls_filename):
         """
         Печать отчета с помощью CALC.
-        @param XLSFileName_: Имя xls файла, содержащего сгенерированный отчет.
+        @param xls_filename: Имя xls файла, содержащего сгенерированный отчет.
         """
-        if XLSFileName_ and os.path.exists(XLSFileName_):
-            cmd = 'libreoffice -p %s&' % XLSFileName_
+        if xls_filename and os.path.exists(xls_filename):
+            cmd = 'libreoffice -p %s&' % xls_filename
             log.info(u'Выполнения комманды ОС <%s>' % cmd)
             os.system(cmd)
         else:
-            log.warning(u'Печать. Файл <%s> не найден.' % XLSFileName_)
+            log.warning(u'Печать. Файл <%s> не найден.' % xls_filename)
 
-    def PageSetup(self):
+    def setPageSetup(self):
         """
         Установка параметров страницы.
         """
         pass
 
-    def Convert(self, report=None, ToFile_=None, *args, **kwargs):
+    def convert(self, report=None, to_filename=None, *args, **kwargs):
         """
         Вывод результатов отчета в Excel.
         @param report: Полное описание шаблона отчета.
-        @param ToFile_: Имя файла, куда необходимо сохранить отчет.
+        @param to_filename: Имя файла, куда необходимо сохранить отчет.
         """
         rep_file_name = self._genXLSReport(report, *args, **kwargs)
         if rep_file_name:
             # Открыть CALC в режиме
-            self.OpenOffice(rep_file_name)
+            self.openOffice(rep_file_name)
 
-    def OpenOffice(self, XLSFileName_):
+    def openOffice(self, xls_filename):
         """
         Открыть.
-        @param XLSFileName_: Имя xls файла, содержащего сгенерированный отчет.
+        @param xls_filename: Имя xls файла, содержащего сгенерированный отчет.
         """
-        if XLSFileName_ and os.path.exists(XLSFileName_):
-            cmd = 'libreoffice %s&' % XLSFileName_
+        if xls_filename and os.path.exists(xls_filename):
+            cmd = 'libreoffice %s&' % xls_filename
             log.info('Выполнения комманды ОС <%s>' % cmd)
             os.system(cmd)
         else:
-            log.warning(u'Открытие. Файл <%s> не найден' % XLSFileName_)
+            log.warning(u'Открытие. Файл <%s> не найден' % xls_filename)
 
-    def Edit(self, RepFileName_=None):
+    def edit(self, rep_filename=None):
         """
         Редактирование отчета.
-        @param RepFileName_: Полное имя файла шаблона отчета.
+        @param rep_filename: Полное имя файла шаблона отчета.
         """
         # Определить файл *.xls
-        xls_file = os.path.abspath(os.path.splitext(RepFileName_)[0]+'.xls')
+        xls_file = os.path.abspath(os.path.splitext(rep_filename)[0]+'.xls')
         cmd = 'libreoffice \"%s\"&' % xls_file
         # и запустить
         os.system(cmd)
@@ -229,7 +229,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             variables = kwargs.get('variables', None)
             coord_fill = kwargs.get('coord_fill', None)
             data_rep = rep.generate(self._Rep, query_tbl,
-                                    NameSpace_=variables, CoordFill_=coord_fill)
+                                    name_space=variables, coord_fill=coord_fill)
 
             return data_rep
         except:
@@ -270,7 +270,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # 2. Запустить генерацию
             rep = icrepgen.icReportGenerator()
             data_rep = rep.generate(self._Rep, query_tbl,
-                                    NameSpace_=vars, *args, **kwargs)
+                                    name_space=vars, *args, **kwargs)
 
             return data_rep
         except:
@@ -317,30 +317,30 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             return rep_file_name
         return None
 
-    def PreviewResult(self, report_data=None):
+    def previewResult(self, report_data=None):
         """
         Предварительный просмотр.
         @param report_data: Сгенерированный отчет.
         """
         report_filename = self.save(report_data)
         if report_filename:
-            return self.PreviewOffice(report_filename)
+            return self.previewOffice(report_filename)
 
-    def PrintResult(self, report_data=None):
+    def printResult(self, report_data=None):
         """
         Печать.
         @param report_data: Сгенерированный отчет.
         """
         report_filename = self.save(report_data)
         if report_filename:
-            return self.PrintOffice(report_filename)
+            return self.printOffice(report_filename)
 
-    def ConvertResult(self, report_data=None, to_file=None):
+    def convertResult(self, report_data=None, to_filename=None):
         """
         Конвертирование результатов отчета.
         @param report_data: Сгенерированный отчет.
-        @param to_file: Имя результирующего файла.
+        @param to_filename: Имя результирующего файла.
         """
         report_filename = self.save(report_data)
         if report_filename:
-            return self.OpenOffice(report_filename)
+            return self.openOffice(report_filename)

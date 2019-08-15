@@ -90,7 +90,7 @@ Excel
                             Sup
                             Span
             WorksheetOptions
-                PageSetup
+                setPageSetup
                     Layout
                     PageMargins
                     Header
@@ -138,7 +138,7 @@ Excel
 
 *WorksheetOptions* - Настройки листа. Атрибутов нет.
 
-*PageSetup* - Параметры страницы.
+*setPageSetup* - Параметры страницы.
 
 *Layout* - Размещение.
 

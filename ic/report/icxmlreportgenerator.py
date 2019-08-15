@@ -19,21 +19,21 @@ from ic.report import icrepfile
 
 from ic import config
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 
 class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     """
     Класс системы генерации отчетов, основанные на генерации XML файлов.
     """
-    def __init__(self, Rep_=None, ParentForm_=None):
+    def __init__(self, report=None, parent=None):
         """
         Конструктор класса.
-        @param Rep_: Шаблон отчета.
-        @param ParentForm_: Родительская форма, необходима для вывода сообщений.
+        @param report: Шаблон отчета.
+        @param parent: Родительская форма, необходима для вывода сообщений.
         """
         # вызов конструктора предка
-        icrepgensystem.icReportGeneratorSystem.__init__(self, Rep_, ParentForm_)
+        icrepgensystem.icReportGeneratorSystem.__init__(self, report, parent)
 
         # Имя файла шаблона отчета
         self.RepTmplFileName = None
@@ -41,16 +41,16 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         # Папка отчетов.
         self._report_dir = None
         if self._ParentForm:
-            self._report_dir = os.path.abspath(self._ParentForm.GetReportDir())
+            self._report_dir = os.path.abspath(self._ParentForm.getReportDir())
         
-    def reloadRepData(self, RepTmplFileName_=None):
+    def reloadRepData(self, tmpl_filename=None):
         """
         Перегрузить данные отчета.
-        @param RepTmplFileName_: Имя файла шаблона отчета.
+        @param tmpl_filename: Имя файла шаблона отчета.
         """
-        if RepTmplFileName_ is None:
-            RepTmplFileName_ = self.RepTmplFileName
-        icrepgensystem.icReportGeneratorSystem.reloadRepData(self, RepTmplFileName_)
+        if tmpl_filename is None:
+            tmpl_filename = self.RepTmplFileName
+        icrepgensystem.icReportGeneratorSystem.reloadRepData(self, tmpl_filename)
         
     def getReportDir(self):
         """
@@ -58,21 +58,21 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         """
         if self._report_dir is None:
             if self._ParentForm:
-                self._report_dir = os.path.abspath(self._ParentForm.GetReportDir())
+                self._report_dir = os.path.abspath(self._ParentForm.getReportDir())
             else:
                 dlg.getMsgBox(u'Ошибка', u'Не определена папка отчетов!')
                                 
         return self._report_dir
 
-    def _genXMLReport(self, Rep_):
+    def _genXMLReport(self, report):
         """
         Генерация отчета и сохранение его в XML файл.
-        @param Rep_: Полное описание шаблона отчета.
+        @param report: Полное описание шаблона отчета.
         @return: Возвращает имя xml файла или None в случае ошибки.
         """
-        if Rep_ is None:
-            Rep_ = self._Rep
-        data_rep = self.GenerateReport(Rep_)
+        if report is None:
+            report = self._Rep
+        data_rep = self.generateReport(report)
         if data_rep:
             rep_file = icrepfile.icExcelXMLReportFile()
             rep_file_name = os.path.join(self.getReportDir(),
@@ -82,17 +82,17 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             return rep_file_name
         return None
         
-    def Preview(self, Rep_=None):
+    def preview(self, report=None):
         """
         Предварительный просмотр.
-        @param Rep_: Полное описание шаблона отчета.
+        @param report: Полное описание шаблона отчета.
         """
-        xml_rep_file_name = self._genXMLReport(Rep_)
+        xml_rep_file_name = self._genXMLReport(report)
         if xml_rep_file_name:
             # Открыть excel в режиме просмотра
-            self.PreviewExcel(xml_rep_file_name)
+            self.previewExcel(xml_rep_file_name)
             
-    def PreviewExcel(self, xml_filename):
+    def previewExcel(self, xml_filename):
         """
         Открыть excel  в режиме предварительного просмотра.
         @param xml_filename: Имя xml файла, содержащего сгенерированный отчет.
@@ -116,17 +116,17 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             log.fatal()
             return False
 
-    def Print(self, Rep_=None):
+    def print(self, report=None):
         """
         Печать.
-        @param Rep_: Полное описание шаблона отчета.
+        @param report: Полное описание шаблона отчета.
         """
-        xml_rep_file_name = self._genXMLReport(Rep_)
+        xml_rep_file_name = self._genXMLReport(report)
         if xml_rep_file_name:
             # Открыть печать в excel
-            self.PrintExcel(xml_rep_file_name)
+            self.printExcel(xml_rep_file_name)
 
-    def PrintExcel(self, xml_filename):
+    def printExcel(self, xml_filename):
         """
         Печать отчета с помощью excel.
         @param xml_filename: Имя xml файла, содержащего сгенерированный отчет.
@@ -148,24 +148,24 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             log.fatal()
             return False
             
-    def PageSetup(self):
+    def setPageSetup(self):
         """
         Установка параметров страницы.
         """
         pass
 
-    def Convert(self, Rep_=None, ToXLSFile_=None, *args, **kwargs):
+    def convert(self, report=None, to_xls_filename=None, *args, **kwargs):
         """
         Вывод результатов отчета в Excel.
-        @param Rep_: Полное описание шаблона отчета.
-        @param ToXLSFile_: Имя файла, куда необходимо сохранить отчет.
+        @param report: Полное описание шаблона отчета.
+        @param to_xls_filename: Имя файла, куда необходимо сохранить отчет.
         """
-        xml_rep_file_name = self._genXMLReport(Rep_)
+        xml_rep_file_name = self._genXMLReport(report)
         if xml_rep_file_name:
             # Excel
-            self.OpenExcel(xml_rep_file_name)
+            self.openExcel(xml_rep_file_name)
 
-    def OpenExcel(self, xml_filename):
+    def openExcel(self, xml_filename):
         """
         Открыть excel.
         @param xml_filename: Имя xml файла, содержащего сгенерированный отчет.
@@ -187,26 +187,26 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             log.fatal()
             return False
 
-    def Edit(self, RepFileName_=None):
+    def edit(self, rep_filename=None):
         """
         Редактирование отчета.
-        @param RepFileName_: Полное имя файла шаблона отчета.
+        @param rep_filename: Полное имя файла шаблона отчета.
         """
         # Определить файл *.xml
-        xml_file = os.path.abspath(os.path.splitext(RepFileName_)[0]+'.xml')
+        xml_file = os.path.abspath(os.path.splitext(rep_filename)[0]+'.xml')
         cmd = 'start excel.exe \"%s\"' % xml_file
         # и запустить MSExcel
         os.system(cmd)
 
-    def GenerateReport(self, Rep_=None):
+    def generateReport(self, report=None):
         """
         Запустить генератор отчета.
-        @param Rep_: Шаблон отчета.
+        @param report: Шаблон отчета.
         @return: Возвращает сгенерированный отчет или None в случае ошибки.
         """
         try:
-            if Rep_ is not None:
-                self._Rep = Rep_
+            if report is not None:
+                self._Rep = report
 
             # 1. Получить таблицу запроса
             query_tbl = self.getQueryTbl(self._Rep)

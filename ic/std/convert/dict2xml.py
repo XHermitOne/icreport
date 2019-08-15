@@ -630,8 +630,8 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
 
         self.startElementLevel('WorksheetOptions', attrs)
 
-        # PageSetup
-        page_setup = [element for element in data['children'] if element['name'] == 'PageSetup']
+        # setPageSetup
+        page_setup = [element for element in data['children'] if element['name'] == 'setPageSetup']
         if page_setup:
             self.setPageSetup(page_setup[0])
 
@@ -640,8 +640,8 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         if fit_to_page:
             self.setFitToPage(fit_to_page[0])
 
-        # Print
-        print_tag = [element for element in data['children'] if element['name'] == 'Print']
+        # print
+        print_tag = [element for element in data['children'] if element['name'] == 'print']
         if print_tag:
             self.setPrint(print_tag[0])
 
@@ -658,7 +658,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         """
         Начало параметров печати.
         """
-        self.startElementLevel('PageSetup', {})
+        self.startElementLevel('setPageSetup', {})
 
         # Ориентация
         layouts = [element for element in data['children'] if element['name'] == 'Layout']
@@ -670,7 +670,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         if page_margins:
             self.setPageMargins(page_margins[0])
 
-        self.endElementLevel('PageSetup')
+        self.endElementLevel('setPageSetup')
 
     def setLayout(self, data=None):
         """
@@ -710,7 +710,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         """
         Начало атрибутов печати.
         """
-        self.startElementLevel('Print', {})
+        self.startElementLevel('print', {})
 
         # Валидность информации в шаблоне
         valid_info = [element for element in data['children'] if element['name'] == 'ValidPrinterInfo']
@@ -753,7 +753,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         if n_copies:
             self.setNumberofCopies(n_copies[0])
 
-        self.endElementLevel('Print')
+        self.endElementLevel('print')
 
     def setValidPrinterInfo(self, data=None):
         """

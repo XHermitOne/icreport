@@ -161,23 +161,23 @@ def main(argv):
                                db_url=db, sql=sql, command=do_cmd,
                                stylelib_filename=stylelib, variables=variables)
     elif mode == 'view':
-        do_report.ReportViewer(report_dir=path)
+        do_report.openReportViewer(report_dir=path)
     elif mode == 'edit':
-        do_report.ReportEditor(report_dir=path)
+        do_report.openReportEditor(report_dir=path)
     elif mode == 'print':
-        do_report.ReportPrint(report_filename=mode_arg, report_dir=path,
+        do_report.printReport(report_filename=mode_arg, report_dir=path,
                               db_url=db, sql=sql, command=do_cmd,
                               stylelib_filename=stylelib, variables=variables)
     elif mode == 'preview':
-        do_report.ReportPreview(report_filename=mode_arg, report_dir=path,
+        do_report.previewReport(report_filename=mode_arg, report_dir=path,
                                 db_url=db, sql=sql, command=do_cmd,
                                 stylelib_filename=stylelib, variables=variables)
     elif mode == 'export':
-        do_report.ReportExport(report_filename=mode_arg, report_dir=path,
+        do_report.exportReport(report_filename=mode_arg, report_dir=path,
                                db_url=db, sql=sql, command=do_cmd,
                                stylelib_filename=stylelib, variables=variables)
     elif mode == 'select':
-        do_report.ReportSelect(report_filename=mode_arg, report_dir=path,
+        do_report.selectReport(report_filename=mode_arg, report_dir=path,
                                db_url=db, sql=sql, command=do_cmd,
                                stylelib_filename=stylelib, variables=variables)
 

@@ -47,10 +47,10 @@ REP_BROWSER_BUTTONS_HEIGHT = 30
 NOT_WORK_DIRNAMES = ('__pycache__',)
 
 
-def getReportList(ReportDir_, is_sort=True):
+def getReportList(report_dir, is_sort=True):
     """
     Получить список отчетов.
-    @param ReportDir_: Директорий, в котором лежат файлы отчетов.
+    @param report_dir: Директорий, в котором лежат файлы отчетов.
     @type is_sort: bool.
     @param is_sort: Сортировать список по именам?
     @return: Возвращает список списков следующего формата:
@@ -68,14 +68,14 @@ def getReportList(ReportDir_, is_sort=True):
     """
     try:
         # Коррекция аргументов
-        ReportDir_ = os.path.abspath(os.path.normpath(ReportDir_))
+        report_dir = os.path.abspath(os.path.normpath(report_dir))
 
         # Выходой список
         dir_list = list()
         rep_list = list()
 
         # Сначала обработать под-папки
-        sub_dirs = filefunc.getSubDirsFilter(ReportDir_)
+        sub_dirs = filefunc.getSubDirsFilter(report_dir)
 
         # то записать информацию в выходной список о директории
         img_idx = 0
@@ -104,7 +104,7 @@ def getReportList(ReportDir_, is_sort=True):
             dir_list.sort(key=lambda i: i[2])
 
         # Получить список всех файлов
-        file_rep_list = [filename for filename in filefunc.getFilesByExt(ReportDir_, '.rprt')
+        file_rep_list = [filename for filename in filefunc.getFilesByExt(report_dir, '.rprt')
                          if filename[-8:].lower() != '_pkl.rprt']
 
         for rep_file_name in file_rep_list:
@@ -131,7 +131,7 @@ def getReportList(ReportDir_, is_sort=True):
         return dir_list + rep_list
     except:
         # Вывести сообщение об ошибке в лог
-        log.fatal(u'Ошибка заполнения информации о файлах отчетов <%s>.' % ReportDir_)
+        log.fatal(u'Ошибка заполнения информации о файлах отчетов <%s>.' % report_dir)
 
 
 def get_root_dirname():
@@ -158,7 +158,7 @@ class icReportBrowserPrototype:
     """
     Форма браузера отчетов.
     """
-    def __init__(self, Mode_=IC_REPORT_VIEWER_MODE, report_dir=''):
+    def __init__(self, mode=IC_REPORT_VIEWER_MODE, report_dir=''):
         """
         Конструктор.
         """
@@ -185,7 +185,7 @@ class icReportBrowserPrototype:
                 if self._ReportDir:
                     self._ReportDir = os.path.normpath(self._ReportDir)
                     inifunc.saveParamINI(self.getReportSettingsINIFile(),
-                                     'REPORTS', 'report_dir', self._ReportDir)
+                                         'REPORTS', 'report_dir', self._ReportDir)
         # Отобразить новый путь в окне
         self.dir_txt.SetLabel(self._ReportDir)
 
@@ -200,7 +200,7 @@ class icReportBrowserPrototype:
         self.img_list.Add(bmp.createBitmap(os.path.join(get_img_dirname(), 'report.png')))
         self.rep_tree.AssignImageList(self.img_list)
 
-        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelectChanged, id=self.rep_tree.GetId())
+        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.onSelectChanged, id=self.rep_tree.GetId())
 
         # Кнопки управления
 
@@ -212,7 +212,7 @@ class icReportBrowserPrototype:
                                                              size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                    REP_BROWSER_BUTTONS_HEIGHT),
                                                              pos=wx.Point(REP_BROWSER_BUTTONS_POS_X, 30))
-        self.Bind(wx.EVT_BUTTON, self.OnPreviewRepButton, id=self.rep_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self.onPreviewRepButton, id=self.rep_button.GetId())
 
         # Кнопка /печати
         self.print_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
@@ -222,7 +222,7 @@ class icReportBrowserPrototype:
                                                                size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                      REP_BROWSER_BUTTONS_HEIGHT),
                                                                pos=wx.Point(REP_BROWSER_BUTTONS_POS_X, 70))
-        self.Bind(wx.EVT_BUTTON, self.OnPrintRepButton, id=self.print_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self.onPrintRepButton, id=self.print_button.GetId())
 
         # Кнопка установки параметров страницы
         self.page_setup_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
@@ -232,7 +232,7 @@ class icReportBrowserPrototype:
                                                                     size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                           REP_BROWSER_BUTTONS_HEIGHT),
                                                                     pos=wx.Point(REP_BROWSER_BUTTONS_POS_X, 110))
-        self.Bind(wx.EVT_BUTTON, self.OnPageSetupButton, id=self.page_setup_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self.onPageSetupButton, id=self.page_setup_button.GetId())
 
         # Кнопка конвертирования отчета
         self.convert_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
@@ -242,9 +242,9 @@ class icReportBrowserPrototype:
                                                                  size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                        REP_BROWSER_BUTTONS_HEIGHT),
                                                                  pos=wx.Point(REP_BROWSER_BUTTONS_POS_X, 150))
-        self.Bind(wx.EVT_BUTTON, self.OnConvertRepButton, id=self.convert_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self.onConvertRepButton, id=self.convert_button.GetId())
 
-        if Mode_ == IC_REPORT_EDITOR_MODE:
+        if mode == IC_REPORT_EDITOR_MODE:
             # Кнопка настройки
             self.set_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
                                                                  bmp.createBitmap(os.path.join(get_img_dirname(),
@@ -253,7 +253,7 @@ class icReportBrowserPrototype:
                                                                  size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                        REP_BROWSER_BUTTONS_HEIGHT),
                                                                  pos=wx.Point(REP_BROWSER_BUTTONS_POS_X, 190))
-            self.Bind(wx.EVT_BUTTON, self.OnSetRepDirButton, id=self.set_button.GetId())
+            self.Bind(wx.EVT_BUTTON, self.onSetRepDirButton, id=self.set_button.GetId())
 
             # Кнопка создания нового отчета
             self.new_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
@@ -263,7 +263,7 @@ class icReportBrowserPrototype:
                                                                  size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                        REP_BROWSER_BUTTONS_HEIGHT),
                                                                  pos=wx.Point(REP_BROWSER_BUTTONS_POS_X, 230))
-            self.Bind(wx.EVT_BUTTON, self.OnNewRepButton, id=self.new_button.GetId())
+            self.Bind(wx.EVT_BUTTON, self.onNewRepButton, id=self.new_button.GetId())
 
             # Кнопка редактирования отчета
             self.edit_button=wx.lib.buttons.GenBitmapTextButton(self,wx.NewId(),
@@ -273,7 +273,7 @@ class icReportBrowserPrototype:
                                                                 size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                       REP_BROWSER_BUTTONS_HEIGHT),
                                                                 pos=wx.Point(REP_BROWSER_BUTTONS_POS_X, 270))
-            self.Bind(wx.EVT_BUTTON, self.OnEditRepButton, id=self.edit_button.GetId())
+            self.Bind(wx.EVT_BUTTON, self.onEditRepButton, id=self.edit_button.GetId())
 
             # Кнопка Обновления отчета
             self.convert_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
@@ -283,7 +283,7 @@ class icReportBrowserPrototype:
                                                                      size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                            REP_BROWSER_BUTTONS_HEIGHT),
                                                                      pos=wx.Point(REP_BROWSER_BUTTONS_POS_X, 310))
-            self.Bind(wx.EVT_BUTTON, self.OnUpdateRepButton, id=self.convert_button.GetId())
+            self.Bind(wx.EVT_BUTTON, self.onUpdateRepButton, id=self.convert_button.GetId())
 
             # Кнопка модуля отчета
             self.module_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
@@ -293,7 +293,7 @@ class icReportBrowserPrototype:
                                                                     size=(REP_BROWSER_BUTTONS_WIDTH,
                                                                           REP_BROWSER_BUTTONS_HEIGHT),
                                                                     pos=wx.Point(REP_BROWSER_BUTTONS_POS_X, 350))
-            self.Bind(wx.EVT_BUTTON, self.OnModuleRepButton, id=self.module_button.GetId())
+            self.Bind(wx.EVT_BUTTON, self.onModuleRepButton, id=self.module_button.GetId())
                 
         # Кнопка выхода
         self.exit_button = wx.lib.buttons.GenBitmapTextButton(self, wx.NewId(),
@@ -304,7 +304,7 @@ class icReportBrowserPrototype:
                                                                     REP_BROWSER_BUTTONS_HEIGHT),
                                                               pos=wx.Point(REP_BROWSER_BUTTONS_POS_X, 390),
                                                               style=wx.ALIGN_LEFT)
-        self.Bind(wx.EVT_BUTTON, self.OnExitButton, id=self.exit_button.GetId())
+        self.Bind(wx.EVT_BUTTON, self.onExitButton, id=self.exit_button.GetId())
 
         # Заполнить дерево отчетов
         self._fillReportTree(self._ReportDir)
@@ -325,7 +325,7 @@ class icReportBrowserPrototype:
         """
         return os.path.join(get_root_dirname(), 'settings.ini')
         
-    def OnPreviewRepButton(self, event):
+    def onPreviewRepButton(self, event):
         """
         Обработчик нажатия кнопки 'Предварительный просмотр/Печать'.
         """
@@ -337,13 +337,13 @@ class icReportBrowserPrototype:
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
             report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX],
-                                                      ParentForm_=self,
-                                                      bRefresh=True).Preview()
+                                                      parent=self,
+                                                      bRefresh=True).preview()
         # Если это папка, то вывести сообщение
         else:
             dlg.getMsgBox(u'Необходимо выбрать отчет!', parent=self)
             
-    def OnPrintRepButton(self, event):
+    def onPrintRepButton(self, event):
         """
         Обработчик нажатия кнопки 'Печать отчета'.
         """
@@ -355,14 +355,14 @@ class icReportBrowserPrototype:
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
             report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX],
-                                                      ParentForm_=self,
+                                                      parent=self,
                                                       bRefresh=True).Print()
         # Если это папка, то вывести сообщение
         else:
             dlg.getMsgBox(u'Необходимо выбрать отчет!', parent=self)
         event.Skip()
 
-    def OnPageSetupButton(self, event):
+    def onPageSetupButton(self, event):
         """
         Обработчик нажатия кнопки 'Параметры страницы'.
         """
@@ -372,12 +372,12 @@ class icReportBrowserPrototype:
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
-            report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX], ParentForm_=self).PageSetup()
+            report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX], parent=self).setPageSetup()
         # Если это папка, то вывести сообщение
         else:
             dlg.getMsgBox(u'Необходимо выбрать отчет!', parent=self)
 
-    def OnSetRepDirButton(self, event):
+    def onSetRepDirButton(self, event):
         """
         Обработчик нажатия кнопки 'Папка отчетов'.
         """
@@ -403,13 +403,13 @@ class icReportBrowserPrototype:
             # и обновить дерево отчетов
             self._fillReportTree(self._ReportDir)
 
-    def OnExitButton(self, event):
+    def onExitButton(self, event):
         """
         Обработчик нажатия кнопки 'Выход'.
         """
         self.Close()
 
-    def OnNewRepButton(self, event):
+    def onNewRepButton(self, event):
         """
         Обработчик нажатия ккнопки 'Новый отчет'.
         """
@@ -417,7 +417,7 @@ class icReportBrowserPrototype:
         report_generator.getCurReportGeneratorSystem().createNew(self._ReportDir)
         event.Skip()
 
-    def OnEditRepButton(self, event):
+    def onEditRepButton(self, event):
         """
         Обработчик нажатия ккнопки 'Редактирование отчета'.
         """
@@ -427,15 +427,15 @@ class icReportBrowserPrototype:
         # Если это файл отчета, то запустить на редактирование
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Запустить на редактирование
-            rep_generator = report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX], ParentForm_=self)
+            rep_generator = report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX], parent=self)
             if rep_generator is not None:
-                rep_generator.Edit(item_data[0])
+                rep_generator.edit(item_data[0])
             else:
                 log.warning(u'Не определен генератор отчета. Тип <%s>' % item_data[REP_FILE_IDX])
 
         event.Skip()
 
-    def OnUpdateRepButton(self, event):
+    def onUpdateRepButton(self, event):
         """
         Обработчик нажатия кнопки 'Обновление отчета'.
         """
@@ -446,16 +446,16 @@ class icReportBrowserPrototype:
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Запустить обновление шаблона отчета
             log.debug(u'Обновление отчета <%s>' % item_data[0])
-            report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX], ParentForm_=self).Update(item_data[0])
+            report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX], parent=self).update(item_data[0])
         else:
-            report_generator.getCurReportGeneratorSystem(self).Update()
+            report_generator.getCurReportGeneratorSystem(self).update()
                 
         # Заполнить дерево отчетов
         self._fillReportTree(self._ReportDir)
 
         event.Skip()
 
-    def OnConvertRepButton(self, event):
+    def onConvertRepButton(self, event):
         """
         Обработчик нажатия кнопки 'Конвертация'.
         """
@@ -467,14 +467,14 @@ class icReportBrowserPrototype:
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
             report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX],
-                                                      ParentForm_=self,
-                                                      bRefresh=True).Convert()
+                                                      parent=self,
+                                                      bRefresh=True).convert()
         else:
             dlg.getMsgBox(u'Необходимо выбрать отчет!', parent=self)
 
         event.Skip()
 
-    def OnModuleRepButton(self, event):
+    def onModuleRepButton(self, event):
         """
         Обработчик нажатия кнопки 'Модуль отчета'.
         """
@@ -484,13 +484,13 @@ class icReportBrowserPrototype:
         # Если это файл отчета, то запустить открытие модуля отчета
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX],
-                                                      ParentForm_=self).OpenModule(item_data[REP_FILE_IDX])
+                                                      parent=self).openModule(item_data[REP_FILE_IDX])
         else:
             dlg.getMsgBox(u'Необходимо выбрать отчет!', parent=self)
 
         event.Skip()
 
-    def OnRightMouseClick(self, event):
+    def onRightMouseClick(self, event):
         """
         Нажаитие правой кнопки мыши на дереве.
         """
@@ -498,10 +498,10 @@ class icReportBrowserPrototype:
         popup_menu = wx.Menu()
         id_rename = wx.NewId()
         popup_menu.Append(id_rename, u'Переименовать отчет')
-        self.Bind(wx.EVT_MENU, self.OnRenameReport, id=id_rename)
+        self.Bind(wx.EVT_MENU, self.onRenameReport, id=id_rename)
         self.rep_tree.PopupMenu(popup_menu,event.GetPosition())
 
-    def OnRenameReport(self, event):
+    def onRenameReport(self, event):
         """
         Переименовать отчет.
         """
@@ -519,22 +519,22 @@ class icReportBrowserPrototype:
                                                  new_rep_name+'.rprt')
                 # Если новый файл не существует, то переименовать старый
                 if not os.path.isfile(new_rep_file_name):
-                    self.RenameReport(item_data[REP_FILE_IDX], new_rep_name)
+                    self.renameReport(item_data[REP_FILE_IDX], new_rep_name)
                 else:
                     dlg.getMsgBox(self, u'Невозможно поменять имя отчета. Отчет с таким именем уже существует.')
 
         event.Skip()
 
-    def RenameReport(self, RepFileName_, NewName_):
+    def renameReport(self, rep_filename, new_name):
         """
         Переименовать отчет.
         """
-        old_name = os.path.splitext(os.path.split(RepFileName_)[1])[0]
-        old_rep_file_name = RepFileName_
+        old_name = os.path.splitext(os.path.split(rep_filename)[1])[0]
+        old_rep_file_name = rep_filename
         old_rep_pkl_file_name = os.path.splitext(old_rep_file_name)[0] + '_pkl.rprt'
         old_xls_file_name = os.path.splitext(old_rep_file_name)[0] + '.xls'
         new_rep_file_name = os.path.join(os.path.split(old_rep_file_name)[0],
-                                         NewName_+'.rprt')
+                                         new_name + '.rprt')
         if os.path.isfile(old_rep_file_name):
             try:
                 os.rename(old_rep_file_name, new_rep_file_name)
@@ -545,7 +545,7 @@ class icReportBrowserPrototype:
                 os.remove(old_rep_pkl_file_name)
             # Поменять имя в файле отчета.
             report = resfunc.loadResource(new_rep_file_name)
-            report['name'] = NewName_
+            report['name'] = new_name
 
             rep_file = None
             try:
@@ -556,7 +556,7 @@ class icReportBrowserPrototype:
                 rep_file.close()
 
         new_xls_file_name = os.path.join(os.path.split(old_rep_file_name)[0],
-                                         NewName_+'.xls')
+                                         new_name + '.xls')
         if os.path.isfile(old_xls_file_name):
             os.rename(old_xls_file_name, new_xls_file_name)
             # Поменять имя листа отчета.
@@ -570,7 +570,7 @@ class icReportBrowserPrototype:
                 rep_tmpl_book = excel_app.Workbooks.Open(rep_tmpl)
                 rep_tmpl_sheet = rep_tmpl_book.Worksheets(old_name)
                 # Переименовать лист
-                rep_tmpl_sheet.Name = NewName_
+                rep_tmpl_sheet.Name = new_name
                 # Сохранить и закрыть
                 rep_tmpl_book.save()
                 excel_app.Quit()
@@ -578,21 +578,21 @@ class icReportBrowserPrototype:
                 # Вывести сообщение об ошибке в лог
                 log.fatal(u'Ошибка переименования файла')
 
-    def OnSelectChanged(self, event):
+    def onSelectChanged(self, event):
         """
         Изменение выделенного компонента.
         """
         pass
         
-    def _fillReportTree(self, ReportDir_):
+    def _fillReportTree(self, report_dir):
         """
         Наполнить дерево отчетов данными об отчетах.
-        @param ReportDir_: Директория отчетов.
+        @param report_dir: Директория отчетов.
         """
         # Получить описание всех отчетов
-        rep_data = getReportList(ReportDir_)
+        rep_data = getReportList(report_dir)
         if rep_data is None:
-            log.warning(u'Данные не прочитались. Папка отчетов <%s>' % ReportDir_)
+            log.warning(u'Данные не прочитались. Папка отчетов <%s>' % report_dir)
             return
         # Удалить все пункты
         self.rep_tree.DeleteAllItems()
@@ -604,15 +604,15 @@ class icReportBrowserPrototype:
         # Развернуть дерево
         self.rep_tree.Expand(root)
 
-    def _appendItemsReportTree(self, ParentId_, ItemsData_):
+    def _appendItemsReportTree(self, parent_id, items):
         """
         Добавить пункты дерева по полученному описанию отчетов.
-        @param ParentId_: Идентификатор родительского узла.
-        @param ItemsData_: Ветка описаний отчетов.
+        @param parent_id: Идентификатор родительского узла.
+        @param items: Ветка описаний отчетов.
         """
         # Перебрать описания отчетов в описании.
-        for item_data in ItemsData_:
-            item = self.rep_tree.AppendItem(ParentId_, item_data[REP_DESCRIPT_IDX], -1, -1, data=None)
+        for item_data in items:
+            item = self.rep_tree.AppendItem(parent_id, item_data[REP_DESCRIPT_IDX], -1, -1, data=None)
             # Если описание папки отчетов, то доавить рекурсивно ветку
             if item_data[REP_ITEMS_IDX] is not None:
                 self._appendItemsReportTree(item, item_data[REP_ITEMS_IDX])
@@ -626,14 +626,14 @@ class icReportBrowserPrototype:
             # Добавить связь с данными
             self.rep_tree.SetItemData(item, item_data)
 
-    def SetReportDir(self, Dir_):
+    def setReportDir(self, rep_dir):
         """
         Установить директорий/папку отчетов.
-        @param Dir_: Папка отчетов.
+        @param rep_dir: Папка отчетов.
         """
-        self._ReportDir = Dir_
+        self._ReportDir = rep_dir
 
-    def GetReportDir(self):
+    def getReportDir(self):
         """
         Папка отчетов.
         """
@@ -653,19 +653,19 @@ class icReportBrowserDialog(icReportBrowserPrototype, wx.Dialog):
     Диалоговое окно браузера отчетов.
     """
 
-    def __init__(self, ParentForm_=None, Mode_=IC_REPORT_VIEWER_MODE, report_dir=''):
+    def __init__(self, parent=None, mode=IC_REPORT_VIEWER_MODE, report_dir=''):
         """
         Конструктор.
-        @param ParentForm_: Родительская форма.
-        @param Mode_: Режим работы.
+        @param parent: Родительская форма.
+        @param mode: Режим работы.
         @param report_dir: Папка отчетов.
         """
         # Версия в строковом виде
         ver = '.'.join([str(ident) for ident in config.__version__])
         # Создать экземпляр главного окна
-        wx.Dialog.__init__(self, ParentForm_, wx.NewId(),
+        wx.Dialog.__init__(self, parent, wx.NewId(),
                            title=u'%s. Система управления отчетами. v. %s' % (TITLE, ver),
                            pos=wx.DefaultPosition, size=wx.Size(REP_BROWSER_DLG_WIDTH, REP_BROWSER_DLG_HEIGHT),
                            style=wx.MINIMIZE_BOX | wx.SYSTEM_MENU | wx.CAPTION)
 
-        icReportBrowserPrototype.__init__(self, Mode_, report_dir)
+        icReportBrowserPrototype.__init__(self, mode, report_dir)

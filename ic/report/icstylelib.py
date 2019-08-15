@@ -13,7 +13,7 @@ from ic.std.convert import xml2dict
 
 from ic.report import icreptemplate
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 # Стиль
 IC_REP_STYLE = {'font': None,   # Шрифт Структура типа ic.components.icfont.SPC_IC_FONT
@@ -35,11 +35,11 @@ class icRepStyleLib(icreptemplate.icReportTemplate):
         icreptemplate.icReportTemplate.__init__(self)
         self._style_lib = {}
         
-    def convert(self, SrcData_):
+    def convert(self, src_data):
         """
         Конвертация из XML представления библиотеки стилей в представление
             библиотеки стилей отчета.
-        @param SrcData_: Исходные данные.
+        @param src_data: Исходные данные.
         """
         pass
         
@@ -73,10 +73,10 @@ class icXMLRepStyleLib(icRepStyleLib):
         @param xml_filename: Исходные данные.
         """
         xml_data = self.open(xml_filename)
-        self._style_lib = self.data_convert(xml_data)
+        self._style_lib = self.covert_data(xml_data)
         return self._style_lib
 
-    def data_convert(self, Data_):
+    def covert_data(self, data):
         """
         Преобразование данных из одного представления в другое.
         """
@@ -84,7 +84,7 @@ class icXMLRepStyleLib(icRepStyleLib):
             style_lib = {}
             
             # Определение основных структур
-            workbook = Data_['children'][0]
+            workbook = data['children'][0]
             # Стили (в виде словаря)
             styles = {}
             styles_lst = [element for element in workbook['children'] if element['name'] == 'Styles']
@@ -120,13 +120,13 @@ class icXMLRepStyleLib(icRepStyleLib):
                 return False
         return True
 
-    def _getStyles(self, rows, Styles_):
+    def _getStyles(self, rows, styles):
         """
         Определить словарь стилей.
         @param rows: Список строк в XML.
-        @param Styles_: Словарь стилей в XML.
+        @param styles: Словарь стилей в XML.
         """
-        styles = {}
+        new_styles = {}
         for row in rows:
             for cell in row['children']:
                 # Получить значение
@@ -135,21 +135,21 @@ class icXMLRepStyleLib(icRepStyleLib):
                 if value and isinstance(value, str):
                     if self._isStyleTag(value):
                         style_id = cell['StyleID']
-                        styles[value] = self._getStyle(style_id, Styles_)
-        return styles
+                        new_styles[value] = self._getStyle(style_id, styles)
+        return new_styles
                             
-    def _getStyle(self, style_id, Styles_):
+    def _getStyle(self, style_id, styles):
         """
         Определить стиль по его идентификатору.
         @param style_id: Идентификатор стиля в XML описании.
-        @param Styles_: Словарь стилей в XML.
+        @param styles: Словарь стилей в XML.
         """
         style = copy.deepcopy(IC_REP_STYLE)
         
-        if style_id in Styles_:
-            style['font'] = self._getFontStyle(Styles_[style_id])
-            style['color'] = self._getColorStyle(Styles_[style_id])
-            # style['border']=self._getBordersStyle(Styles_[style_id])
-            # style['align']=self._getAlignStyle(Styles_[style_id])
-            # style['format']=self._getFmtStyle(Styles_[style_id])
+        if style_id in styles:
+            style['font'] = self._getFontStyle(styles[style_id])
+            style['color'] = self._getColorStyle(styles[style_id])
+            # style['border']=self._getBordersStyle(styles[style_id])
+            # style['align']=self._getAlignStyle(styles[style_id])
+            # style['format']=self._getFmtStyle(styles[style_id])
         return style

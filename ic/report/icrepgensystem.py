@@ -58,11 +58,11 @@ class icReportGeneratorSystem:
     Класс системы генерации отчетов. Абстрактный класс.
     """
 
-    def __init__(self, report=None, ParentForm_=None):
+    def __init__(self, report=None, parent=None):
         """
         Конструктор класса.
         @param report: Шаблон отчета.
-        @param ParentForm_: Родительская форма, необходима для вывода сообщений.
+        @param parent: Родительская форма, необходима для вывода сообщений.
         """
         # Шаблон отчета
         self._Rep = report
@@ -70,7 +70,7 @@ class icReportGeneratorSystem:
         self._QueryTab = None
 
         # Родительская форма, необходима для вывода сообщений.
-        self._ParentForm = ParentForm_
+        self._ParentForm = parent
 
         # Предварительный просмотр
         self.PrintPreview = None
@@ -120,11 +120,11 @@ class icReportGeneratorSystem:
             description = self._Rep.get('description', self._Rep.get('name', u''))
         return description
 
-    def setParentForm(self, ParentForm_):
+    def setParentForm(self, parent):
         """
         Установить родительскую форму для определения папки отчетов.
         """
-        self._ParentForm = ParentForm_
+        self._ParentForm = parent
         
     def getParentForm(self):
         """
@@ -132,12 +132,12 @@ class icReportGeneratorSystem:
         """
         return self._ParentForm
         
-    def reloadRepData(self, RepTmplFileName_=None):
+    def reloadRepData(self, tmpl_filename=None):
         """
         Перегрузить данные отчета.
-        @param RepTmplFileName_: Имя файла шаблона отчета.
+        @param tmpl_filename: Имя файла шаблона отчета.
         """
-        self._Rep = resfunc.loadResourceFile(RepTmplFileName_, bRefresh=True)
+        self._Rep = resfunc.loadResourceFile(tmpl_filename, bRefresh=True)
         
     def setRepData(self, report):
         """
@@ -152,50 +152,50 @@ class icReportGeneratorSystem:
         """
         return
 
-    def Preview(self, report=None, *args, **kwargs):
+    def preview(self, report=None, *args, **kwargs):
         """
         Предварительный просмотр.
         @param report: Полное описание шаблона отчета.
         """
         return
 
-    def Print(self, report=None, *args, **kwargs):
+    def print(self, report=None, *args, **kwargs):
         """
         Печать.
         @param report: Полное описание шаблона отчета.
         """
         return 
 
-    def PageSetup(self):
+    def setPageSetup(self):
         """
         Установка параметров страницы.
         """
         return
 
-    def Convert(self, report=None, ToFile_=None, *args, **kwargs):
+    def convert(self, report=None, to_filename=None, *args, **kwargs):
         """
         Конвертирование результатов отчета.
         @param report: Полное описание шаблона отчета.
-        @param ToFile_: Имя файла, куда необходимо сохранить отчет.
+        @param to_filename: Имя файла, куда необходимо сохранить отчет.
         """
         return
 
-    def Export(self, report=None, ToFile_=None, *args, **kwargs):
+    def export(self, report=None, to_filename=None, *args, **kwargs):
         """
         Вывод результатов отчета во внешнюю программу.
         @param report: Полное описание шаблона отчета.
-        @param ToFile_: Имя файла, куда необходимо сохранить отчет.
+        @param to_filename: Имя файла, куда необходимо сохранить отчет.
         """
-        return self.Convert(report, ToFile_)
+        return self.convert(report, to_filename)
 
-    def New(self, dst_path=None):
+    def createNew(self, dst_path=None):
         """
         Создание нового отчета.
         @param dst_path: Результирующая папка, в которую будет помещен новый файл.
         """
-        return self.NewByOffice(dst_path)
+        return self.createNewByOffice(dst_path)
         
-    def NewByOffice(self, dst_path=None):
+    def createNewByOffice(self, dst_path=None):
         """
         Создание нового отчета средствами LibreOffice Calc.
         @param dst_path: Результирующая папка, в которую будет помещен новый файл.
@@ -231,39 +231,39 @@ class icReportGeneratorSystem:
             # Вывести сообщение об ошибке в лог
             log.fatal(u'createNew report template by LibreOffice Calc')
 
-    def Edit(self, report=None):
+    def edit(self, report=None):
         """
         Редактирование отчета.
         @param report: Полное описание шаблона отчета.
         """
         return
 
-    def Update(self, RepTemplateFileName_=None):
+    def update(self, tmpl_filename=None):
         """
         Обновить шаблон отчета в системе генератора отчетов.
-        @param RepTemplateFileName_: Имя файла шаблона отчета.
+        @param tmpl_filename: Имя файла шаблона отчета.
             Если None, то должен производиться запрос на выбор этого файла.
         @return: Имя файла файла шаблона или None в случае ошибки.
         """
         try:
-            return self._Update(RepTemplateFileName_)
+            return self._update(tmpl_filename)
         except:
-            log.fatal(u'Ошибка обновления шаблона <%s>' % RepTemplateFileName_)
+            log.fatal(u'Ошибка обновления шаблона <%s>' % tmpl_filename)
         return None
 
-    def _Update(self, RepTemplateFileName_=None):
+    def _update(self, tmpl_filename=None):
         """
         Обновить шаблон отчета в системе генератора отчетов.
-        @param RepTemplateFileName_: Имя файла шаблона отчета.
+        @param tmpl_filename: Имя файла шаблона отчета.
             Если None, то должен производиться запрос на выбор этого файла.
         @return: Имя файла файла шаблона или None в случае ошибки.
         """
-        if RepTemplateFileName_ is None:
+        if tmpl_filename is None:
             filename = dlg.getFileDlg(self._ParentForm, u'Выберите шаблон отчета:',
                                       u'Электронные таблицы ODF (*.ods)|*.ods|Microsoft Excel 2003 XML (*.xml)|*.xml',
                                       self.getReportDir())
         else:
-            filename = os.path.abspath(os.path.normpath(RepTemplateFileName_))
+            filename = os.path.abspath(os.path.normpath(tmpl_filename))
 
         if os.path.isfile(filename):
             # Конвертация
@@ -296,14 +296,14 @@ class icReportGeneratorSystem:
             log.warning(u'Не найден файл источника шаблона <%s>' % filename)
         return None
    
-    def OpenModule(self, RepTemplateFileName_=None):
+    def openModule(self, tmpl_filename=None):
         """
         Открыть модуль отчета в редакторе.
         """
-        if RepTemplateFileName_ is None:
+        if tmpl_filename is None:
             log.warning(u'Не определен файл модуля отчета')
         # Определить файл *.xml
-        module_file = os.path.abspath(os.path.splitext(RepTemplateFileName_)[0]+'.py')
+        module_file = os.path.abspath(os.path.splitext(tmpl_filename)[0]+'.py')
         if os.path.exists(module_file):
             try:
                 self._ParentForm.GetParent().ide.OpenFile(module_file)
@@ -333,7 +333,7 @@ class icReportGeneratorSystem:
         """
         return None
 
-    def InitRepTemplate(self, report, QueryTab_=None):
+    def initRepTemplate(self, report, QueryTab_=None):
         """
         Прочитать данные о шаблоне отчета.
         @param report: Полное описание шаблона отчета.
@@ -424,23 +424,23 @@ class icReportGeneratorSystem:
 
         return None
 
-    def _isQueryFunc(self, Query_):
+    def _isQueryFunc(self, query):
         """
         Определить представлен запрос в виде функции?
-        @param Query_: Текст запроса.
+        @param query: Текст запроса.
         @return: True/False.
         """
-        return Query_ and isinstance(Query_, str) and Query_.startswith(PY_SIGNATURE)
+        return query and isinstance(query, str) and query.startswith(PY_SIGNATURE)
 
-    def _execQueryFunc(self, Query_, vars=None):
+    def _execQueryFunc(self, query, vars=None):
         """
         Получить запрос из функции.
-        @param Query_: Текст запроса.
+        @param query: Текст запроса.
         @param vars: Внешние переменные.
         @return: Возвращает запрос в разрешенном формате.
         """
         # Убрать сигнатуру определения функции
-        func = Query_.replace(PY_SIGNATURE, '').strip()
+        func = query.replace(PY_SIGNATURE, '').strip()
         var_names = vars.keys() if vars else None
         log.debug(u'Выполнение функции: <%s>. Дополнительные переменные %s' % (func, var_names))
         return execfunc.exec_code(func, name_space=locals(), kwargs=vars)
@@ -557,18 +557,18 @@ class icReportGeneratorSystem:
             log.fatal(u'Ошибка определения таблицы запроса <%s>.' % query)
         return None
 
-    def RepSQLObj2SQLite(self, report, ResTab_):
+    def RepSQLObj2SQLite(self, report, res_table):
         """
         Преобразование имен в шаблоне отчета в контексте SQLObject в имена в
             контексте sqlite.
         @param report: Щаблон отчета.
-        @param ResTab_: Ресурсное описание таблиц.
+        @param res_table: Ресурсное описание таблиц.
         """
         try:
             rep = report
             # Для корректной обработки имен полей и таблиц они д.б.
             # отсортированны по убыванию длин имен классов данных
-            data_class_names = ResTab_.keys()
+            data_class_names = res_table.keys()
             data_class_names.sort()
             data_class_names.reverse()
 
@@ -581,7 +581,7 @@ class icReportGeneratorSystem:
                         # Перебор классов
                         for data_class_name in data_class_names:
                             cell['value'] = ic.db.tabrestr.icNamesSQLObj2SQLite(cell['value'], data_class_name,
-                                                                                ResTab_[data_class_name]['scheme'])
+                                                                                res_table[data_class_name]['scheme'])
             # Перебор ячеек
             for row in rep['under']:
                 for cell in row:
@@ -589,7 +589,7 @@ class icReportGeneratorSystem:
                         # Перебор классов
                         for data_class_name in data_class_names:
                             cell['value'] = ic.db.tabrestr.icNamesSQLObj2SQLite(cell['value'], data_class_name,
-                                                                                ResTab_[data_class_name]['scheme'])
+                                                                                res_table[data_class_name]['scheme'])
             # 2. Лист шаблона
             # Перебор ячеек
             for row in rep['sheet']:
@@ -598,36 +598,36 @@ class icReportGeneratorSystem:
                         # Перебор классов
                         for data_class_name in data_class_names:
                             cell['value'] = ic.db.tabrestr.icNamesSQLObj2SQLite(cell['value'], data_class_name,
-                                                                                ResTab_[data_class_name]['scheme'])
+                                                                                res_table[data_class_name]['scheme'])
             # 3. Описание групп
             for grp in rep['groups']:
                 for data_class_name in data_class_names:
                     grp['field'] = ic.db.tabrestr.icNamesSQLObj2SQLite(grp['field'], data_class_name,
-                                                                       ResTab_[data_class_name]['scheme'])
+                                                                       res_table[data_class_name]['scheme'])
 
             return rep
         except:
             return report
 
-    def PreviewResult(self, report_data=None):
+    def previewResult(self, report_data=None):
         """
         Предварительный просмотр.
         @param report_data: Сгенерированный отчет.
         """
         return
 
-    def PrintResult(self, report_data=None):
+    def printResult(self, report_data=None):
         """
         Печать.
         @param report_data: Сгенерированный отчет.
         """
         return
 
-    def ConvertResult(self, report_data=None, to_file=None):
+    def convertResult(self, report_data=None, to_filename=None):
         """
         Конвертирование результатов отчета.
         @param report_data: Сгенерированный отчет.
-        @param to_file: Имя результирующего файла.
+        @param to_filename: Имя результирующего файла.
         """
         return
 

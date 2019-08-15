@@ -46,7 +46,7 @@ from ic.std.log import log
 
 from ic.std.convert import xml2dict
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 # --- Константы ---
 # --- Спецификации и структуры ---
@@ -76,11 +76,11 @@ class icReportData:
         """
         self._rep_data = None
         
-    def convert(self, SrcData_):
+    def convert(self, src_data):
         """
         Конвертация из первоначального представления данные в представление
             данных отчета.
-        @param SrcData_: Исходные данные.
+        @param src_data: Исходные данные.
         """
         pass
         
@@ -167,14 +167,14 @@ class icXMLReportData(icReportData):
         
     FIELD_NAMES = string.ascii_uppercase
 
-    def _getFields(self, Columns_):
+    def _getFields(self, columns):
         """
         Получить описания полей. Поля заполняются по колонкам.
         """
         try:
             fields = list()
             i_name = 0
-            for col in Columns_:
+            for col in columns:
                 field = list()
                 # Имя поля
                 if 'Name' in col:
@@ -223,26 +223,25 @@ class icXMLReportData(icReportData):
             log.fatal(u'Ошибка определения данных отчета.')
             return None
         
-    def _getVariables(self, Variables_):
+    def _getVariables(self, variables):
         """
         Переменные пространства имен.
         """
         try:
-            variables = dict([(var['Name'], var['value']) for var in Variables_])
+            variables = dict([(var['Name'], var['value']) for var in variables])
             return variables
         except:
             # Вывести сообщение об ошибке в лог
             log.fatal(u'Ошибка определения переменных пространства имен отчета.')
             return None
 
-    def _getCoordFill(self, CoordValues_):
+    def _getCoordFill(self, coord_values):
         """
         Координатные замены значений ячеек.
         """
         try:
-            coord_fill = dict([((int(fill['Row']),
-                                                 int(fill['Col'])),
-                                                fill['value']) for fill in CoordValues_])
+            coord_fill = dict([((int(fill['Row']), int(fill['Col'])),
+                                fill['value']) for fill in coord_values])
             return coord_fill
         except:
             # Вывести сообщение об ошибке в лог

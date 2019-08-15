@@ -7,7 +7,7 @@
 
 import copy
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 tblDct = {'__fields__': (('n_lot',), ('predmet_lot',), ('cena_lot',)),
           '__name__': 'P1',
@@ -42,7 +42,7 @@ LDct2 = {'__variables__': {'VAR_L': 'Слот 2'},
 LDct3 = {'__variables__': {'VAR_L': 'Слот 3'}}
 
 
-def SD(var, val):
+def getSD(var, val):
     return {'__variables__': {var: val}}
 
 
@@ -57,8 +57,8 @@ sfdjhjkhfajkhfjdskhfhks
                              'VAR_LG': 'Общий текст',
                              'name_torg': 'Имя торгов'},
            '__loop__': {'L': [LDct1, LDct2],
-                        'I': [SD('I', 1), SD('I', 2), SD('I', 3)],
-                        'J': [SD('J', 1), SD('J', 2), SD('J', 3)]},
+                        'I': [getSD('I', 1), getSD('I', 2), getSD('I', 3)],
+                        'J': [getSD('J', 1), getSD('J', 2), getSD('J', 3)]},
            '__tables__': []}
 
 
@@ -124,7 +124,7 @@ def findNextVar(rep, pos=0):
     return p1, p2, s
 
 
-def getLoopLst(data, lname):
+def getLoopList(data, lname):
     """
     Определяет список элементов в цикле.
     """
@@ -165,7 +165,7 @@ def getLoopLst(data, lname):
     return lst
 
 
-def getTableTempl(rep, pos):
+def getTableTemplate(rep, pos):
     """
     """
     # --- Разбираем шаблон таблицы
@@ -207,7 +207,7 @@ def _gen_table(table, templ):
     return txt
 
 
-def DoTabelByName(data, templ, name):
+def doTableByName(data, templ, name):
     """
     Генерация по имени таблицы.
     """
@@ -220,24 +220,24 @@ def DoTabelByName(data, templ, name):
     return ''
 
 
-def DoTabelByIndx(data, templ, indx):
+def doTableByIdx(data, templ, idx):
     """
     Генерация по индексу таблицы.
     """
-    if len(data['__tables__']) > indx:
-        tbl = data['__tables__'][indx]
+    if len(data['__tables__']) > idx:
+        tbl = data['__tables__'][idx]
         return _gen_table(tbl, templ)
 
     return ''
 
 
-def parse_rtf(data, rep, replDct=None, indxLoop=None, indxKey=None):
+def parse_rtf(data, rep, replace_dict=None, idx_loop=None, idx_key=None):
     """
     """
     p2 = 0
         
-    if not replDct:
-        replDct = data['__variables__']
+    if not replace_dict:
+        replace_dict = data['__variables__']
 
     if data and '__tables__' not in data:
         data['__tables__'] = []
@@ -254,8 +254,8 @@ def parse_rtf(data, rep, replDct=None, indxLoop=None, indxKey=None):
 
     indx = 0
     
-    if indxLoop and indxKey:
-        varKey = '%s_%s' % (indxLoop, indxKey)
+    if idx_loop and idx_key:
+        varKey = '%s_%s' % (idx_loop, idx_key)
     else:
         varKey = ''
     
@@ -272,7 +272,7 @@ def parse_rtf(data, rep, replDct=None, indxLoop=None, indxKey=None):
             tEndTag = p2
             
             if varKey:
-                tName = var[3:]+'_'+indxKey
+                tName = var[3:] +'_' + idx_key
             else:
                 tName = var[3:]
 
@@ -300,7 +300,7 @@ def parse_rtf(data, rep, replDct=None, indxLoop=None, indxKey=None):
                 if n != -1:
                     templ = templ[:n]
 
-                lst = getLoopLst(data, lName)
+                lst = getLoopList(data, lName)
                 txt = ''
                 if lst:
                     for sp in lst:
@@ -334,9 +334,9 @@ def parse_rtf(data, rep, replDct=None, indxLoop=None, indxKey=None):
             
             # Генерируем таблицу
             if tName:
-                txt = DoTabelByName(data, templ, tName)
+                txt = doTableByName(data, templ, tName)
             else:
-                txt = DoTabelByIndx(data, templ, indx)
+                txt = doTableByIdx(data, templ, indx)
                 indx += 1
 
             # Вставляем таблицу
@@ -348,16 +348,16 @@ def parse_rtf(data, rep, replDct=None, indxLoop=None, indxKey=None):
         elif not bTableBeg and not bLoopBeg:
             
             if varKey:
-                v = var+'_'+str(indxKey)
-                if v not in replDct.keys():
+                v = var+'_'+str(idx_key)
+                if v not in replace_dict.keys():
                     v = var
             else:
                 v = var
                 
-            if v in replDct.keys():
-                replTxt = str(replDct[v]).replace('\n', '\line ')
+            if v in replace_dict.keys():
+                replTxt = str(replace_dict[v]).replace('\n', '\line ')
                 rep = rep[:p1] + replTxt + rep[p2+1:]
-                p2 = p1 + len(str(replDct[v]))+1
+                p2 = p1 + len(str(replace_dict[v])) + 1
             else:
                 rep = rep[:p1] + rep[p2+1:]
                 p2 = p1 + 1
@@ -365,23 +365,23 @@ def parse_rtf(data, rep, replDct=None, indxLoop=None, indxKey=None):
     return rep
 
 
-def rtfReport(data, repFileName, templFileName):
+def genRTFReport(data, rep_filename, tmpl_filename):
     """
     Создает rtf отчет по шаблону.
     """
-    f = open(templFileName, 'rt')
+    f = open(tmpl_filename, 'rt')
     rep = f.read()
     f.close()
 
     rep = parse_rtf(data, rep)
     
-    f = open(repFileName, 'wt')
+    f = open(rep_filename, 'wt')
     f.write(rep)
     f.close()
 
 
 def test():
-    rtfReport(DataDct, 'V:/pythonprj/ReportRTF/IzvTEST.rtf', 'V:/pythonprj/ReportRTF/Blank_Izv.rtf')
+    genRTFReport(DataDct, 'V:/pythonprj/ReportRTF/IzvTEST.rtf', 'V:/pythonprj/ReportRTF/Blank_Izv.rtf')
 
 
 if __name__ == '__main__':

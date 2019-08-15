@@ -19,7 +19,7 @@ from ic.std.utils import textfunc
 
 from ic.report import icrepgen
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 # Константы
 # Теги шаблона
@@ -145,10 +145,10 @@ class icReportTemplate:
         rtp_create_time = os.path.getmtime(pickle_file_name)
         return xml_create_time > rtp_create_time
         
-    def read(self, TemplateFile_, template_name=None):
+    def read(self, tmpl_filename, template_name=None):
         """
         Прочитать файл шаблона отчета.
-        @param TemplateFile_: Файл шаблона отчета.
+        @param tmpl_filename: Файл шаблона отчета.
         @param template_name: Имя шаблона (листа).
         """
         pass
@@ -337,74 +337,74 @@ class icReportTemplate:
             return icrepgen.REP_FMT_EXCEL+style_fmt['Format']
         return icrepgen.REP_FMT_NONE
 
-    def _getPageSetup(self, PageSetup_):
+    def _getPageSetup(self, page_setup):
         """
         Определить параметры страницы.
         """
-        page_setup = {}
+        new_page_setup = {}
         # Ориентиция
-        layouts = [obj for obj in PageSetup_['children'] if obj['name'] == 'Layout']
+        layouts = [obj for obj in page_setup['children'] if obj['name'] == 'Layout']
         log.debug('Layout %s' % layouts)
         if layouts:
             layout = layouts[0]
             if 'Orientation' in layout:
                 if layout['Orientation'] == 'Landscape':
-                    page_setup['orientation'] = icrepgen.IC_REP_ORIENTATION_LANDSCAPE
+                    new_page_setup['orientation'] = icrepgen.IC_REP_ORIENTATION_LANDSCAPE
                 elif layout['Orientation'] == 'Portrait':
-                    page_setup['orientation'] = icrepgen.IC_REP_ORIENTATION_PORTRAIT
+                    new_page_setup['orientation'] = icrepgen.IC_REP_ORIENTATION_PORTRAIT
             # Начало нумерации страниц
             if 'StartPageNumber' in layout:
-                page_setup['start_num'] = int(layout['StartPageNumber'])
+                new_page_setup['start_num'] = int(layout['StartPageNumber'])
         # Поля
-        page_margins = [obj for obj in PageSetup_['children'] if obj['name'] == 'PageMargins']
+        page_margins = [obj for obj in page_setup['children'] if obj['name'] == 'PageMargins']
         log.debug('PageMargins %s' % page_margins)
         if page_margins:
             page_margin = page_margins[0]
-            page_setup['page_margins'] = []
-            page_setup['page_margins'].append(float(page_margin.get('Left', 0)))
-            page_setup['page_margins'].append(float(page_margin.get('Right', 0)))
-            page_setup['page_margins'].append(float(page_margin.get('Top', 0)))
-            page_setup['page_margins'].append(float(page_margin.get('Bottom', 0)))
-            page_setup['page_margins'] = tuple(page_setup['page_margins'])
+            new_page_setup['page_margins'] = []
+            new_page_setup['page_margins'].append(float(page_margin.get('Left', 0)))
+            new_page_setup['page_margins'].append(float(page_margin.get('Right', 0)))
+            new_page_setup['page_margins'].append(float(page_margin.get('Top', 0)))
+            new_page_setup['page_margins'].append(float(page_margin.get('Bottom', 0)))
+            new_page_setup['page_margins'] = tuple(new_page_setup['page_margins'])
 
-        return page_setup
+        return new_page_setup
 
-    def _getPrintSetup(self, PrintSetup_):
+    def _getPrintSetup(self, print_setup):
         """
         Определить параметры страницы.
         """
-        print_setup = {}
+        new_print_setup = {}
         # Размер бумаги
-        paper_sizes = [obj for obj in PrintSetup_['children'] if obj['name'] == 'PaperSizeIndex']
+        paper_sizes = [obj for obj in print_setup['children'] if obj['name'] == 'PaperSizeIndex']
         if paper_sizes:
-            print_setup['paper_size'] = paper_sizes[0]['value']
+            new_print_setup['paper_size'] = paper_sizes[0]['value']
         # Масштаб
-        scales = [obj for obj in PrintSetup_['children'] if obj['name'] == 'Scale']
+        scales = [obj for obj in print_setup['children'] if obj['name'] == 'Scale']
         if scales:
-            print_setup['scale'] = int(scales[0]['value'])
+            new_print_setup['scale'] = int(scales[0]['value'])
         else:
             # Параметры заполнения
             try:
-                h_fit = [obj for obj in PrintSetup_['children'] if obj['name'] == 'FitWidth'][0]['value']
+                h_fit = [obj for obj in print_setup['children'] if obj['name'] == 'FitWidth'][0]['value']
             except:
                 h_fit = DEFAULT_FIT_WIDTH
             try:
-                v_fit = [obj for obj in PrintSetup_['children'] if obj['name'] == 'FitHeight'][0]['value']
+                v_fit = [obj for obj in print_setup['children'] if obj['name'] == 'FitHeight'][0]['value']
             except:
                 v_fit = DEFAULT_FIT_HEIGHT
-            print_setup['fit'] = (int(h_fit), int(v_fit))
+            new_print_setup['fit'] = (int(h_fit), int(v_fit))
         # Плотность печати
         try:
-            h_resolution = [obj for obj in PrintSetup_['children'] if obj['name'] == 'HorizontalResolution'][0]['value']
+            h_resolution = [obj for obj in print_setup['children'] if obj['name'] == 'HorizontalResolution'][0]['value']
         except:
             h_resolution = DEFAULT_HORIZ_RESOLUTION
         try:    
-            v_resolution = [obj for obj in PrintSetup_['children'] if obj['name'] == 'VerticalResolution'][0]['value']
+            v_resolution = [obj for obj in print_setup['children'] if obj['name'] == 'VerticalResolution'][0]['value']
         except:
             v_resolution = DEFAULT_VERT_RESOLUTION
-        print_setup['resolution'] = (int(h_resolution), int(v_resolution))
+        new_print_setup['resolution'] = (int(h_resolution), int(v_resolution))
 
-        return print_setup
+        return new_print_setup
 
 
 class icExcelXMLReportTemplate(icReportTemplate):
@@ -435,39 +435,39 @@ class icExcelXMLReportTemplate(icReportTemplate):
         # Высота строки по умолчанию
         self._default_row_height = 12.75
 
-    def read(self, TemplateFile_, template_name=None):
+    def read(self, tmpl_filename, template_name=None):
         """
         Прочитать файл шаблона отчета.
-        @param TemplateFile_: Файл шаблона отчета.
+        @param tmpl_filename: Файл шаблона отчета.
         @param template_name: Имя шаблона (листа).
         """
-        if self.mustRenew(TemplateFile_, template_name):
+        if self.mustRenew(tmpl_filename, template_name):
             # Надо обновить шаблон
-            template_data = self.open(TemplateFile_)
+            template_data = self.open(tmpl_filename)
             self._rep_template = self.parse(template_data, template_name)
-            self.save(TemplateFile_, template_name)
+            self.save(tmpl_filename, template_name)
         else:
             # Можно просто загрузить из Pickle файла
-            self.load(TemplateFile_, template_name)
+            self.load(tmpl_filename, template_name)
         return self._rep_template
 
-    def open(self, TemplateFile_):
+    def open(self, tmpl_filename):
         """
         Открыть файл шаблона отчета.
-        @param TemplateFile_: Файл шаблона отчета.
+        @param tmpl_filename: Файл шаблона отчета.
         """
-        return xml2dict.XmlFile2Dict(TemplateFile_)
+        return xml2dict.XmlFile2Dict(tmpl_filename)
 
-    def _normList(self, List_, element_name, Len_=None):
+    def _normList(self, data_list, element_name, length=None):
         """
         Нормализация списка.
-        @param Len_: Максимальная длина списка, если указана, то 
+        @param length: Максимальная длина списка, если указана, то
             список нормализуется до максимальной длины.
         """
         element_template = {'name': element_name}
         lst = []
-        for i in range(len(List_)):
-            element = List_[i]
+        for i in range(len(data_list)):
+            element = data_list[i]
             # Проверка индексов
             if 'Index' in element:
                 if int(element['Index']) > len(lst):
@@ -477,26 +477,26 @@ class icExcelXMLReportTemplate(icReportTemplate):
             if 'merge_across' in element:
                 lst += [element_template] * int(element['merge_across'])
                 
-        if Len_:
-            if Len_ > len(lst):
+        if length:
+            if length > len(lst):
                 # Удлинить
-                lst += [element_template]*(Len_-len(lst))
+                lst += [element_template]*(length - len(lst))
         return lst
         
-    def _normTable(self, Table_):
+    def _normTable(self, table):
         """
         Нормализация (приведение к квадратному виду) таблицы.
         """
-        table = {}.fromkeys([key for key in Table_.keys() if key != 'children'])
-        for key in table.keys():
-            table[key] = Table_[key]
-        table['children'] = []
+        new_table = {}.fromkeys([key for key in table.keys() if key != 'children'])
+        for key in new_table.keys():
+            new_table[key] = table[key]
+        new_table['children'] = []
         # Колонки
-        cols = [element for element in Table_['children'] if element['name'] == 'Column']
+        cols = [element for element in table['children'] if element['name'] == 'Column']
         cols = self._normList(cols, 'Column')
         max_len = len(cols)
         # Строки
-        rows = [element for element in Table_['children'] if element['name'] == 'Row']
+        rows = [element for element in table['children'] if element['name'] == 'Row']
         rows = self._normList(rows, 'Row')
         # Ячейки
         for i_row in range(len(rows)):
@@ -504,9 +504,9 @@ class icExcelXMLReportTemplate(icReportTemplate):
             if 'children' in row:
                 rows[i_row]['children'] = self._normList(row['children'], 'Cell', max_len)
 
-        table['children'] += cols
-        table['children'] += rows
-        return table
+        new_table['children'] += cols
+        new_table['children'] += rows
+        return new_table
 
     def _defineSpan(self, obj_list):
         """
@@ -527,10 +527,10 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 result.append(obj)
         return result
 
-    def parse(self, TemplateData_, template_name=None):
+    def parse(self, template_data, template_name=None):
         """
         Разобрать/преобразовать прочитанную структуру.
-        @param TemplateData_: Словарь описания шаблона.
+        @param template_data: Словарь описания шаблона.
         @param template_name: Имя шаблона(листа), если None то первый лист.
         """
         try:
@@ -538,7 +538,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
             rep = copy.deepcopy(icrepgen.IC_REP_TMPL)
 
             # 0. Определение основных структур
-            workbook = TemplateData_['children'][0]
+            workbook = template_data['children'][0]
             # Стили (в виде словаря)
             styles = dict([(style['ID'], style) for style in [element for element in workbook['children']
                                                               if element['name'] == 'Styles'][0]['children']])
@@ -620,9 +620,9 @@ class icExcelXMLReportTemplate(icReportTemplate):
             sheet_options = [rep_obj for rep_obj in self._rep_worksheet['children']
                              if rep_obj['name'] == 'WorksheetOptions']
 
-            page_setup = [rep_obj for rep_obj in sheet_options[0]['children'] if rep_obj['name'] == 'PageSetup'][0]
+            page_setup = [rep_obj for rep_obj in sheet_options[0]['children'] if rep_obj['name'] == 'setPageSetup'][0]
             rep['page_setup'].update(self._getPageSetup(page_setup))
-            print_setup = [rep_obj for rep_obj in sheet_options[0]['children'] if rep_obj['name'] == 'Print']
+            print_setup = [rep_obj for rep_obj in sheet_options[0]['children'] if rep_obj['name'] == 'print']
             if print_setup:
                 rep['page_setup'].update(self._getPrintSetup(print_setup[0]))
 
@@ -692,72 +692,72 @@ class icExcelXMLReportTemplate(icReportTemplate):
             self._tag_band_col = tag_col
         return self._tag_band_col
         
-    def _band(self, Band_, row, ColSize_):
+    def _band(self, band, row, col_size):
         """
         Процедура заполнения бэнда.
         """
-        band = Band_
-        if 'row' not in band or band['row'] < 0:
-            band['row'] = row
-        if 'col' not in band or band['col'] < 0:
-            band['col'] = 0
-        if 'row_size' not in band or band['row_size'] < 0:
-            band['row_size'] = 1
+        new_band = band
+        if 'row' not in new_band or new_band['row'] < 0:
+            new_band['row'] = row
+        if 'col' not in new_band or new_band['col'] < 0:
+            new_band['col'] = 0
+        if 'row_size' not in new_band or new_band['row_size'] < 0:
+            new_band['row_size'] = 1
         else:
-            band['row_size'] += 1
-        if 'col_size' not in band or band['col_size'] < 0:
-            band['col_size'] = ColSize_
-        return band
+            new_band['row_size'] += 1
+        if 'col_size' not in new_band or new_band['col_size'] < 0:
+            new_band['col_size'] = col_size
+        return new_band
      
     FIELD_NAMES = string.ascii_uppercase
 
-    def _normDetail(self, Detail_, Rep_):
+    def _normDetail(self, detail, report):
         """
         Приведение к нормальному виду табличной части отчета.
             Если ячейки в табличной части не заполнены, то имеется ввиду,
             что ячейки будет заполняться по порядку.
-        @param Detail_: Описание бенда табличной части.
-        @param Rep_: Описание данных отчета.
+        @param detail: Описание бенда табличной части.
+        @param report: Описание данных отчета.
         """
-        if Detail_['row_size'] == 1:
-            ok = any([bool(cell['value']) for cell in Rep_['sheet'][Detail_['row']]])
+        if detail['row_size'] == 1:
+            ok = any([bool(cell['value']) for cell in report['sheet'][detail['row']]])
             if not ok:
-                for i_row in range(Detail_['row'], Detail_['row']+Detail_['row_size']):
-                    for i_col in range(Detail_['col'], Detail_['col']+Detail_['col_size']):
+                for i_row in range(detail['row'], detail['row'] + detail['row_size']):
+                    for i_col in range(detail['col'], detail['col'] + detail['col_size']):
                         try:
-                            Rep_['sheet'][i_row][i_col]['value'] = '[\'%s\']' % (self.FIELD_NAMES[i_col-Detail_['col']])
+                            report['sheet'][i_row][i_col]['value'] = '[\'%s\']' % (self.FIELD_NAMES[i_col - detail['col']])
                         except:
                             log.fatal('Ошибка. Функция _normDetail')
-        return Rep_
+        return report
         
-    def _defBand(self, BandTag_, row, ColCount_, title_row, Rep_):
+    def _defBand(self, band_tag, row, col_count, title_row, report):
         """
         Заполнить описание бенда.
-        @param BandTag_: Тег бэнда.
+        @param band_tag: Тег бэнда.
         @param row: Номер строки.
         @param title_row: Количество строк заголовочных бендов.
-        @param ColCount_: Количество колонок.
-        @param Rep_: Описание данных отчета.
+        @param col_count: Количество колонок.
+        @param report: Описание данных отчета.
         @return: Описание данных отчета.
         """
         try:
             # Сделать копию данных отчета для возможного отката.
-            rep = copy.deepcopy(Rep_)
+            rep = copy.deepcopy(report)
             
-            log.debug(u'Определение бэнда. Тег: <%s>' % BandTag_)
-            if BandTag_.strip() == HEADER_TAG:
+            log.debug(u'Определение бэнда. Тег: <%s>' % band_tag)
+            if band_tag.strip() == HEADER_TAG:
                 # Заполнить бэнд
-                rep['header'] = self._band(rep['header'], row-title_row, ColCount_)
-            elif BandTag_.strip() == DETAIL_TAG:
+                rep['header'] = self._band(rep['header'], row - title_row, col_count)
+            elif band_tag.strip() == DETAIL_TAG:
                 # Заполнить бэнд
-                rep['detail'] = self._band(rep['detail'], row-title_row, ColCount_)
+                rep['detail'] = self._band(rep['detail'], row - title_row, col_count)
                 self._normDetail(rep['detail'], rep)
-            elif BandTag_.strip() == FOOTER_TAG:
+            elif band_tag.strip() == FOOTER_TAG:
                 # Заполнить бэнд
-                rep['footer'] = self._band(rep['footer'], row-title_row, ColCount_)
-            elif HEADER_GROUP_TAG in BandTag_:
+                rep['footer'] = self._band(rep['footer'], row - title_row, col_count)
+            elif HEADER_GROUP_TAG in band_tag:
                 # Определить имя поля группировки
-                field_name = re.split(icrepgen.REP_FIELD_PATT, BandTag_)[1].strip()[2:-2]
+                field_name = re.split(icrepgen.REP_FIELD_PATT, band_tag)[1].strip()[2:-2]
                 # Если такой группы не зарегестрировано, то прописать ее
                 is_grp = any([grp['field'] == field_name for grp in rep['groups']])
                 if not is_grp:
@@ -767,10 +767,10 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 # Записать заголовок группы
                 grp_field = [grp for grp in rep['groups'] if grp['field'] == field_name][0]
                 # Заполнить бэнд
-                grp_field['header'] = self._band(grp_field['header'], row-title_row, ColCount_)
-            elif FOOTER_GROUP_TAG in BandTag_:
+                grp_field['header'] = self._band(grp_field['header'], row - title_row, col_count)
+            elif FOOTER_GROUP_TAG in band_tag:
                 # Определить имя поля группировки
-                field_name = re.split(icrepgen.REP_FIELD_PATT, BandTag_)[1].strip()[2:-2]
+                field_name = re.split(icrepgen.REP_FIELD_PATT, band_tag)[1].strip()[2:-2]
                 # Если такой группы не зарегестрировано, то прописать ее
                 is_grp = any([grp['field'] == field_name for grp in rep['groups']])
                 if not is_grp:
@@ -780,37 +780,37 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 # Записать примечание группы
                 grp_field = [grp for grp in rep['groups'] if grp['field'] == field_name][0]
                 # Заполнить бэнд
-                grp_field['footer'] = self._band(grp_field['footer'], row-title_row, ColCount_)
-            elif BandTag_.strip() == UPPER_TAG:
+                grp_field['footer'] = self._band(grp_field['footer'], row - title_row, col_count)
+            elif band_tag.strip() == UPPER_TAG:
                 # Верхний колонтитул
-                rep['upper'] = self._band(rep['upper'], row-title_row, ColCount_)
-            elif BandTag_.strip() == UNDER_TAG:
+                rep['upper'] = self._band(rep['upper'], row - title_row, col_count)
+            elif band_tag.strip() == UNDER_TAG:
                 # Нижний колонтитул
-                rep['under'] = self._band(rep['under'], row-title_row, ColCount_)
+                rep['under'] = self._band(rep['under'], row - title_row, col_count)
             else:
                 # Вывести сообщение об ошибке в лог
-                log.warning(u'Не определенный тип бэнда <%s>.' % BandTag_)
+                log.warning(u'Не определенный тип бэнда <%s>.' % band_tag)
             # Заполнить колонтитулы
             rep['upper'] = self._bandUpper(rep['upper'], self._rep_worksheet)
             rep['under'] = self._bandUnder(rep['under'], self._rep_worksheet)
             
             return rep
         except:
-            log.fatal(u'Ошибка определения бэнда <%s>.' % BandTag_)
-            return Rep_
+            log.fatal(u'Ошибка определения бэнда <%s>.' % band_tag)
+            return report
         
-    def _bandUpper(self, Band_, WorksheetData_):
+    def _bandUpper(self, band, worksheet_data):
         """
         Процедура заполнения верхнего колонтитула.
-        @param Band_: Бэнд колонтитула.
-        @param WorksheetData_: Данные листа шаблона.
+        @param band: Бэнд колонтитула.
+        @param worksheet_data: Данные листа шаблона.
         """
-        rep_upper = Band_
+        rep_upper = band
         # Заполнить данные и размер поля колонтитула
-        if 'data' not in Band_:
-            worksheet_options = [element for element in WorksheetData_['children'] if element['name'] == 'WorksheetOptions']
+        if 'data' not in band:
+            worksheet_options = [element for element in worksheet_data['children'] if element['name'] == 'WorksheetOptions']
             if worksheet_options:
-                page_setup = [element for element in worksheet_options[0]['children'] if element['name'] == 'PageSetup']
+                page_setup = [element for element in worksheet_options[0]['children'] if element['name'] == 'setPageSetup']
                 if page_setup:
                     header = [element for element in page_setup[0]['children'] if element['name'] == 'Header']
                     if header:
@@ -820,18 +820,18 @@ class icExcelXMLReportTemplate(icReportTemplate):
                             rep_upper['height'] = header[0]['Margin']
         return rep_upper
         
-    def _bandUnder(self, Band_, WorksheetData_):
+    def _bandUnder(self, band, worksheet_data):
         """
         Процедура заполнения нижнего колонтитула.
-        @param Band_: Бэнд колонтитула.
-        @param WorksheetData_: Данные листа шаблона.
+        @param band: Бэнд колонтитула.
+        @param worksheet_data: Данные листа шаблона.
         """
-        rep_under = Band_
+        rep_under = band
         # Заполнить данные и размер поля колонтитула
-        if 'data' not in Band_:
-            worksheet_options = [element for element in WorksheetData_['children'] if element['name'] == 'WorksheetOptions']
+        if 'data' not in band:
+            worksheet_options = [element for element in worksheet_data['children'] if element['name'] == 'WorksheetOptions']
             if worksheet_options:
-                page_setup = [element for element in worksheet_options[0]['children'] if element['name'] == 'PageSetup']
+                page_setup = [element for element in worksheet_options[0]['children'] if element['name'] == 'setPageSetup']
                 if page_setup:
                     footer = [element for element in page_setup[0]['children'] if element['name'] == 'Footer']
                     if footer:
@@ -841,20 +841,20 @@ class icExcelXMLReportTemplate(icReportTemplate):
                             rep_under['height'] = footer[0]['Margin']
         return rep_under
         
-    def _getParseRow(self, row, CurBand_):
+    def _getParseRow(self, row, cur_band):
         """
         Подготовить для разбора строку шаблона.
         @param row: Описание строки.
-        @param CurBand_: Текуший тег бенда.
+        @param cur_band: Текуший тег бенда.
         """
         return row
     
-    def _getCellStyle(self, rows, columns, Styles_, row, column):
+    def _getCellStyle(self, rows, columns, styles, row, column):
         """
         Определить стиль ячейки.
         @param rows: Список строк.
         @param columns: Список колонок.
-        @param Styles_: Словарь стилей.
+        @param styles: Словарь стилей.
         @param row: Номер строки ячейки.
         @param column: Номер колонки ячейки.
         """
@@ -863,40 +863,40 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 template_cell = rows[row]['children'][column]
             except:
                 template_cell = {}
-                cell_style = Styles_['Default']
+                cell_style = styles['Default']
             # Определение стиля ячейки
             if 'StyleID' in template_cell:
-                cell_style = Styles_[template_cell['StyleID']]
+                cell_style = styles[template_cell['StyleID']]
             else:
                 row = rows[row]
                 if 'StyleID' in row:
-                    cell_style = Styles_[row['StyleID']]
+                    cell_style = styles[row['StyleID']]
                 else:
                     if columns and len(columns) > column:
                         col = columns[column]
                         if 'StyleID' in col:
-                            cell_style = Styles_[col['StyleID']]
+                            cell_style = styles[col['StyleID']]
                         else:
-                            cell_style = Styles_['Default']
+                            cell_style = styles['Default']
                     else:
-                        cell_style = Styles_['Default']
-            # log.debug('Get cell style <%text>' % cell_style)
+                        cell_style = styles['Default']
+            # log.debug('Get new_cell style <%text>' % cell_style)
             return cell_style
         except:
             log.fatal(u'Ошибка определения стиля ячейки шаблона отчета')
-        return Styles_['Default']
+        return styles['Default']
 
-    def _getTypeCell(self, Cell_):
+    def _getTypeCell(self, cell):
         """
         Определить тип ячейки.
-        @param Cell_: Описание ячейки.
+        @param cell: Описание ячейки.
         """
         # В ячейке нет данных
-        if 'children' not in Cell_ or not Cell_['children']:
+        if 'children' not in cell or not cell['children']:
             return icrepgen.REP_FMT_NONE
             
         # Данные в ячейке имеются
-        cell_data = Cell_['children'][0]
+        cell_data = cell['children'][0]
         if 'Type' in cell_data:
             if cell_data['Type'] == 'General':
                 return icrepgen.REP_FMT_NONE
@@ -908,41 +908,41 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 return icrepgen.REP_FMT_MISC+cell_data['Type']
         return icrepgen.REP_FMT_NONE
 
-    def _getCellValue(self, Cell_):
+    def _getCellValue(self, cell):
         """
         Значение ячейки.
-        @param Cell_: Описание ячейки.
+        @param cell: Описание ячейки.
         """
         # Данных в ячейке нет
-        if 'children' not in Cell_ or not Cell_['children'] or \
-           'value' not in Cell_['children'][0]:
+        if 'children' not in cell or not cell['children'] or \
+           'value' not in cell['children'][0]:
             return None
-        return Cell_['children'][0]['value']
+        return cell['children'][0]['value']
         
-    def _setDefaultCellSize(self, Table_):
+    def _setDefaultCellSize(self, table):
         """
         Установка параметров по умолчанию для ячейки.
-        @param Table_: Описание Таблицы.
+        @param table: Описание Таблицы.
         """
-        if 'DefaultColumnWidth' in Table_:
-            self._default_column_width = float(Table_['DefaultColumnWidth'])
+        if 'DefaultColumnWidth' in table:
+            self._default_column_width = float(table['DefaultColumnWidth'])
             self._column_span_width = self._default_column_width
-        if 'DefaultRowHeight' in Table_:
-            self._default_row_height = float(Table_['DefaultRowHeight'])
+        if 'DefaultRowHeight' in table:
+            self._default_row_height = float(table['DefaultRowHeight'])
             self._row_span_height = self._default_row_height
         
-    def _getCellAttr(self, rows, columns, Styles_, row, column):
+    def _getCellAttr(self, rows, columns, styles, row, column):
         """
         Функция возращает структуру атрибутов ячейки.
         @param rows: Список строк.
         @param columns: Список колонок.
-        @param Styles_: Словарь стилей.
+        @param styles: Словарь стилей.
         @param row: Номер строки ячейки.
         @param column: Номер колонки ячейки.
         @return: Возвращает структуру icrepgen.IC_REP_CELL. 
         """
         try:
-            cell_style = self._getCellStyle(rows, columns, Styles_, row, column)
+            cell_style = self._getCellStyle(rows, columns, styles, row, column)
             cell = {}
 
             # Ширина колонок
@@ -1046,9 +1046,9 @@ class icExcelXMLReportTemplate(icReportTemplate):
         @return: Строка-тег бэнда или None  в случае ошибки.
         """
         try:
-            row = rows[row]
+            row_data = rows[row]
             # Проверка корректности описания строки
-            if 'children' not in row or not row['children']:
+            if 'children' not in row_data or not row_data['children']:
                 log.warning(u'Ошибка наличия дочерних объектов строки <%s>' % row)
                 return self.__cur_band
             i_tag = self._getTagBandIdx(rows)
@@ -1060,7 +1060,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 self.__cur_band = HEADER_TAG
             else:
                 if i_tag > 0:
-                    i_tag, tag_value = self._findTagBandRow(row)
+                    i_tag, tag_value = self._findTagBandRow(row_data)
                     if i_tag >= 0:
                         # Если тег найден, то взять его
                         self.__cur_band = tag_value
@@ -1068,7 +1068,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
             return self.__cur_band
         except:
             log.fatal(u'Ошибка в функции _getTagBandRow')
-            return None
+        return None
 
     def _findTagBandRow(self, row):
         """
@@ -1114,7 +1114,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
             return bool(tag == UNDER_TAG)
         except:
             log.fatal(u'Ошибка в функции _isUnderBand')
-            return False
+        return False
 
     def _isTitleBand(self, rows, row):
         """
@@ -1127,12 +1127,12 @@ class icExcelXMLReportTemplate(icReportTemplate):
             return bool(self._getTagBandRow(rows, row) in TITLE_TAGS)
         except:
             log.fatal(u'Ошибка в функции _isTitleBand')
-            return False
+        return False
 
-    def _parseDescriptionTag(self, Rep_, parse_row):
+    def _parseDescriptionTag(self, report, parse_row):
         """
         Разбор заголовочного тега описания.
-        @param Rep_: Шаблон отчета.
+        @param report: Шаблон отчета.
         @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
@@ -1140,19 +1140,19 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 # Если теги бендов не указаны в шаблоне то
                 # определяем описание как имя файла
                 tmpl_filename = self.getTemplateFilename()
-                Rep_['description'] = os.path.splitext(os.path.basename(tmpl_filename))[0] if tmpl_filename else u''
+                report['description'] = os.path.splitext(os.path.basename(tmpl_filename))[0] if tmpl_filename else u''
             else:
                 if 'value' in parse_row[0]['children'][0] and parse_row[0]['children'][0]['value']:
-                    Rep_['description'] = parse_row[0]['children'][0]['value']
+                    report['description'] = parse_row[0]['children'][0]['value']
                 else:
-                    Rep_['description'] = None
+                    report['description'] = None
         except:
             log.fatal(u'Ошибка в функции _parseDescriptionTag')
 
-    def _parseVarTag(self, Rep_, parse_row):
+    def _parseVarTag(self, report, parse_row):
         """
         Разбор заголовочного тега переменных.
-        @param Rep_: Шаблон отчета.
+        @param report: Шаблон отчета.
         @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
@@ -1162,14 +1162,14 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 value = execfunc.exec_code(value.replace(CODE_SIGNATURE, u'').strip())
             elif isinstance(value, str) and value.startswith(PY_SIGNATURE):
                 value = execfunc.exec_code(value.replace(PY_SIGNATURE, u'').strip())
-            Rep_['variables'][name] = value
+            report['variables'][name] = value
         except:
             log.fatal(u'Ошибка в функции _parseVarTag')
 
-    def _parseGeneratorTag(self, Rep_, parse_row):
+    def _parseGeneratorTag(self, report, parse_row):
         """
         Разбор заголовочного тега генеаратора.
-        @param Rep_: Шаблон отчета.
+        @param report: Шаблон отчета.
         @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
@@ -1177,49 +1177,49 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 # Если теги бендов не указаны в шаблоне то
                 # определяем генератор по расширению имени файла
                 tmpl_filename = self.getTemplateFilename()
-                Rep_['generator'] = os.path.splitext(tmpl_filename)[1].upper() if tmpl_filename else '.ODS'
+                report['generator'] = os.path.splitext(tmpl_filename)[1].upper() if tmpl_filename else '.ODS'
             else:
                 if 'value' in parse_row[0]['children'][0] and parse_row[0]['children'][0]['value']:
-                    Rep_['generator'] = parse_row[0]['children'][0]['value']
+                    report['generator'] = parse_row[0]['children'][0]['value']
                 else:
-                    Rep_['generator'] = None
+                    report['generator'] = None
         except:
             log.fatal(u'Ошибк в функции _parseGeneratorTag')
 
-    def _parseDataSrcTag(self, Rep_, parse_row):
+    def _parseDataSrcTag(self, report, parse_row):
         """
         Разбор заголовочного тега источника даных.
-        @param Rep_: Шаблон отчета.
+        @param report: Шаблон отчета.
         @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
-            Rep_['data_source'] = parse_row[0]['children'][0]['value']
+            report['data_source'] = parse_row[0]['children'][0]['value']
         except:
-            Rep_['data_source'] = None
+            report['data_source'] = None
             log.warning(u'Не указан источник данных!')
 
-    def _parseQueryTag(self, Rep_, parse_row):
+    def _parseQueryTag(self, report, parse_row):
         """
         Разбор заголовочного тега запроса.
-        @param Rep_: Шаблон отчета.
+        @param report: Шаблон отчета.
         @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
-            Rep_['query'] = parse_row[0]['children'][0]['value']
+            report['query'] = parse_row[0]['children'][0]['value']
         except:
-            Rep_['query'] = None
+            report['query'] = None
             log.warning(u'Не указан запрос!')
             
-    def _parseStyleLibTag(self, Rep_, parse_row):
+    def _parseStyleLibTag(self, report, parse_row):
         """
         Разбор заголовочного тега библиотеки стилей.
-        @param Rep_: Шаблон отчета.
+        @param report: Шаблон отчета.
         @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
             from . import icstylelib
             xml_style_lib_file_name = parse_row[0]['children'][0]['value']
-            Rep_['style_lib'] = icstylelib.icXMLRepStyleLib().convert(xml_style_lib_file_name)
+            report['style_lib'] = icstylelib.icXMLRepStyleLib().convert(xml_style_lib_file_name)
         except:
             log.fatal(u'Ошибка в функции _parseStyleLibTag')
             
@@ -1247,14 +1247,14 @@ class icODSReportTemplate(icExcelXMLReportTemplate):
         """
         icExcelXMLReportTemplate.__init__(self)
 
-    def open(self, TemplateFile_):
+    def open(self, tmpl_filename):
         """
         Открыть файл шаблона отчета.
-        @param TemplateFile_: Файл шаблона отчета.
+        @param tmpl_filename: Файл шаблона отчета.
         """
         v_excel = icexcel.icVExcel()
-        result = v_excel.load(TemplateFile_)
-        v_excel.saveAsXML(TemplateFile_.replace('.ods', '.xml'))
+        result = v_excel.load(tmpl_filename)
+        v_excel.saveAsXML(tmpl_filename.replace('.ods', '.xml'))
         return result
 
 
@@ -1269,18 +1269,18 @@ class icXLSReportTemplate(icODSReportTemplate):
         """
         icODSReportTemplate.__init__(self)
 
-    def open(self, TemplateFile_):
+    def open(self, tmpl_filename):
         """
         Открыть файл шаблона отчета.
-        @param TemplateFile_: Файл шаблона отчета.
+        @param tmpl_filename: Файл шаблона отчета.
         """
         try:
-            ods_filename = os.path.splitext(TemplateFile_)[0] + '.ods'
-            cmd = 'unoconv --format=ods %s' % TemplateFile_
+            ods_filename = os.path.splitext(tmpl_filename)[0] + '.ods'
+            cmd = 'unoconv --format=ods %s' % tmpl_filename
             log.info(u'Выполнение комманды ОС <%s>' % cmd)
             os.system(cmd)
 
             return icODSReportTemplate.open(self, ods_filename)
         except:
-            log.fatal(u'Ошибка открытия файла шаблона <%s>' % TemplateFile_)
+            log.fatal(u'Ошибка открытия файла шаблона <%s>' % tmpl_filename)
         return None

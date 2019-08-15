@@ -30,7 +30,7 @@ class icVWorksheet(icprototype.icVPrototype):
         icprototype.icVPrototype.__init__(self, parent, *args, **kwargs)
         self._attributes = {'name': 'Worksheet', 'Name': 'default',
                             'children': [{'name': 'WorksheetOptions',
-                                          'children': [{'name': 'PageSetup',
+                                          'children': [{'name': 'setPageSetup',
                                                         'children': [{'name': 'PageMargins',
                                                                       'Bottom': 0.984251969, 'Left': 0.787401575,
                                                                       'Top': 0.984251969, 'Right': 0.787401575,
@@ -425,7 +425,7 @@ class icVTable(icprototype.icVPrototype):
         # Проверка на попадание в объединенную ячейку
         if self.isInMergeCell(row, col):
             sheet_name = self.get_parent_by_name('Worksheet').getName()
-            err_txt = 'Getting cell (sheet: %s, row: %d, column: %d) into merge cell!' % (sheet_name, row, col)
+            err_txt = 'Getting new_cell (sheet: %s, row: %d, column: %d) into merge new_cell!' % (sheet_name, row, col)
             raise icexceptions.icMergeCellError((100, err_txt))
 
         cur_row = self.getRow(row)
@@ -462,7 +462,7 @@ class icVTable(icprototype.icVPrototype):
         if self.isInMergeCell(row, col):
             if config.DETECT_MERGE_CELL_ERROR:
                 sheet_name = self.get_parent_by_name('Worksheet').getName()
-                err_txt = 'Getting cell (sheet: %s, row: %d, column: %d) into merge cell!' % (sheet_name, row, col)
+                err_txt = 'Getting new_cell (sheet: %s, row: %d, column: %d) into merge new_cell!' % (sheet_name, row, col)
                 raise icexceptions.icMergeCellError((100, err_txt))
             else:
                 cell = self.getInMergeCell(row, col)
@@ -693,7 +693,7 @@ class icVWorksheetOptions(icprototype.icVPrototype):
         """
         Параметры печати.
         """
-        page_setup_attr = [element for element in self._attributes['children'] if element['name'] == 'PageSetup']
+        page_setup_attr = [element for element in self._attributes['children'] if element['name'] == 'setPageSetup']
         if page_setup_attr:
             page_setup = icVPageSetup(self)
             page_setup.set_attributes(page_setup_attr[0])
@@ -713,7 +713,7 @@ class icVWorksheetOptions(icprototype.icVPrototype):
         """
         Параметры принтера.
         """
-        print_attr = [element for element in self._attributes['children'] if element['name'] == 'Print']
+        print_attr = [element for element in self._attributes['children'] if element['name'] == 'print']
         if print_attr:
             print_setup = icVPrint(self)
             print_setup.set_attributes(print_attr[0])
@@ -746,7 +746,7 @@ class icVPageSetup(icprototype.icVPrototype):
         Конструктор.
         """
         icprototype.icVPrototype.__init__(self, parent, *args, **kwargs)
-        self._attributes = {'name': 'PageSetup', 'children': []}
+        self._attributes = {'name': 'setPageSetup', 'children': []}
 
     def getLayout(self):
         """
@@ -830,7 +830,7 @@ class icVPrint(icprototype.icVPrototype):
         Конструктор.
         """
         icprototype.icVPrototype.__init__(self, parent, *args, **kwargs)
-        self._attributes = {'name': 'Print', 'children': []}
+        self._attributes = {'name': 'print', 'children': []}
 
     def getPaperSizeIndex(self):
         """

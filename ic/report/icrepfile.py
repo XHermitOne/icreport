@@ -18,7 +18,7 @@ from ic.std.utils import textfunc
 
 from ic.report import icrepgen
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 # Спецификации и структуры
 # Спецификация стиля ячеек
@@ -41,11 +41,11 @@ class icReportFile:
         """
         pass
         
-    def write(self, RepFileName_, RepData_):
+    def write(self, rep_filename, rec_data):
         """
         Сохранить заполненный отчет в файле.
-        @param RepFileName_: Имя файла отчета.
-        @param RepData_: Данные отчета.
+        @param rep_filename: Имя файла отчета.
+        @param rec_data: Данные отчета.
         @return: Функция возвращает имя созданного xml файла, 
             или None в случае ошибки.
         """
@@ -63,78 +63,78 @@ class icExcelXMLReportFile(icReportFile):
         """
         icReportFile.__init__(self)
         
-    def write(self, RepFileName_, RepData_):
+    def write(self, rep_filename, rec_data):
         """
         Сохранить заполненный отчет в файле.
-        @param RepFileName_: Имя файла отчета XML.
-        @param RepData_: Данные отчета.
+        @param rep_filename: Имя файла отчета XML.
+        @param rec_data: Данные отчета.
         @return: Функция возвращает имя созданного xml файла, 
             или None в случае ошибки.
         """
         xml_file = None
         try:
             # Начать запись
-            xml_file = open(RepFileName_, 'wt')
+            xml_file = open(rep_filename, 'wt')
             xml_gen = icXMLSSGenerator(xml_file)
             xml_gen.startDocument()
             xml_gen.startBook()
 
             # Параметры страницы
-            # xml_gen.savePageSetup(RepName_,Rep_)
+            # xml_gen.savePageSetup(rep_name,report)
         
             # Стили
-            xml_gen.scanStyles(RepData_['sheet'])
+            xml_gen.scanStyles(rec_data['sheet'])
             xml_gen.saveStyles()
         
             # Данные
-            xml_gen.startSheet(RepData_['name'], RepData_)
-            xml_gen.saveColumns(RepData_['sheet'])
-            for i_row in range(len(RepData_['sheet'])):
-                xml_gen.startRow(RepData_['sheet'][i_row])
+            xml_gen.startSheet(rec_data['name'], rec_data)
+            xml_gen.saveColumns(rec_data['sheet'])
+            for i_row in range(len(rec_data['sheet'])):
+                xml_gen.startRow(rec_data['sheet'][i_row])
                 # Сбросить индекс ячейки
                 xml_gen.cell_idx = 1
-                for i_col in range(len(RepData_['sheet'][i_row])):
-                    cell = RepData_['sheet'][i_row][i_col]
-                    xml_gen.saveCell(i_row+1, i_col+1, cell, RepData_['sheet'])
+                for i_col in range(len(rec_data['sheet'][i_row])):
+                    cell = rec_data['sheet'][i_row][i_col]
+                    xml_gen.saveCell(i_row+1, i_col+1, cell, rec_data['sheet'])
                 xml_gen.endRow()
             
-            xml_gen.endSheet(RepData_)
+            xml_gen.endSheet(rec_data)
        
             # Закончить запись
             xml_gen.endBook()
             xml_gen.endDocument()
             xml_file.close()
         
-            return RepFileName_
+            return rep_filename
         except:
             if xml_file:
                 xml_file.close()
-            log.error(u'Ошибка сохранения отчета <%s>.' % textfunc.toUnicode(RepFileName_))
+            log.error(u'Ошибка сохранения отчета <%s>.' % textfunc.toUnicode(rep_filename))
             raise
         return None
 
-    def write_book(self, RepFileName_, *RepSheetData_):
+    def write_book(self, rep_filename, *rep_sheet_data):
         """
         Сохранить список листов заполненного отчета в файле.
-        @param RepFileName_: Имя файла отчета XML.
-        @param RepSheetData_: Данные отчета, разобранные по листам.
+        @param rep_filename: Имя файла отчета XML.
+        @param rep_sheet_data: Данные отчета, разобранные по листам.
         @return: Функция возвращает имя созданного xml файла, 
             или None в случае ошибки.
         """
         xml_file = None
         try:
             # Начать запись
-            xml_file = open(RepFileName_, 'wt')
+            xml_file = open(rep_filename, 'wt')
             xml_gen = icXMLSSGenerator(xml_file)
             xml_gen.startDocument()
             xml_gen.startBook()
         
-            for rep_sheet_data in RepSheetData_:
+            for rep_sheet_data in rep_sheet_data:
                 # Стили
                 xml_gen.scanStyles(rep_sheet_data['sheet'])
             xml_gen.saveStyles()
         
-            for rep_sheet_data in RepSheetData_:
+            for rep_sheet_data in rep_sheet_data:
                 # Данные
                 xml_gen.startSheet(rep_sheet_data['name'], rep_sheet_data)
                 xml_gen.saveColumns(rep_sheet_data['sheet'])
@@ -154,11 +154,11 @@ class icExcelXMLReportFile(icReportFile):
             xml_gen.endDocument()
             xml_file.close()
         
-            return RepFileName_
+            return rep_filename
         except:
             if xml_file:
                 xml_file.close()
-            log.error(u'Ошибка сохранения отчета %s.' % RepFileName_)
+            log.error(u'Ошибка сохранения отчета %s.' % rep_filename)
             raise
         return None
 
@@ -241,80 +241,80 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
                            '1': 'Landscape',
                            }
 
-    def savePageSetup(self, Rep_):
+    def savePageSetup(self, report):
         """
         Записать в xml файле параметры страницы.
-        @param Rep_: Тело отчета.
+        @param report: Тело отчета.
         """
         self.startElementLevel('WorksheetOptions', {'xmlns': 'urn:schemas-microsoft-com:office:excel'})
-        if 'page_setup' in Rep_:
+        if 'page_setup' in report:
             # Параметры страницы
-            self.startElementLevel('PageSetup', {})
+            self.startElementLevel('setPageSetup', {})
 
             # Ориентация листа
-            if 'orientation' in Rep_['page_setup']:
-                self.startElementLevel('Layout', 
-                                       {'x:Orientation': self._orientationRep2XML[Rep_['page_setup']['orientation']],
-                                        'x:StartPageNum': str(Rep_['page_setup'].setdefault('start_num', 1))})
+            if 'orientation' in report['page_setup']:
+                self.startElementLevel('Layout',
+                                       {'x:Orientation': self._orientationRep2XML[report['page_setup']['orientation']],
+                                        'x:StartPageNum': str(report['page_setup'].setdefault('start_num', 1))})
                 self.endElementLevel('Layout')
 
             # Поля
-            if 'page_margins' in Rep_['page_setup']:
-                self.startElementLevel('PageMargins', 
-                                       {'x:Left': str(Rep_['page_setup']['page_margins'][0]),
-                                        'x:Right': str(Rep_['page_setup']['page_margins'][1]),
-                                        'x:Top': str(Rep_['page_setup']['page_margins'][2]),
-                                        'x:Bottom': str(Rep_['page_setup']['page_margins'][3])})
+            if 'page_margins' in report['page_setup']:
+                self.startElementLevel('PageMargins',
+                                       {'x:Left': str(report['page_setup']['page_margins'][0]),
+                                        'x:Right': str(report['page_setup']['page_margins'][1]),
+                                        'x:Top': str(report['page_setup']['page_margins'][2]),
+                                        'x:Bottom': str(report['page_setup']['page_margins'][3])})
                 self.endElementLevel('PageMargins')
         
             # Обработка верхнего колонтитула
-            if 'data' in Rep_['upper']:
-                data = str(Rep_['upper']['data'])   # , 'CP1251').encode('UTF-8')
+            if 'data' in report['upper']:
+                data = str(report['upper']['data'])   # , 'CP1251').encode('UTF-8')
                 self.startElementLevel('Header', 
-                                       {'x:Margin': str(Rep_['upper']['height']),
+                                       {'x:Margin': str(report['upper']['height']),
                                         'x:Data': data})
                 self.endElementLevel('Header')
                 
             # Обработка нижнего колонтитула
-            if 'data' in Rep_['under']:
-                data = str(Rep_['under']['data'])  # , 'CP1251').encode('UTF-8')
+            if 'data' in report['under']:
+                data = str(report['under']['data'])  # , 'CP1251').encode('UTF-8')
                 self.startElementLevel('Footer', 
-                                       {'x:Margin': str(Rep_['under']['height']),
+                                       {'x:Margin': str(report['under']['height']),
                                         'x:Data': data})
                 self.endElementLevel('Footer')
                 
-            self.endElementLevel('PageSetup')
+            self.endElementLevel('setPageSetup')
 
             # Параметры печати
-            self.startElementLevel('Print', {})
+            self.startElementLevel('print', {})
 
-            if 'paper_size' in Rep_['page_setup']:
+            if 'paper_size' in report['page_setup']:
                 self.startElementLevel('PaperSizeIndex', {})
-                self.characters(str(Rep_['page_setup']['paper_size']))
+                self.characters(str(report['page_setup']['paper_size']))
                 self.endElementLevel('PaperSizeIndex')
 
-            if 'scale' in Rep_['page_setup']:
+            if 'scale' in report['page_setup']:
                 self.startElementLevel('Scale', {})
-                self.characters(str(Rep_['page_setup']['scale']))
+                self.characters(str(report['page_setup']['scale']))
                 self.endElementLevel('Scale')
         
-            if 'resolution' in Rep_['page_setup']:
+            if 'resolution' in report['page_setup']:
                 self.startElementLevel('HorizontalResolution', {})
-                self.characters(str(Rep_['page_setup']['resolution'][0]))
+                self.characters(str(report['page_setup']['resolution'][0]))
                 self.endElementLevel('HorizontalResolution')
                 self.startElementLevel('VerticalResolution', {})
-                self.characters(str(Rep_['page_setup']['resolution'][1]))
+                self.characters(str(report['page_setup']['resolution'][1]))
                 self.endElementLevel('VerticalResolution')
 
-            if 'fit' in Rep_['page_setup']:
+            if 'fit' in report['page_setup']:
                 self.startElementLevel('FitWidth', {})
-                self.characters(str(Rep_['page_setup']['fit'][0]))
+                self.characters(str(report['page_setup']['fit'][0]))
                 self.endElementLevel('FitWidth')
                 self.startElementLevel('FitHeight', {})
-                self.characters(str(Rep_['page_setup']['fit'][1]))
+                self.characters(str(report['page_setup']['fit'][1]))
                 self.endElementLevel('FitHeight')
         
-            self.endElementLevel('Print')
+            self.endElementLevel('print')
 
         self.endElementLevel('WorksheetOptions')
 
@@ -344,18 +344,18 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         """
         self.endElementLevel('Workbook')
 
-    def startSheet(self, RepName_, Rep_):
+    def startSheet(self, rep_name, report):
         """
         Теги начала страницы.
-        @param RepName_: Имя отчета.
-        @param Rep_: Тело отчета.
+        @param rep_name: Имя отчета.
+        @param report: Тело отчета.
         """
-        rep_name = str(RepName_)    # , self._encoding)
+        rep_name = str(rep_name)    # , self._encoding)
         self.startElementLevel('Worksheet', {'ss:Name': rep_name})
         # Диапазон ячеек верхнего колонтитула
         try:
-            if Rep_['upper']:
-                refers_to = self._getUpperRangeStr(Rep_['upper'])
+            if report['upper']:
+                refers_to = self._getUpperRangeStr(report['upper'])
 
                 self.startElementLevel('Names', {})
                 self.startElementLevel('NamedRange', {'ss:Name': 'Print_Titles',
@@ -363,116 +363,116 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
                 self.endElementLevel('NamedRange')
                 self.endElementLevel('Names')
         except:
-            log.error('Names SAVE <%s>' % Rep_['upper'])
+            log.error('Names SAVE <%s>' % report['upper'])
             raise
         
         # Начало таблицы
         self.startElementLevel('Table', {})
 
-    def _getUpperRangeStr(self, Upper_):
+    def _getUpperRangeStr(self, upper):
         """
         Представить диапазон ячеек верхнего колонтитула в виде строки.
         """
-        return '=C%d:C%d,R%d:R%d' % (Upper_['col']+1, Upper_['col']+Upper_['col_size'],
-                                     Upper_['row']+1, Upper_['row']+Upper_['row_size'])
+        return '=C%d:C%d,R%d:R%d' % (upper['col'] + 1, upper['col'] + upper['col_size'],
+                                     upper['row'] + 1, upper['row'] + upper['row_size'])
         
-    def endSheet(self, Rep_):
+    def endSheet(self, report):
         """
         Теги начала страницы.
-        @param Rep_: Тело отчета.
+        @param report: Тело отчета.
         """
         self.endElementLevel('Table')
-        self.savePageSetup(Rep_)
+        self.savePageSetup(report)
         self.endElementLevel('Worksheet')
     
-    def scanStyles(self, Sheet_):
+    def scanStyles(self, sheet):
         """
         Сканирование стилей на листе.
         """
-        for i_row in range(len(Sheet_)):
-            for i_col in range(len(Sheet_[i_row])):
-                cell = Sheet_[i_row][i_col]
+        for i_row in range(len(sheet)):
+            for i_col in range(len(sheet[i_row])):
+                cell = sheet[i_row][i_col]
                 if cell is not None:
                     self.setStyle(cell)
         return self._styles
         
-    def setStyle(self, Cell_):
+    def setStyle(self, cell):
         """
         Определить стиль ячейки.
-        @param Cell_: Атрибуты ячейки.
+        @param cell: Атрибуты ячейки.
         @return: Возвращает индекс стиля в списке стилей.
         """
-        cell_style_idx = self.getStyle(Cell_)
+        cell_style_idx = self.getStyle(cell)
         if cell_style_idx is None:
             # Создать новый стиль
             new_idx = len(self._styles)
             cell_style = copy.deepcopy(SPC_IC_XML_STYLE)
-            cell_style['align'] = Cell_['align']
-            cell_style['font'] = Cell_['font']
-            cell_style['border'] = Cell_['border']
-            cell_style['format'] = Cell_['format']
-            cell_style['color'] = Cell_['color']
+            cell_style['align'] = cell['align']
+            cell_style['font'] = cell['font']
+            cell_style['border'] = cell['border']
+            cell_style['format'] = cell['format']
+            cell_style['color'] = cell['color']
             cell_style['style_id'] = 'x'+str(new_idx)
             # Прописать в ячейке идентификатор стиля
-            Cell_['style_id'] = cell_style['style_id']
+            cell['style_id'] = cell_style['style_id']
             self._styles.append(cell_style)
             return new_idx
         return cell_style_idx
       
-    def getStyle(self, Cell_):
+    def getStyle(self, cell):
         """
         Определить стиль ячейки из уже имеющихся.
-        @param Cell_: Атрибуты ячейки.
+        @param cell: Атрибуты ячейки.
         @return: Возвращает индекс стиля в списке стилей.
         """
         # сначала поискать в списке стилей
-        find_style = [style for style in self._styles if self._equalStyles(style, Cell_)]
+        find_style = [style for style in self._styles if self._equalStyles(style, cell)]
 
         # Если такой стиль найден, то вернуть его
         if find_style:
-            Cell_['style_id'] = find_style[0]['style_id']
+            cell['style_id'] = find_style[0]['style_id']
             return self._styles.index(find_style[0])
         return None
         
-    def _equalStyles(self, Style1_, Style2_):
+    def _equalStyles(self, style1, style2):
         """
         Функция проверки равенства стилей.
         """
-        return bool(self._equalAlign(Style1_['align'], Style2_['align']) and
-                    self._equalFont(Style1_['font'], Style2_['font']) and
-                    self._equalBorder(Style1_['border'], Style2_['border']) and
-                    self._equalFormat(Style1_['format'], Style2_['format']) and
-                    self._equalColor(Style1_['color'], Style2_['color']))
+        return bool(self._equalAlign(style1['align'], style2['align']) and
+                    self._equalFont(style1['font'], style2['font']) and
+                    self._equalBorder(style1['border'], style2['border']) and
+                    self._equalFormat(style1['format'], style2['format']) and
+                    self._equalColor(style1['color'], style2['color']))
 
-    def _equalAlign(self, Align1_, Align2_):
+    def _equalAlign(self, align1, align2):
         """
         Равенство выравниваний.
         """
-        return bool(Align1_ == Align2_)
+        return bool(align1 == align2)
         
-    def _equalFont(self, Font1_, Font2_):
+    def _equalFont(self, font1, font2):
         """
         Равенство шрифтов.
         """
-        return bool(Font1_ == Font2_)
+        return bool(font1 == font2)
         
-    def _equalBorder(self, Border1_, Border2_):
+    def _equalBorder(self, border1, border2):
         """
         Равенство обрамлений.
         """
-        return bool(Border1_ == Border2_)
+        return bool(border1 == border2)
         
-    def _equalFormat(self, Fmt1_, Fmt2_):
+    def _equalFormat(self, format1, format2):
         """
         Равенство форматов.
         """
-        return bool(Fmt1_ == Fmt2_)
+        return bool(format1 == format2)
         
-    def _equalColor(self, Color1_, Color2_):
+    def _equalColor(self, color1, color2):
         """
         Равенство цветов.
         """
-        return bool(Color1_ == Color2_)
+        return bool(color1 == color2)
         
     def saveStyles(self):
         """
@@ -561,26 +561,26 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
             
         self.endElementLevel('Styles')
         
-    def _getRGBColor(self, Color_):
+    def _getRGBColor(self, color):
         """
         Преобразование цвета из (R,G,B) в #RRGGBB.
         """
-        if type(Color_) in (list, tuple):
-            return '#%02X%02X%02X' % (Color_[0], Color_[1], Color_[2])
+        if type(color) in (list, tuple):
+            return '#%02X%02X%02X' % (color[0], color[1], color[2])
         # ВНИМАНИЕ! Если цвет задается не RGB форматом, тогда оставить его без изменения
-        return Color_
+        return color
 
-    def _getNumFmt(self, Fmt_):
+    def _getNumFmt(self, format):
         """
         Формат чисел.
         """
-        if Fmt_[0] == icrepgen.REP_FMT_EXCEL:
-            return Fmt_[1:]
-        elif Fmt_[0] == icrepgen.REP_FMT_STR:
+        if format[0] == icrepgen.REP_FMT_EXCEL:
+            return format[1:]
+        elif format[0] == icrepgen.REP_FMT_STR:
             return '@'
-        elif Fmt_[0] == icrepgen.REP_FMT_NUM:
+        elif format[0] == icrepgen.REP_FMT_NUM:
             return '0'
-        elif Fmt_[0] == icrepgen.REP_FMT_FLOAT:
+        elif format[0] == icrepgen.REP_FMT_FLOAT:
             return '0.'
         return '0'
 
@@ -594,16 +594,16 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
                      icrepgen.IC_VERT_ALIGN_BOTTOM: 'Bottom',
                      }
         
-    def _borderRep2XML(self, Border_, Position_):
+    def _borderRep2XML(self, border, position):
         """
         Преобразование обрамления из нашего представления
             в xml представление.
         """
-        if Border_[Position_]:
-            return {'Position': self._positionRep2XML.setdefault(Position_, 'Left'),
-                    'Color': self._colorRep2XML(Border_[Position_].setdefault('color', None)),
-                    'LineStyle': self._lineRep2XML.setdefault(Border_[Position_].setdefault('style', icrepgen.IC_REP_LINE_TRANSPARENT), 'Continuous'),
-                    'Weight': str(Border_[Position_].setdefault('weight', 1)),
+        if border[position]:
+            return {'Position': self._positionRep2XML.setdefault(position, 'Left'),
+                    'Color': self._colorRep2XML(border[position].setdefault('color', None)),
+                    'LineStyle': self._lineRep2XML.setdefault(border[position].setdefault('style', icrepgen.IC_REP_LINE_TRANSPARENT), 'Continuous'),
+                    'Weight': str(border[position].setdefault('weight', 1)),
                     }
 
     # Преобразование позиции линии обрамления из нашего представления
@@ -621,18 +621,18 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
                     icrepgen.IC_REP_LINE_TRANSPARENT: None,
                     }
     
-    def _colorRep2XML(self, Color_):
+    def _colorRep2XML(self, color):
         """
         Преобразование цвета из нашего представления
             в xml представление.
         """
         return None
 
-    def saveColumns(self, Sheet_):
+    def saveColumns(self, sheet):
         """
         Запись атрибутов колонок.
         """
-        width_cols = self.getWidthColumns(Sheet_)
+        width_cols = self.getWidthColumns(sheet)
         for width_col in width_cols:
             # Если ширина колонки определена
             if width_col is not None:
@@ -641,25 +641,25 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
                 self.startElement('Column', {'ss:AutoFitWidth': '0'})
             self.endElement('Column')
             
-    def getColumnCount(self, Sheet_):
+    def getColumnCount(self, sheet):
         """
         Определить количество колонок.
         """
-        if Sheet_:
-            return max([len(row) for row in Sheet_])
+        if sheet:
+            return max([len(row) for row in sheet])
         return 0
 
-    def getWidthColumns(self, Sheet_):
+    def getWidthColumns(self, sheet):
         """
         Ширины колонок.
         """
-        col_count = self.getColumnCount(Sheet_)
+        col_count = self.getColumnCount(sheet)
         col_width = []
         # Выбрать строку по которой будыт выставяться ширины колонок
-        row = [row for row in Sheet_ if len(row) == col_count][0] if Sheet_ else list()
+        row = [row for row in sheet if len(row) == col_count][0] if sheet else list()
         for cell in row:
             if cell:
-                # log.debug('Column width <%text>' % cell['width'])
+                # log.debug('Column width <%text>' % new_cell['width'])
                 col_width.append(cell['width'])
             else:
                 # log.debug('Column default width')
@@ -687,33 +687,33 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         """
         self.endElementLevel('Row')
         
-    def _saveCellStyleID(self, Cell_):
+    def _saveCellStyleID(self, cell):
         """
         Определить идентификатор стиля ячейки для записи.
         """
-        if 'style_id' in Cell_:
-            return Cell_['style_id']
+        if 'style_id' in cell:
+            return cell['style_id']
         else:
-            style_idx = self.getStyle(Cell_)
+            style_idx = self.getStyle(cell)
             if style_idx is not None:
                 style_id = self._styles[style_idx]['style_id']
             else:
                 style_id = 'Default'
             return style_id
         
-    def saveCell(self, row, column, Cell_, Sheet_=None):
+    def saveCell(self, row, column, cell, sheet=None):
         """
         Записать ячейку.
         @param row: НОмер строки.
         @param column: Номер колонки.
-        @param Cell_: Атрибуты ячейки.
+        @param cell: Атрибуты ячейки.
         """
-        if Cell_ is None:
+        if cell is None:
             self._idx_set = False   # Сбросить флаг установки индекса
             self.cell_idx += 1
             return 
 
-        if 'hidden' in Cell_ and Cell_['hidden']:
+        if 'hidden' in cell and cell['hidden']:
             self._idx_set = False   # Сбросить флаг установки индекса
             # ВНИМАНИЕ!!! Здесь надо увеличивать индекс на 1
             # потому что в Excel индексирование начинается с 1 !!!
@@ -727,30 +727,30 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
                 self._idx_set = True    # Установить флаг установки индекса
 
         # Объединение ячеек
-        if Cell_['merge_col'] > 1:
-            cell_attr['ss:merge_across'] = str(Cell_['merge_col']-1)
+        if cell['merge_col'] > 1:
+            cell_attr['ss:merge_across'] = str(cell['merge_col'] - 1)
             # Обработать верхнюю строку области объединения
-            self._setCellmerge_across(row, column, Cell_['merge_col'], Sheet_)
-            if Cell_['merge_row'] > 1:
+            self._setCellmerge_across(row, column, cell['merge_col'], sheet)
+            if cell['merge_row'] > 1:
                 # Обработать дополнительную область объединения
-                self._setCellMerge(row, column, Cell_['merge_col'], Cell_['merge_row'], Sheet_)
+                self._setCellMerge(row, column, cell['merge_col'], cell['merge_row'], sheet)
             self._idx_set = False   # Сбросить флаг установки индекса
         # ВНИМАНИЕ!!! Здесь надо увеличивать индекс на 1
         # потому что в Excel индексирование начинается с 1 !!!
         self.cell_idx = column+1
     
-        if Cell_['merge_row'] > 1:
-            cell_attr['ss:MergeDown'] = str(Cell_['merge_row']-1)
+        if cell['merge_row'] > 1:
+            cell_attr['ss:MergeDown'] = str(cell['merge_row'] - 1)
             # Обработать левый столбец области объединения
-            self._setCellMergeDown(row, column, Cell_['merge_row'], Sheet_)
+            self._setCellMergeDown(row, column, cell['merge_row'], sheet)
 
         # Стиль
-        cell_attr['ss:StyleID'] = self._saveCellStyleID(Cell_)
+        cell_attr['ss:StyleID'] = self._saveCellStyleID(cell)
 
         self.startElement('Cell', cell_attr)
-        if Cell_['value'] is not None:
-            self.startElement('Data', {'ss:Type': self._getCellType(Cell_['value'])})
-            value = self._getCellValue(Cell_['value'])
+        if cell['value'] is not None:
+            self.startElement('Data', {'ss:Type': self._getCellType(cell['value'])})
+            value = self._getCellValue(cell['value'])
             self.characters(value)
         
             self.endElement('Data')
@@ -790,55 +790,55 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
             # Это не число
             return 'String'
 
-    def _setCellmerge_across(self, row, column, merge_across_, Sheet_):
+    def _setCellmerge_across(self, row, column, merge_across_, sheet):
         """
         Сбросить все ячейки, которые попадают в горизонтальную зону объединения.
         @param row: НОмер строки.
         @param column: Номер колонки.
         @param merge_across_: Количество ячеек, объединенных с текущей.
-        @param Sheet_: Структура листа.
+        @param sheet: Структура листа.
         """
         for i in range(1, merge_across_):
             try:
-                cell = Sheet_[row-1][column+i-1]
+                cell = sheet[row - 1][column + i - 1]
             except IndexError:
                 continue
             if cell and (not cell['value']):
-                Sheet_[row-1][column+i-1]['hidden'] = True
-        return Sheet_
+                sheet[row - 1][column + i - 1]['hidden'] = True
+        return sheet
 
-    def _setCellMergeDown(self, row, column, merge_down, Sheet_):
+    def _setCellMergeDown(self, row, column, merge_down, sheet):
         """
         Сбросить все ячейки, которые попадают в вертикальную зону объединения.
         @param row: НОмер строки.
         @param column: Номер колонки.
         @param merge_down: Количество ячеек, объединенных с текущей.
-        @param Sheet_: Структура листа.
+        @param sheet: Структура листа.
         """
         for i in range(1, merge_down):
             try:
-                cell = Sheet_[row+i-1][column-1]
+                cell = sheet[row + i - 1][column - 1]
             except IndexError:
                 continue
             if cell and (not cell['value']):
-                Sheet_[row+i-1][column-1]['hidden'] = True
-        return Sheet_
+                sheet[row + i - 1][column - 1]['hidden'] = True
+        return sheet
 
-    def _setCellMerge(self, row, column, merge_across_, merge_down, Sheet_):
+    def _setCellMerge(self, row, column, merge_across_, merge_down, sheet):
         """
         Сбросить все ячейки, которые попадают в зону объединения.
         @param row: НОмер строки.
         @param column: Номер колонки.
         @param merge_across_: Количество ячеек, объединенных с текущей.
         @param merge_down: Количество ячеек, объединенных с текущей.
-        @param Sheet_: Структура листа.
+        @param sheet: Структура листа.
         """
         for x in range(1, merge_across_):
             for y in range(1, merge_down):
                 try:
-                    cell = Sheet_[row+y-1][column+x-1]
+                    cell = sheet[row + y - 1][column + x - 1]
                 except IndexError:
                     continue
                 if cell is not None and (not cell['value']):
-                    Sheet_[row+y-1][column+x-1]['hidden'] = True
-        return Sheet_
+                    sheet[row + y - 1][column + x - 1]['hidden'] = True
+        return sheet

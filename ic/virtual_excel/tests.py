@@ -93,7 +93,7 @@ class icVirtualExcelTests(unittest.TestCase):
 
     def test_hello_word(self):
         """
-        Тестирование генерации xml для OpenOffice.org Calc.
+        Тестирование генерации xml для openOffice.org Calc.
         """
         app = icexcel.icVExcel()
         work_book = app.getActiveWorkbook()
@@ -107,7 +107,7 @@ class icVirtualExcelTests(unittest.TestCase):
 
     def test_ooo2_calc(self):
         """
-        Тестирование генерации xml для OpenOffice.org Calc.
+        Тестирование генерации xml для openOffice.org Calc.
         """
         app = icexcel.icVExcel()
         work_book = app.getActiveWorkbook()
@@ -120,7 +120,7 @@ class icVirtualExcelTests(unittest.TestCase):
 
     def test_ooo3_calc(self):
         """
-        Тестирование генерации xml для OpenOffice.org Calc.
+        Тестирование генерации xml для openOffice.org Calc.
         """
         app = icexcel.icVExcel()
         work_book = app.getActiveWorkbook()
@@ -137,7 +137,7 @@ class icVirtualExcelTests(unittest.TestCase):
 
     def test_ooo4_calc(self):
         """
-        Тестирование генерации xml для OpenOffice.org Calc.
+        Тестирование генерации xml для openOffice.org Calc.
         """
         app = icexcel.icVExcel()
         work_book = app.getActiveWorkbook()
@@ -153,7 +153,7 @@ class icVirtualExcelTests(unittest.TestCase):
 
     def test_ooo5_hidden(self):
         """
-        Тестирование генерации xml для OpenOffice.org Calc.
+        Тестирование генерации xml для openOffice.org Calc.
         """
         app = icexcel.icVExcel()
         app.load(self.test_path + '/testfiles/example.xml')

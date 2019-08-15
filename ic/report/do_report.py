@@ -128,7 +128,7 @@ def createReportResourceFile(template_filename):
             log.info(u'Найден источник шаблона отчета <%s>' % unicode_src_filename)
             try:
                 rep_generator = report_generator.createReportGeneratorSystem(ext)
-                return rep_generator.Update(src_filename)
+                return rep_generator.update(src_filename)
             except:
                 log.fatal(u'Ошибка конвертации шаблона отчета <%s> -> <%s>' % (unicode_src_filename, norm_tmpl_filename))
             return None
@@ -154,7 +154,7 @@ def loadStyleLib(stylelib_filename=None):
     return stylelib
 
 
-def ReportBrowser(parent_form=None, report_dir='', mode=icreportbrowser.IC_REPORT_EDITOR_MODE):
+def openReportBrowser(parent_form=None, report_dir='', mode=icreportbrowser.IC_REPORT_EDITOR_MODE):
     """
     Запуск браузера отчетов.
     @param parent_form: Родительская форма, если не указана, 
@@ -178,7 +178,7 @@ def ReportBrowser(parent_form=None, report_dir='', mode=icreportbrowser.IC_REPOR
     return False
 
 
-def ReportEditor(parent_form=None, report_dir=''):
+def openReportEditor(parent_form=None, report_dir=''):
     """
     Запуск редактора отчетов. Редактор - режим работы браузера.
     @param parent_form: Родительская форма, если не указана, 
@@ -186,10 +186,10 @@ def ReportEditor(parent_form=None, report_dir=''):
     @param report_dir: Директорий, где хранятся отчеты.
     @return: Возвращает результат выполнения операции True/False.
     """
-    return ReportBrowser(parent_form, report_dir, icreportbrowser.IC_REPORT_EDITOR_MODE)
+    return openReportBrowser(parent_form, report_dir, icreportbrowser.IC_REPORT_EDITOR_MODE)
 
 
-def ReportViewer(parent_form=None, report_dir=''):
+def openReportViewer(parent_form=None, report_dir=''):
     """
     Запуск просмотрщика отчетов. Просмотрщик - режим работы браузера.
     @param parent_form: Родительская форма, если не указана, 
@@ -197,10 +197,10 @@ def ReportViewer(parent_form=None, report_dir=''):
     @param report_dir: Директорий, где хранятся отчеты.
     @return: Возвращает результат выполнения операции True/False.
     """
-    return ReportBrowser(parent_form, report_dir, icreportbrowser.IC_REPORT_VIEWER_MODE)
+    return openReportBrowser(parent_form, report_dir, icreportbrowser.IC_REPORT_VIEWER_MODE)
 
 
-def ReportPrint(parent_form=None, report_filename='', report_dir='',
+def printReport(parent_form=None, report_filename='', report_dir='',
                 db_url=None, sql=None, command=None,
                 stylelib_filename=None, variables=None):
     """
@@ -220,7 +220,7 @@ def ReportPrint(parent_form=None, report_filename='', report_dir='',
     report_filename = getReportResourceFilename(report_filename, report_dir)
     try:
         if not report_filename:
-            return ReportViewer(parent_form, report_dir)
+            return openReportViewer(parent_form, report_dir)
         else:
             stylelib = loadStyleLib(stylelib_filename)
             # Если определен отчет, то запустить на выполнение
@@ -233,7 +233,7 @@ def ReportPrint(parent_form=None, report_filename='', report_dir='',
     return False
 
 
-def ReportPreview(parent_form=None, report_filename='', report_dir='',
+def previewReport(parent_form=None, report_filename='', report_dir='',
                   db_url=None, sql=None, command=None,
                   stylelib_filename=None, variables=None):
     """
@@ -253,12 +253,12 @@ def ReportPreview(parent_form=None, report_filename='', report_dir='',
     report_filename = getReportResourceFilename(report_filename, report_dir)
     try:
         if not report_filename:
-            return ReportViewer(parent_form, report_dir)
+            return openReportViewer(parent_form, report_dir)
         else:
             stylelib = loadStyleLib(stylelib_filename)
             # Если определен отчет, то запустить на выполнение
             repgen_system = report_generator.getReportGeneratorSystem(report_filename, parent_form)
-            return repgen_system.Preview(resfunc.loadResourceFile(report_filename),
+            return repgen_system.preview(resfunc.loadResourceFile(report_filename),
                                          stylelib=stylelib,
                                          variables=variables)
     except:
@@ -266,7 +266,7 @@ def ReportPreview(parent_form=None, report_filename='', report_dir='',
     return False
 
 
-def ReportExport(parent_form=None, report_filename='', report_dir='',
+def exportReport(parent_form=None, report_filename='', report_dir='',
                  db_url=None, sql=None, command=None,
                  stylelib_filename=None, variables=None):
     """
@@ -286,12 +286,12 @@ def ReportExport(parent_form=None, report_filename='', report_dir='',
     report_filename = getReportResourceFilename(report_filename, report_dir)
     try:
         if not report_filename:
-            return ReportViewer(parent_form, report_dir)
+            return openReportViewer(parent_form, report_dir)
         else:
             stylelib = loadStyleLib(stylelib_filename)
             # Если определен отчет, то запустить на выполнение
             repgen_system = report_generator.getReportGeneratorSystem(report_filename, parent_form)
-            return repgen_system.Convert(resfunc.loadResourceFile(report_filename),
+            return repgen_system.convert(resfunc.loadResourceFile(report_filename),
                                          stylelib=stylelib,
                                          variables=variables)
     except:
@@ -299,7 +299,7 @@ def ReportExport(parent_form=None, report_filename='', report_dir='',
     return False
 
 
-def ReportSelect(parent_form=None, report_filename='', report_dir='',
+def selectReport(parent_form=None, report_filename='', report_dir='',
                  db_url=None, sql=None, command=None,
                  stylelib_filename=None, variables=None):
     """
@@ -319,7 +319,7 @@ def ReportSelect(parent_form=None, report_filename='', report_dir='',
     report_filename = getReportResourceFilename(report_filename, report_dir)
     try:
         if not report_filename:
-            return ReportViewer(parent_form, report_dir)
+            return openReportViewer(parent_form, report_dir)
         else:
             stylelib = loadStyleLib(stylelib_filename)
             # Если определен отчет, то запустить на выполнение
@@ -361,7 +361,7 @@ def doReport(parent_form=None, report_filename='', report_dir='', db_url='', sql
             app = wx.PySimpleApp()
 
         if not report_filename:
-            return ReportViewer(parent_form, report_dir)
+            return openReportViewer(parent_form, report_dir)
         else:
             # Если определен отчет, то запустить на выполнение
             repgen_system = report_generator.getReportGeneratorSystem(report_filename, parent_form)
@@ -373,11 +373,11 @@ def doReport(parent_form=None, report_filename='', report_dir='', db_url='', sql
             if command:
                 command = command.lower()
                 if command == DO_COMMAND_PRINT:
-                    repgen_system.PrintResult(data)
+                    repgen_system.printResult(data)
                 elif command == DO_COMMAND_PREVIEW:
-                    repgen_system.PreviewResult(data)
+                    repgen_system.previewResult(data)
                 elif command == DO_COMMAND_EXPORT:
-                    repgen_system.ConvertResult(data)
+                    repgen_system.convertResult(data)
                 elif command == DO_COMMAND_SELECT:
                     repgen_system.doSelectAction(data)
                 else:
