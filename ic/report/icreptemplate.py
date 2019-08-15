@@ -458,13 +458,13 @@ class icExcelXMLReportTemplate(icReportTemplate):
         """
         return xml2dict.XmlFile2Dict(TemplateFile_)
 
-    def _normList(self, List_, ElementName_, Len_=None):
+    def _normList(self, List_, element_name, Len_=None):
         """
         Нормализация списка.
         @param Len_: Максимальная длина списка, если указана, то 
             список нормализуется до максимальной длины.
         """
-        element_template = {'name': ElementName_}
+        element_template = {'name': element_name}
         lst = []
         for i in range(len(List_)):
             element = List_[i]
@@ -474,8 +474,8 @@ class icExcelXMLReportTemplate(icReportTemplate):
                     lst += [element_template] * (int(element['Index'])-len(lst)-1)
             lst.append(element)
             # Проверка на объединенные ячейки
-            if 'MergeAcross' in element:
-                lst += [element_template] * int(element['MergeAcross'])
+            if 'merge_across' in element:
+                lst += [element_template] * int(element['merge_across'])
                 
         if Len_:
             if Len_ > len(lst):
@@ -646,40 +646,40 @@ class icExcelXMLReportTemplate(icReportTemplate):
         log.info(u'Колонка тегов бендов: %s' % str(self._tag_band_col))
         return self._tag_band_col is not None
 
-    def _getColumnCount(self, Rows_):
+    def _getColumnCount(self, rows):
         """
         Определить количество колонок.
-        @param Rows_: Список описаний строк.
+        @param rows: Список описаний строк.
         @return: Количество колонок шаблона отчета.
         """
         # Сначала предполагаем что в шаблоне имеется колонка тегов бендов
-        col_count = self._getTagBandIdx(Rows_)
+        col_count = self._getTagBandIdx(rows)
         if col_count <= 0:
             # В шаблоне нет колонки тегов бендов
             # Считаем по строкам
             max_col = 0
-            for row in range(len(Rows_)):
-                if 'children' in Rows_[row]:
-                    for col in range(len(Rows_[row]['children'])):
+            for row in range(len(rows)):
+                if 'children' in rows[row]:
+                    for col in range(len(rows[row]['children'])):
                         max_col = max(max_col, col)
             col_count = max_col
         return col_count
 
-    def _getTagBandIdx(self, Rows_):
+    def _getTagBandIdx(self, rows):
         """
         Определить номер колонки тегов бэндов.
-        @param Rows_: Список описаний строк.
+        @param rows: Список описаний строк.
         @return: Номер колонки тегов бендов.
         """
         if self._tag_band_col is None:
             # Это последняя колонка
             tag_col = 0
-            for row in range(len(Rows_)):
-                if 'children' in Rows_[row]:
-                    for col in range(len(Rows_[row]['children'])):
+            for row in range(len(rows)):
+                if 'children' in rows[row]:
+                    for col in range(len(rows[row]['children'])):
                         # Определение данных ячейки
                         try:
-                            cell_data = Rows_[row]['children'][col]['children']
+                            cell_data = rows[row]['children'][col]['children']
                         except:
                             cell_data = None
                         # Если данные ячейки определены, то получить значение
@@ -692,13 +692,13 @@ class icExcelXMLReportTemplate(icReportTemplate):
             self._tag_band_col = tag_col
         return self._tag_band_col
         
-    def _band(self, Band_, Row_, ColSize_):
+    def _band(self, Band_, row, ColSize_):
         """
         Процедура заполнения бэнда.
         """
         band = Band_
         if 'row' not in band or band['row'] < 0:
-            band['row'] = Row_
+            band['row'] = row
         if 'col' not in band or band['col'] < 0:
             band['col'] = 0
         if 'row_size' not in band or band['row_size'] < 0:
@@ -730,12 +730,12 @@ class icExcelXMLReportTemplate(icReportTemplate):
                             log.fatal('Ошибка. Функция _normDetail')
         return Rep_
         
-    def _defBand(self, BandTag_, Row_, ColCount_, TitleRow_, Rep_):
+    def _defBand(self, BandTag_, row, ColCount_, title_row, Rep_):
         """
         Заполнить описание бенда.
         @param BandTag_: Тег бэнда.
-        @param Row_: Номер строки.
-        @param TitleRow_: Количество строк заголовочных бендов.
+        @param row: Номер строки.
+        @param title_row: Количество строк заголовочных бендов.
         @param ColCount_: Количество колонок.
         @param Rep_: Описание данных отчета.
         @return: Описание данных отчета.
@@ -747,14 +747,14 @@ class icExcelXMLReportTemplate(icReportTemplate):
             log.debug(u'Определение бэнда. Тег: <%s>' % BandTag_)
             if BandTag_.strip() == HEADER_TAG:
                 # Заполнить бэнд
-                rep['header'] = self._band(rep['header'], Row_-TitleRow_, ColCount_)
+                rep['header'] = self._band(rep['header'], row-title_row, ColCount_)
             elif BandTag_.strip() == DETAIL_TAG:
                 # Заполнить бэнд
-                rep['detail'] = self._band(rep['detail'], Row_-TitleRow_, ColCount_)
+                rep['detail'] = self._band(rep['detail'], row-title_row, ColCount_)
                 self._normDetail(rep['detail'], rep)
             elif BandTag_.strip() == FOOTER_TAG:
                 # Заполнить бэнд
-                rep['footer'] = self._band(rep['footer'], Row_-TitleRow_, ColCount_)
+                rep['footer'] = self._band(rep['footer'], row-title_row, ColCount_)
             elif HEADER_GROUP_TAG in BandTag_:
                 # Определить имя поля группировки
                 field_name = re.split(icrepgen.REP_FIELD_PATT, BandTag_)[1].strip()[2:-2]
@@ -767,7 +767,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 # Записать заголовок группы
                 grp_field = [grp for grp in rep['groups'] if grp['field'] == field_name][0]
                 # Заполнить бэнд
-                grp_field['header'] = self._band(grp_field['header'], Row_-TitleRow_, ColCount_)
+                grp_field['header'] = self._band(grp_field['header'], row-title_row, ColCount_)
             elif FOOTER_GROUP_TAG in BandTag_:
                 # Определить имя поля группировки
                 field_name = re.split(icrepgen.REP_FIELD_PATT, BandTag_)[1].strip()[2:-2]
@@ -780,13 +780,13 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 # Записать примечание группы
                 grp_field = [grp for grp in rep['groups'] if grp['field'] == field_name][0]
                 # Заполнить бэнд
-                grp_field['footer'] = self._band(grp_field['footer'], Row_-TitleRow_, ColCount_)
+                grp_field['footer'] = self._band(grp_field['footer'], row-title_row, ColCount_)
             elif BandTag_.strip() == UPPER_TAG:
                 # Верхний колонтитул
-                rep['upper'] = self._band(rep['upper'], Row_-TitleRow_, ColCount_)
+                rep['upper'] = self._band(rep['upper'], row-title_row, ColCount_)
             elif BandTag_.strip() == UNDER_TAG:
                 # Нижний колонтитул
-                rep['under'] = self._band(rep['under'], Row_-TitleRow_, ColCount_)
+                rep['under'] = self._band(rep['under'], row-title_row, ColCount_)
             else:
                 # Вывести сообщение об ошибке в лог
                 log.warning(u'Не определенный тип бэнда <%s>.' % BandTag_)
@@ -841,26 +841,26 @@ class icExcelXMLReportTemplate(icReportTemplate):
                             rep_under['height'] = footer[0]['Margin']
         return rep_under
         
-    def _getParseRow(self, Row_, CurBand_):
+    def _getParseRow(self, row, CurBand_):
         """
         Подготовить для разбора строку шаблона.
-        @param Row_: Описание строки.
+        @param row: Описание строки.
         @param CurBand_: Текуший тег бенда.
         """
-        return Row_
+        return row
     
-    def _getCellStyle(self, Rows_, Cols_, Styles_, Row_, Col_):
+    def _getCellStyle(self, rows, columns, Styles_, row, column):
         """
         Определить стиль ячейки.
-        @param Rows_: Список строк.
-        @param Cols_: Список колонок.
+        @param rows: Список строк.
+        @param columns: Список колонок.
         @param Styles_: Словарь стилей.
-        @param Row_: Номер строки ячейки.
-        @param Col_: Номер колонки ячейки.
+        @param row: Номер строки ячейки.
+        @param column: Номер колонки ячейки.
         """
         try:
             try:
-                template_cell = Rows_[Row_]['children'][Col_]
+                template_cell = rows[row]['children'][column]
             except:
                 template_cell = {}
                 cell_style = Styles_['Default']
@@ -868,12 +868,12 @@ class icExcelXMLReportTemplate(icReportTemplate):
             if 'StyleID' in template_cell:
                 cell_style = Styles_[template_cell['StyleID']]
             else:
-                row = Rows_[Row_]
+                row = rows[row]
                 if 'StyleID' in row:
                     cell_style = Styles_[row['StyleID']]
                 else:
-                    if Cols_ and len(Cols_) > Col_:
-                        col = Cols_[Col_]
+                    if columns and len(columns) > column:
+                        col = columns[column]
                         if 'StyleID' in col:
                             cell_style = Styles_[col['StyleID']]
                         else:
@@ -931,41 +931,41 @@ class icExcelXMLReportTemplate(icReportTemplate):
             self._default_row_height = float(Table_['DefaultRowHeight'])
             self._row_span_height = self._default_row_height
         
-    def _getCellAttr(self, Rows_, Cols_, Styles_, Row_, Col_):
+    def _getCellAttr(self, rows, columns, Styles_, row, column):
         """
         Функция возращает структуру атрибутов ячейки.
-        @param Rows_: Список строк.
-        @param Cols_: Список колонок.
+        @param rows: Список строк.
+        @param columns: Список колонок.
         @param Styles_: Словарь стилей.
-        @param Row_: Номер строки ячейки.
-        @param Col_: Номер колонки ячейки.
+        @param row: Номер строки ячейки.
+        @param column: Номер колонки ячейки.
         @return: Возвращает структуру icrepgen.IC_REP_CELL. 
         """
         try:
-            cell_style = self._getCellStyle(Rows_, Cols_, Styles_, Row_, Col_)
+            cell_style = self._getCellStyle(rows, columns, Styles_, row, column)
             cell = {}
 
             # Ширина колонок
-            if not Cols_:
+            if not columns:
                 cell_width = self._default_column_width     # 8.43
-            elif len(Cols_) > Col_ and 'Hidden' in Cols_[Col_]:
+            elif len(columns) > column and 'Hidden' in columns[column]:
                 cell_width = 0
-            elif Cols_ and len(Cols_) > Col_ and 'Width' in Cols_[Col_]:
-                cell_width = float(Cols_[Col_]['Width'])
-                if 'Span' in Cols_[Col_]:
+            elif columns and len(columns) > column and 'Width' in columns[column]:
+                cell_width = float(columns[column]['Width'])
+                if 'Span' in columns[column]:
                     # Повторение атрибутов колонок
                     self._column_span_width = cell_width
             else:
                 cell_width = self._column_span_width    # None=8.43
 
             # Высота строк
-            if not Rows_:
+            if not rows:
                 cell_height = self._default_row_height
-            elif len(Rows_) > Row_ and 'Hidden' in Rows_[Row_] and Rows_[Row_]['Hidden'] == '1':
+            elif len(rows) > row and 'Hidden' in rows[row] and rows[row]['Hidden'] == '1':
                 cell_height = 0
-            elif Rows_ and len(Rows_) > Row_ and 'Height' in Rows_[Row_]:
-                cell_height = float(Rows_[Row_]['Height'])
-                if 'Span' in Rows_[Row_]:
+            elif rows and len(rows) > row and 'Height' in rows[row]:
+                cell_height = float(rows[row]['Height'])
+                if 'Span' in rows[row]:
                     # Повторение атрибутов строк
                     self._row_span_height = cell_height
             else:
@@ -978,12 +978,12 @@ class icExcelXMLReportTemplate(icReportTemplate):
             cell['merge_col'] = 1
 
             try:            
-                template_cell = Rows_[Row_]['children'][Col_]
+                template_cell = rows[row]['children'][column]
 
                 if 'MergeDown' in template_cell:
                     cell['merge_row'] = int(template_cell['MergeDown']) + 1
-                if 'MergeAcross' in template_cell:
-                    cell['merge_col'] = int(template_cell['MergeAcross']) + 1
+                if 'merge_across' in template_cell:
+                    cell['merge_col'] = int(template_cell['merge_across']) + 1
             except:
                 template_cell = None
                 
@@ -1024,34 +1024,34 @@ class icExcelXMLReportTemplate(icReportTemplate):
             log.fatal(u'Ошибка определения атрибутов ячейки шаблона.')
         return None
     
-    def _isTag(self, Value_):
+    def _isTag(self, value):
         """
         Есть ли теги бендов в значении ячейки.
-        @param Value_: Значение ячейки.
+        @param value: Значение ячейки.
         @return: Возвращает True/False.
         """
-        if not Value_:
+        if not value:
             return False
         # Если хотя бы 1 тег есть в ячейке, то все ок
         for tag in ALL_TAGS:
-            if Value_.find(tag) != -1:
+            if value.find(tag) != -1:
                 return True
         return False
 
-    def _getTagBandRow(self, Rows_, Row_):
+    def _getTagBandRow(self, rows, row):
         """
         Определить тег бенда, к которому принадлежит строка.
-        @param Rows_: Список строк.
-        @param Row_: Номер строки.
+        @param rows: Список строк.
+        @param row: Номер строки.
         @return: Строка-тег бэнда или None  в случае ошибки.
         """
         try:
-            row = Rows_[Row_]
+            row = rows[row]
             # Проверка корректности описания строки
             if 'children' not in row or not row['children']:
                 log.warning(u'Ошибка наличия дочерних объектов строки <%s>' % row)
                 return self.__cur_band
-            i_tag = self._getTagBandIdx(Rows_)
+            i_tag = self._getTagBandIdx(rows)
 
             # ВНИМАНИЕ! Если колонки тегов бендов нет в шаблоне
             # то считаем что весь шаблон это шапка отчета
@@ -1070,17 +1070,17 @@ class icExcelXMLReportTemplate(icReportTemplate):
             log.fatal(u'Ошибка в функции _getTagBandRow')
             return None
 
-    def _findTagBandRow(self, Row_):
+    def _findTagBandRow(self, row):
         """
         Поиск тега в текущем бэнде.
-        @param Row_: Строка.
+        @param row: Строка.
         @return: Кортеж: (Индекс ячейки в строке, в которой находится тег.
             Или -1, если тег в строке не найден,
             Сам тег).
         """
         try:
-            for i in range(len(Row_['children'])-1, -1, -1):
-                cell = Row_['children'][i]
+            for i in range(len(row['children'])-1, -1, -1):
+                cell = row['children'][i]
                 if 'children' in cell and cell['children'] and 'value' in cell['children'][0] and \
                    self._isTag(str(cell['children'][0]['value']).lower().strip()):
                     return i, cell['children'][0]['value'].lower().strip()
@@ -1088,52 +1088,52 @@ class icExcelXMLReportTemplate(icReportTemplate):
             log.fatal(u'Ошибка в функции _findTagBandRow')
         return -1, None
 
-    def _isUpperBand(self, Rows_, Row_):
+    def _isUpperBand(self, rows, row):
         """
         Проверить является текущая строка листа бэндом верхнего колонтитула.
-        @param Rows_: Список строк.
-        @param Row_: Номер строки.
+        @param rows: Список строк.
+        @param row: Номер строки.
         @return: Возвращает True/False.
         """
         try:
-            tag = self._getTagBandRow(Rows_, Row_)
+            tag = self._getTagBandRow(rows, row)
             return bool(tag == UPPER_TAG)
         except:
             log.fatal(u'Ошибка в функции _isUpperBand')
             return False
     
-    def _isUnderBand(self, Rows_, Row_):
+    def _isUnderBand(self, rows, row):
         """
         Проверить является текущая строка листа бэндом нижнего колонтитула.
-        @param Rows_: Список строк.
-        @param Row_: Номер строки.
+        @param rows: Список строк.
+        @param row: Номер строки.
         @return: Возвращает True/False.
         """
         try:
-            tag = self._getTagBandRow(Rows_, Row_)
+            tag = self._getTagBandRow(rows, row)
             return bool(tag == UNDER_TAG)
         except:
             log.fatal(u'Ошибка в функции _isUnderBand')
             return False
 
-    def _isTitleBand(self, Rows_, Row_):
+    def _isTitleBand(self, rows, row):
         """
         Проверить является текущая строка листа бэндом заголовочной части.
-        @param Rows_: Список строк.
-        @param Row_: Номер строки.
+        @param rows: Список строк.
+        @param row: Номер строки.
         @return: Возвращает True/False.
         """
         try:
-            return bool(self._getTagBandRow(Rows_, Row_) in TITLE_TAGS)
+            return bool(self._getTagBandRow(rows, row) in TITLE_TAGS)
         except:
             log.fatal(u'Ошибка в функции _isTitleBand')
             return False
 
-    def _parseDescriptionTag(self, Rep_, ParseRow_):
+    def _parseDescriptionTag(self, Rep_, parse_row):
         """
         Разбор заголовочного тега описания.
         @param Rep_: Шаблон отчета.
-        @param ParseRow_: Разбираемая строка шаблона отчета в виде списка.
+        @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
             if not self._existTagBand():
@@ -1142,22 +1142,22 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 tmpl_filename = self.getTemplateFilename()
                 Rep_['description'] = os.path.splitext(os.path.basename(tmpl_filename))[0] if tmpl_filename else u''
             else:
-                if 'value' in ParseRow_[0]['children'][0] and ParseRow_[0]['children'][0]['value']:
-                    Rep_['description'] = ParseRow_[0]['children'][0]['value']
+                if 'value' in parse_row[0]['children'][0] and parse_row[0]['children'][0]['value']:
+                    Rep_['description'] = parse_row[0]['children'][0]['value']
                 else:
                     Rep_['description'] = None
         except:
             log.fatal(u'Ошибка в функции _parseDescriptionTag')
 
-    def _parseVarTag(self, Rep_, ParseRow_):
+    def _parseVarTag(self, Rep_, parse_row):
         """
         Разбор заголовочного тега переменных.
         @param Rep_: Шаблон отчета.
-        @param ParseRow_: Разбираемая строка шаблона отчета в виде списка.
+        @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
-            name = ParseRow_[0]['children'][0]['value']
-            value = ParseRow_[1]['children'][0]['value']
+            name = parse_row[0]['children'][0]['value']
+            value = parse_row[1]['children'][0]['value']
             if isinstance(value, str) and value.startswith(CODE_SIGNATURE):
                 value = execfunc.exec_code(value.replace(CODE_SIGNATURE, u'').strip())
             elif isinstance(value, str) and value.startswith(PY_SIGNATURE):
@@ -1166,11 +1166,11 @@ class icExcelXMLReportTemplate(icReportTemplate):
         except:
             log.fatal(u'Ошибка в функции _parseVarTag')
 
-    def _parseGeneratorTag(self, Rep_, ParseRow_):
+    def _parseGeneratorTag(self, Rep_, parse_row):
         """
         Разбор заголовочного тега генеаратора.
         @param Rep_: Шаблон отчета.
-        @param ParseRow_: Разбираемая строка шаблона отчета в виде списка.
+        @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
             if not self._existTagBand():
@@ -1179,46 +1179,46 @@ class icExcelXMLReportTemplate(icReportTemplate):
                 tmpl_filename = self.getTemplateFilename()
                 Rep_['generator'] = os.path.splitext(tmpl_filename)[1].upper() if tmpl_filename else '.ODS'
             else:
-                if 'value' in ParseRow_[0]['children'][0] and ParseRow_[0]['children'][0]['value']:
-                    Rep_['generator'] = ParseRow_[0]['children'][0]['value']
+                if 'value' in parse_row[0]['children'][0] and parse_row[0]['children'][0]['value']:
+                    Rep_['generator'] = parse_row[0]['children'][0]['value']
                 else:
                     Rep_['generator'] = None
         except:
             log.fatal(u'Ошибк в функции _parseGeneratorTag')
 
-    def _parseDataSrcTag(self, Rep_, ParseRow_):
+    def _parseDataSrcTag(self, Rep_, parse_row):
         """
         Разбор заголовочного тега источника даных.
         @param Rep_: Шаблон отчета.
-        @param ParseRow_: Разбираемая строка шаблона отчета в виде списка.
+        @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
-            Rep_['data_source'] = ParseRow_[0]['children'][0]['value']
+            Rep_['data_source'] = parse_row[0]['children'][0]['value']
         except:
             Rep_['data_source'] = None
             log.warning(u'Не указан источник данных!')
 
-    def _parseQueryTag(self, Rep_, ParseRow_):
+    def _parseQueryTag(self, Rep_, parse_row):
         """
         Разбор заголовочного тега запроса.
         @param Rep_: Шаблон отчета.
-        @param ParseRow_: Разбираемая строка шаблона отчета в виде списка.
+        @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
-            Rep_['query'] = ParseRow_[0]['children'][0]['value']
+            Rep_['query'] = parse_row[0]['children'][0]['value']
         except:
             Rep_['query'] = None
             log.warning(u'Не указан запрос!')
             
-    def _parseStyleLibTag(self, Rep_, ParseRow_):
+    def _parseStyleLibTag(self, Rep_, parse_row):
         """
         Разбор заголовочного тега библиотеки стилей.
         @param Rep_: Шаблон отчета.
-        @param ParseRow_: Разбираемая строка шаблона отчета в виде списка.
+        @param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
         try:
             from . import icstylelib
-            xml_style_lib_file_name = ParseRow_[0]['children'][0]['value']
+            xml_style_lib_file_name = parse_row[0]['children'][0]['value']
             Rep_['style_lib'] = icstylelib.icXMLRepStyleLib().convert(xml_style_lib_file_name)
         except:
             log.fatal(u'Ошибка в функции _parseStyleLibTag')
@@ -1253,8 +1253,8 @@ class icODSReportTemplate(icExcelXMLReportTemplate):
         @param TemplateFile_: Файл шаблона отчета.
         """
         v_excel = icexcel.icVExcel()
-        result = v_excel.Load(TemplateFile_)
-        v_excel.SaveAsXML(TemplateFile_.replace('.ods', '.xml'))
+        result = v_excel.load(TemplateFile_)
+        v_excel.saveAsXML(TemplateFile_.replace('.ods', '.xml'))
         return result
 
 

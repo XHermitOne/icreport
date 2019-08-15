@@ -530,7 +530,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
                 # ВНИМАНИЕ!!! Проверка на пропуск пустых ячеек
                 # т.к. они выкинуться то надо учитывать смещение
                 # индекса последующих ячеек
-                if bool(set(cell.keys()) & set(['StyleID', 'MergeAcross', 'MergeDown', 'Formula'])) or \
+                if bool(set(cell.keys()) & set(['StyleID', 'merge_across', 'MergeDown', 'Formula'])) or \
                    (not empty_data):
                     prev_idx = cur_idx
             self.setCell(cell)
@@ -546,15 +546,15 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
             attrs['ss:Index'] = str(data['Index'])
         if 'StyleID' in data:
             attrs['ss:StyleID'] = str(data['StyleID'])
-        if 'MergeAcross' in data:
-            attrs['ss:MergeAcross'] = str(data['MergeAcross'])
+        if 'merge_across' in data:
+            attrs['ss:merge_across'] = str(data['merge_across'])
         if 'MergeDown' in data:
             attrs['ss:MergeDown'] = str(data['MergeDown'])
         if 'Formula' in data:
             attrs['ss:Formula'] = str(data['Formula'])
 
         empty_data = self.isEmptyData(data)
-        if bool(set(data.keys()) & set(['StyleID', 'MergeAcross', 'MergeDown','Formula'])) or \
+        if bool(set(data.keys()) & set(['StyleID', 'merge_across', 'MergeDown','Formula'])) or \
            (not empty_data):
 
             self.startElementLevel('Cell', attrs, not bool(data['children']))

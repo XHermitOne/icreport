@@ -81,7 +81,7 @@ def main(argv):
     sql = None
     do_cmd = None
     stylelib = None
-    vars = dict()
+    variables = dict()
     path = None
     mode = 'default'
     mode_arg = None
@@ -130,7 +130,7 @@ def main(argv):
         elif option in ('--var',):
             var_name = arg.split('=')[0].strip()
             var_value = arg.split('=')[-1].strip()
-            vars[var_name] = var_value
+            variables[var_name] = var_value
             log.debug(u'Дополнительная переменная <%s>. Значение [%s]' % (str(var_name), str(var_value)))
         elif option in ('--path',):
             path = arg
@@ -159,7 +159,7 @@ def main(argv):
             # Запустить генерацию отчета из комадной строки
             do_report.doReport(report_filename=report_filename, report_dir=path,
                                db_url=db, sql=sql, command=do_cmd,
-                               stylelib_filename=stylelib, variables=vars)
+                               stylelib_filename=stylelib, variables=variables)
     elif mode == 'view':
         do_report.ReportViewer(report_dir=path)
     elif mode == 'edit':
@@ -167,19 +167,19 @@ def main(argv):
     elif mode == 'print':
         do_report.ReportPrint(report_filename=mode_arg, report_dir=path,
                               db_url=db, sql=sql, command=do_cmd,
-                              stylelib_filename=stylelib, variables=vars)
+                              stylelib_filename=stylelib, variables=variables)
     elif mode == 'preview':
         do_report.ReportPreview(report_filename=mode_arg, report_dir=path,
                                 db_url=db, sql=sql, command=do_cmd,
-                                stylelib_filename=stylelib, variables=vars)
+                                stylelib_filename=stylelib, variables=variables)
     elif mode == 'export':
         do_report.ReportExport(report_filename=mode_arg, report_dir=path,
                                db_url=db, sql=sql, command=do_cmd,
-                               stylelib_filename=stylelib, variables=vars)
+                               stylelib_filename=stylelib, variables=variables)
     elif mode == 'select':
         do_report.ReportSelect(report_filename=mode_arg, report_dir=path,
                                db_url=db, sql=sql, command=do_cmd,
-                               stylelib_filename=stylelib, variables=vars)
+                               stylelib_filename=stylelib, variables=variables)
 
     app.MainLoop()
 

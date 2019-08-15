@@ -5,7 +5,7 @@ import hashlib
 
 from . import icprototype
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 COLOR_ENUM = ('#000000',)
 
@@ -66,18 +66,18 @@ class icVStyles(icprototype.icVPrototype):
             self._style_dict[attrs['ID']] = attrs
         return style
 
-    def getStyle(self, ID_):
+    def getStyle(self, style_id):
         """
         Поиск стиля по идентификатору.
         """
         style = None
-        if ID_ in self._style_dict:
+        if style_id in self._style_dict:
             style = icVStyle(self)
-            style.set_attributes(self._style_dict[ID_])
+            style.set_attributes(self._style_dict[style_id])
         else:
             # Попробовать поискать в списке
             find_style = [style_attr for style_attr in self._attributes['children']
-                          if style_attr['name'] == 'Style' and style_attr['ID'] == ID_]
+                          if style_attr['name'] == 'Style' and style_attr['ID'] == style_id]
             if find_style:
                 style = icVStyle(self)
                 style.set_attributes(find_style[0])
@@ -85,21 +85,21 @@ class icVStyles(icprototype.icVPrototype):
                 self.init_style_dict()
 
         # Если такой стиль не найден, тогда вернуть стиль по умолчанию
-        if style is None and ID_ != 'Default':
+        if style is None and style_id != 'Default':
             return self.getStyle('Default')
         return style
 
-    def _equalStyleElement(self, StyleElementAttr1_, StyleElementAttr2_):
+    def _equalStyleElement(self, style_element_attr1, style_element_attr2):
         """
         Сравнение элементов стилей.
         @return: True - элементы равны, False - не равны.
         """
-        if ((StyleElementAttr1_ is None) and (StyleElementAttr2_ is not None)) or \
-           ((StyleElementAttr1_ is not None) and (StyleElementAttr2_ is None)):
+        if ((style_element_attr1 is None) and (style_element_attr2 is not None)) or \
+           ((style_element_attr1 is not None) and (style_element_attr2 is None)):
             return False
             
-        attrs1 = dict([item for item in StyleElementAttr1_.items() if item[0] not in icprototype.PROTOTYPE_ATTR_NAMES])
-        attrs2 = dict([item for item in StyleElementAttr2_.items() if item[0] not in icprototype.PROTOTYPE_ATTR_NAMES])
+        attrs1 = dict([item for item in style_element_attr1.items() if item[0] not in icprototype.PROTOTYPE_ATTR_NAMES])
+        attrs2 = dict([item for item in style_element_attr2.items() if item[0] not in icprototype.PROTOTYPE_ATTR_NAMES])
         equal = True
         for item in attrs1.items():
             try:
@@ -123,11 +123,11 @@ class icVStyles(icprototype.icVPrototype):
 
         # Если определены дочерние елементы, то рекурсивно проверить и их
         if equal:
-            if ('children' in StyleElementAttr1_ and StyleElementAttr1_['children']) or \
-               ('children' in StyleElementAttr2_ and StyleElementAttr2_['children']):
+            if ('children' in style_element_attr1 and style_element_attr1['children']) or \
+               ('children' in style_element_attr2 and style_element_attr2['children']):
 
-                children1 = StyleElementAttr1_['children']
-                children2 = StyleElementAttr2_['children']
+                children1 = style_element_attr1['children']
+                children2 = style_element_attr2['children']
 
                 if len(children1) != len(children2):
                     return False
@@ -177,7 +177,7 @@ class icVStyles(icprototype.icVPrototype):
         """
         find_style = None
 
-        md5_style = self._calcMD5StyleAttr(alignment, borders, font, interior, number_format)
+        md5_style = self._calcCrcStyleAttr(alignment, borders, font, interior, number_format)
 
         find_result = md5_style in self._md5_styles_dict
         if not find_result:
@@ -209,62 +209,62 @@ class icVStyles(icprototype.icVPrototype):
             return style
         return None
 
-    def _getMD5ElementStr(self, Element_):
+    def _getCrcElementStr(self, element):
         """
         Представить в строковом виде элемент без дополнительных полей.
         """
-        return str(dict([(key, Element_[key]) for key in Element_.keys() \
+        return str(dict([(key, element[key]) for key in element.keys() \
                          if key not in icprototype.PROTOTYPE_ATTR_NAMES]))
         
-    def _getMD5AlignmentStr(self, Style_):
+    def _getCrcAlignmentStr(self, style):
         """
         Выравнивание в строковом представлении (для вычисления контрольной суммы).
         """
-        align = [element for element in Style_['children'] if element['name'] == 'Alignment']
+        align = [element for element in style['children'] if element['name'] == 'Alignment']
         if align:
-            return self._getMD5ElementStr(align[0])
+            return self._getCrcElementStr(align[0])
         return ''        
         
-    def _getMD5BordersStr(self, Style_):
+    def _getCrcBordersStr(self, style):
         """
         Обрамление в строковом представлении (для вычисления контрольной суммы).
         """
-        borders = [element for element in Style_['children'] if element['name'] == 'Borders']
+        borders = [element for element in style['children'] if element['name'] == 'Borders']
         if borders:
             borders_str = ''
             for border in borders[0]['children']:
-                borders_str += self._getMD5ElementStr(border)
+                borders_str += self._getCrcElementStr(border)
             return borders_str
         return ''        
 
-    def _getMD5FontStr(self, Style_):
+    def _getCrcFontStr(self, style):
         """
         Шрифт в строковом представлении (для вычисления контрольной суммы).
         """
-        font = [element for element in Style_['children'] if element['name'] == 'Font']
+        font = [element for element in style['children'] if element['name'] == 'Font']
         if font:
-            return self._getMD5ElementStr(font[0])
+            return self._getCrcElementStr(font[0])
         return ''        
         
-    def _getMD5InteriorStr(self, Style_):
+    def _getCrcInteriorStr(self, style):
         """
         Интерьер в строковом представлении (для вычисления контрольной суммы).
         """
-        interior = [element for element in Style_['children'] if element['name'] == 'Interior']
+        interior = [element for element in style['children'] if element['name'] == 'Interior']
         if interior:
-            return self._getMD5ElementStr(interior[0])
+            return self._getCrcElementStr(interior[0])
         return ''        
         
-    def _getMD5NumberFormatStr(self, Style_):
+    def _getCrcNumberFormatStr(self, style):
         """
         Формат чисел в строковом представлении (для вычисления контрольной суммы).
         """
-        num_fmt = [element for element in Style_['children'] if element['name'] == 'NumberFormat']
+        num_fmt = [element for element in style['children'] if element['name'] == 'NumberFormat']
         if num_fmt:
-            return self._getMD5ElementStr(num_fmt[0])
+            return self._getCrcElementStr(num_fmt[0])
         return ''        
     
-    def _calcMD5StyleAttr(self, alignment=None,
+    def _calcCrcStyleAttr(self, alignment=None,
                           borders=None, font=None, interior=None,
                           number_format=None):
         """
@@ -286,39 +286,39 @@ class icVStyles(icprototype.icVPrototype):
         if number_format:
             number_format['name'] = 'NumberFormat'
             new_style_attr['children'].append(number_format)
-        return self._getMD5Style(new_style_attr)            
+        return self._getCrcStyle(new_style_attr)
         
-    def _getMD5Style(self, Style_):
+    def _getCrcStyle(self, style):
         """
         Контрольная сумма содержания стиля.
         """
         style_str = ''
         # Alignment
-        style_str += self._getMD5AlignmentStr(Style_)
+        style_str += self._getCrcAlignmentStr(style)
         # Borders
-        style_str += self._getMD5BordersStr(Style_)
+        style_str += self._getCrcBordersStr(style)
         # Font
-        style_str += self._getMD5FontStr(Style_)
+        style_str += self._getCrcFontStr(style)
         # Interior
-        style_str += self._getMD5InteriorStr(Style_)
+        style_str += self._getCrcInteriorStr(style)
         # NumberFormat
-        style_str += self._getMD5NumberFormatStr(Style_)
+        style_str += self._getCrcNumberFormatStr(style)
         return hashlib.md5(style_str).hexdigest()
 
-    def _delMD5Style(self, MD5Style_):
+    def _delCrcStyle(self, crc_style):
         """
         Удалить стиль из кеша.
         """
-        if MD5Style_ in self._md5_styles_dict:
-            del self._md5_styles_dict[MD5Style_]
+        if crc_style in self._md5_styles_dict:
+            del self._md5_styles_dict[crc_style]
             
-    def _isMD5StyleID(self, StyleID_):
+    def _isCrcStyleID(self, style_id):
         """
         Есть ли в кеше стиль с таким идентификатором?
         @return: Возвращает контрольную сумму стиля в кеше или None,
             если стиль не найден.
         """
-        result = [i_style for i_style in self._md5_styles_dict.items() if i_style[1]['ID'] == StyleID_]
+        result = [i_style for i_style in self._md5_styles_dict.items() if i_style[1]['ID'] == style_id]
         if result:
             return result[0][0]
         return None
@@ -384,12 +384,12 @@ class icVStyles(icprototype.icVPrototype):
                 
         return del_styles_id
                 
-    def delStyleByID(self, ID_):
+    def delStyleByID(self, style_id):
         """
         Удалить стиль по идентификатору.
         """
         try:
-            style_idx = self.getStylesID().index(ID_)
+            style_idx = self.getStylesID().index(style_id)
         except ValueError:
             return False
         
@@ -417,12 +417,12 @@ class icVStyle(icprototype.icVPrototype):
         """
         return self._attributes['ID']
     
-    def setID(self, IDName_):
+    def setID(self, id_name):
         """
         Идентификатор стиля.
-        @param IDName_: Имя идентификатора.
+        @param id_name: Имя идентификатора.
         """
-        self._attributes['ID'] = str(IDName_)
+        self._attributes['ID'] = str(id_name)
     
     def newID(self):
         """
@@ -503,9 +503,9 @@ class icVStyle(icprototype.icVPrototype):
         self._attributes['children'] = style_attrs
         
         if self._parent:
-            md5_attrs = self._parent._isMD5StyleID(self.getID())
+            md5_attrs = self._parent._isCrcStyleID(self.getID())
             if md5_attrs:
-                self._parent._delMD5Style(md5_attrs)
+                self._parent._delCrcStyle(md5_attrs)
         return self._attributes
 
     def getAttrs(self):

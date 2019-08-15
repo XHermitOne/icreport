@@ -22,13 +22,13 @@ def test_1():
     from . import icexcel
     
     excel = icexcel.icVExcel()
-    excel.Load('./testfiles/test.ods')
+    excel.load('./testfiles/test.ods')
     
     excel.setCellValue('Лист1', 10, 9, 1.99)
     excel.setCellValue('Лист1', 11, 9, '=SUM(I8:I10)')
     
-    excel.SaveAs('./testfiles/test_result.ods')
-    excel.SaveAs('./testfiles/test_result.xml')
+    excel.saveAs('./testfiles/test_result.ods')
+    excel.saveAs('./testfiles/test_result.xml')
     
     # cmd='soffice ./testfiles/test_result.ods'
     # cmd='soffice ./testfiles/test_result.xml'

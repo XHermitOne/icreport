@@ -36,7 +36,7 @@ class icVirtualExcelTests(unittest.TestCase):
         """
         app = icexcel.icVExcel()
 
-        app.Load(self.test_path+'/testfiles/example.xml')
+        app.load(self.test_path + '/testfiles/example.xml')
 
         work_book = app.getActiveWorkbook()
 
@@ -86,10 +86,10 @@ class icVirtualExcelTests(unittest.TestCase):
         id2 = styles.createStyle().get_attributes()['ID']
         ids = styles.clearUnUsedStyles()
 
-        app.SaveAs(self.test_path+'/testfiles/result.xml')
+        app.saveAs(self.test_path + '/testfiles/result.xml')
 
-        app.Load(self.test_path+'/testfiles/result.xml')
-        app.SaveAs(self.test_path+'/testfiles/result_ok.xml')
+        app.load(self.test_path + '/testfiles/result.xml')
+        app.saveAs(self.test_path + '/testfiles/result_ok.xml')
 
     def test_hello_word(self):
         """
@@ -103,7 +103,7 @@ class icVirtualExcelTests(unittest.TestCase):
         cell = table.createCell(3, 3)
         cell.setValue('Привет')
 
-        app.SaveAs(self.test_path+'/testfiles/ooo1.xml')
+        app.saveAs(self.test_path + '/testfiles/ooo1.xml')
 
     def test_ooo2_calc(self):
         """
@@ -116,7 +116,7 @@ class icVirtualExcelTests(unittest.TestCase):
 
         new_range = work_sheet.getRange(1, 1, 3, 2)
         new_range.setValues([[11.2, '222'], [333, 333.2], ['444', '5555']])
-        app.SaveAs(self.test_path+'/testfiles/ooo2.xml')
+        app.saveAs(self.test_path + '/testfiles/ooo2.xml')
 
     def test_ooo3_calc(self):
         """
@@ -133,7 +133,7 @@ class icVirtualExcelTests(unittest.TestCase):
         new_range = work_sheet.getRange(1, 1, 2, 2)
         new_range.setStyle(font={'Bold': 1, 'Size': 16, 'Italic': 1},
                            interior={'Color': '#00FF00'})
-        app.SaveAs(self.test_path+'/testfiles/ooo3.xml')
+        app.saveAs(self.test_path + '/testfiles/ooo3.xml')
 
     def test_ooo4_calc(self):
         """
@@ -149,14 +149,14 @@ class icVirtualExcelTests(unittest.TestCase):
                               border_top={'LineStyle': 'Continuous', 'Weight': 2},
                               border_right={'LineStyle': 'Continuous', 'Weight': 1},
                               border_bottom={'LineStyle': 'Continuous', 'Weight': 2})
-        app.SaveAs(self.test_path+'/testfiles/ooo4.xml')
+        app.saveAs(self.test_path + '/testfiles/ooo4.xml')
 
     def test_ooo5_hidden(self):
         """
         Тестирование генерации xml для OpenOffice.org Calc.
         """
         app = icexcel.icVExcel()
-        app.Load(self.test_path+'/testfiles/example.xml')
+        app.load(self.test_path + '/testfiles/example.xml')
 
         work_book = app.getActiveWorkbook()
         work_sheet = work_book.findWorksheet('Worksheet1')
@@ -164,7 +164,7 @@ class icVirtualExcelTests(unittest.TestCase):
         cell = work_sheet.getCell(3, 3)
         cell.setValue('Привет')
 
-        app.SaveAs(self.test_path+'/testfiles/ooo5.xml')
+        app.saveAs(self.test_path + '/testfiles/ooo5.xml')
 
     def test_merge(self):
         """
@@ -172,8 +172,8 @@ class icVirtualExcelTests(unittest.TestCase):
         """
         app = icexcel.icVExcel()
 
-        app.Load(self.test_path+'/testfiles/merge0.xml')
-        app.SaveAs(self.test_path+'/testfiles/merge_ok.xml')
+        app.load(self.test_path + '/testfiles/merge0.xml')
+        app.saveAs(self.test_path + '/testfiles/merge_ok.xml')
 
 
 def test_work_sheet():
@@ -195,7 +195,7 @@ def test_work_sheet():
     print('paste...ok', 'testfiles/worksheet02.xml')
     v_excel.activeWorkbook('testfiles/worksheet02.xml')
     print('active...ok', 'testfiles/worksheet02.xml')
-    v_excel.SaveAs('testfiles/worksheet03.xml')
+    v_excel.saveAs('testfiles/worksheet03.xml')
     print('test_work_sheet STOP', time.time()-start_time)
 
 
@@ -217,7 +217,7 @@ def test_work_sheet_list():
     print('copy...ok', 'testfiles/worksheet02.xml')
     v_excel.activeWorkbook('testfiles/worksheet02.xml')
     print('active...ok', 'testfiles/worksheet02.xml')
-    v_excel.SaveAs('testfiles/worksheet03.xml')
+    v_excel.saveAs('testfiles/worksheet03.xml')
     print('test_work_sheet_list STOP', time.time()-start_time)
 
 
@@ -238,7 +238,7 @@ def test_del_work_sheet_list():
     print('del...ok', 'testfiles/worksheet03.xml')
     v_excel.activeWorkbook('testfiles/worksheet03.xml')
     print('active...ok', 'testfiles/worksheet03.xml')
-    v_excel.SaveAs('testfiles/worksheet03.xml')
+    v_excel.saveAs('testfiles/worksheet03.xml')
     print('test_del_work_sheet_list STOP', time.time()-start_time)
 
 
@@ -260,7 +260,7 @@ def test_del_col_row():
     print('delColumn...ok')
     work_tab.delRow(4)
     print('delRow...ok')
-    v_excel.SaveAs('testfiles/worksheet04.xml')
+    v_excel.saveAs('testfiles/worksheet04.xml')
     print('test_del_col_row STOP', time.time()-start_time)
 
 
@@ -280,7 +280,7 @@ def test_merge_cell():
     v_excel.mergeCell('Worksheet1', 3, 3, 2, 3)
     print('merge...ok')
 
-    v_excel.SaveAs('testfiles/worksheet04.xml')
+    v_excel.saveAs('testfiles/worksheet04.xml')
     print('test_merge_cell STOP', time.time()-start_time)
 
 

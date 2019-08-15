@@ -50,7 +50,7 @@
   <Style ss:ID="s24">
    <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
    <Borders/>
-   <Font ss:FontName="Courier New" x:CharSet="204" x:Family="Modern"/>
+   <Font ss:FontName="Courier createNew" x:CharSet="204" x:Family="Modern"/>
    <Interior ss:Color="#666699" ss:Pattern="Solid"/>
   </Style>
   <Style ss:ID="s25">

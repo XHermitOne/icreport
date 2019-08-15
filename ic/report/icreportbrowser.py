@@ -414,7 +414,7 @@ class icReportBrowserPrototype:
         Обработчик нажатия ккнопки 'Новый отчет'.
         """
         # Запустить редакторы
-        report_generator.getCurReportGeneratorSystem().New(self._ReportDir)
+        report_generator.getCurReportGeneratorSystem().createNew(self._ReportDir)
         event.Skip()
 
     def OnEditRepButton(self, event):
@@ -572,7 +572,7 @@ class icReportBrowserPrototype:
                 # Переименовать лист
                 rep_tmpl_sheet.Name = NewName_
                 # Сохранить и закрыть
-                rep_tmpl_book.Save()
+                rep_tmpl_book.save()
                 excel_app.Quit()
             except pythoncom.com_error:
                 # Вывести сообщение об ошибке в лог

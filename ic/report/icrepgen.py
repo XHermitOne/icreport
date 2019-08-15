@@ -699,11 +699,11 @@ class icReportGenerator:
             log.fatal(u'Ошибка генерации нижнего колонтитула отчета <%s>.' % self._RepName)
             return False
             
-    def _genSubReport(self, SubReportName_, Row_):
+    def _genSubReport(self, SubReportName_, row):
         """
         Генерация под-отчета.
         @param SubReportName_: Имя под-отчета.
-        @param Row_: Номер строки листа, после которой будет вставляться под-отчет.
+        @param row: Номер строки листа, после которой будет вставляться под-отчет.
         @return: Возвращает результат выполнения операции True/False.
         """
         try:
@@ -725,38 +725,38 @@ class icReportGenerator:
                                                   self._QueryTbl['__sub__'][SubReportName_]['__variables__'],
                                                   self._QueryTbl['__sub__'][SubReportName_]['__coord_fill__'])
                     # Вставить результат под-отчета после строки
-                    self._Rep['sheet'] = self._Rep['sheet'][:Row_]+rep_result['sheet']+self._Rep['sheet'][Row_:]
+                    self._Rep['sheet'] = self._Rep['sheet'][:row]+rep_result['sheet']+self._Rep['sheet'][row:]
             return True
         except:
             # Вывести сообщение об ошибке в лог
             log.fatal(u'Ошибка генерации под-отчета <%s> отчета <%s>.' % (SubReportName_, self._RepName))
             return False
 
-    def _genCell(self, FromSheet_, FromRow_, FromCol_, ToRep_, ToRow_, ToCol_, record):
+    def _genCell(self, FromSheet_, from_row, from_col, ToRep_, to_row, to_col, record):
         """
         Генерация ячейки из шаблона в выходной отчет.
         @param FromSheet_: Из листа шаблона.
-        @param FromRow_: Координаты ячейки шаблона. Строка.
-        @param FromCol_: Координаты ячейки шаблона. Столбец.
+        @param from_row: Координаты ячейки шаблона. Строка.
+        @param from_col: Координаты ячейки шаблона. Столбец.
         @param ToRep_: В отчет.
-        @param ToRow_: Координаты ячейки отчета. Строка.
-        @param ToCol_: Координаты ячейки отчета. Столбец.
+        @param to_row: Координаты ячейки отчета. Строка.
+        @param to_col: Координаты ячейки отчета. Столбец.
         @param record: Запись.
         @return: Возвращает результат выполнения операции True/False.
         """
         try:
-            cell = copy.deepcopy(FromSheet_[FromRow_][FromCol_])
+            cell = copy.deepcopy(FromSheet_[from_row][from_col])
 
             # Коррекция координат ячейки
             cell['top'] = self._cur_top
             # Генерация текста ячейки
-            if self._CoordFill and (ToRow_, ToCol_) in self._CoordFill:
+            if self._CoordFill and (to_row, to_col) in self._CoordFill:
                 # Координатные замены
-                fill_val = str(self._CoordFill[(ToRow_, ToCol_)])
-                cell['value'] = self._genTxt({'value': fill_val}, record, ToRow_, ToCol_)
+                fill_val = str(self._CoordFill[(to_row, to_col)])
+                cell['value'] = self._genTxt({'value': fill_val}, record, to_row, to_col)
             else:
                 # Перенести все ячейки из шаблона в выходной отчет
-                cell['value'] = self._genTxt(cell, record, ToRow_, ToCol_)
+                cell['value'] = self._genTxt(cell, record, to_row, to_col)
 
             # log.debug(u'Значение <%text>' % text(cell['value']))
 
@@ -766,31 +766,31 @@ class icReportGenerator:
                 cell.update(self.AttrDefault)
                 
             # Установить описание ячейки отчета.
-            if len(ToRep_['sheet']) <= ToRow_:
+            if len(ToRep_['sheet']) <= to_row:
                 # Расширить строки
-                for i_row in range(len(ToRep_['sheet']), ToRow_+1):
+                for i_row in range(len(ToRep_['sheet']), to_row+1):
                     ToRep_['sheet'].append([])
-            if len(ToRep_['sheet'][ToRow_]) <= ToCol_:
+            if len(ToRep_['sheet'][to_row]) <= to_col:
                 # Расширить колонки
-                for i_col in range(len(ToRep_['sheet'][ToRow_]), ToCol_+1):
-                    ToRep_['sheet'][ToRow_].append(None)
+                for i_col in range(len(ToRep_['sheet'][to_row]), to_col+1):
+                    ToRep_['sheet'][to_row].append(None)
             # Установить описание колонки
             if cell['visible']:
-                ToRep_['sheet'][ToRow_][ToCol_] = cell
+                ToRep_['sheet'][to_row][to_col] = cell
             return True
         except:
             # Вывести сообщение об ошибке в лог
             log.fatal(u'Ошибка генерации ячейки шаблона <%s>.' % self._RepName)
             return False
         
-    def _genTxt(self, cell, record=None, CellRow_=None, CellCol_=None):
+    def _genTxt(self, cell, record=None, cell_row=None, cell_col=None):
         """
         Генерация текста.
         @param cell: Ячейка.
         @param record: Словарь, описывающий текущую запись таблицы запроса.
             Формат: { <имя поля> : <значение поля>, ...}
-        @param CellRow_: Номер строки ячейки в результирующем отчете.
-        @param CellCol_: Номер колонки ячейки в результирующем отчете.
+        @param cell_row: Номер строки ячейки в результирующем отчете.
+        @param cell_col: Номер колонки ячейки в результирующем отчете.
         @return: Возвращает сгенерированное значение.
         """
         value = u''
@@ -1027,7 +1027,7 @@ class icReportGenerator:
         """
         value = u''
         subreport_name = cur_func[2:-2]
-        cell_row = locals['CellRow_'] if 'CellRow_' in locals else globals.get('CellRow_', dict())
+        cell_row = locals['cell_row'] if 'cell_row' in locals else globals.get('cell_row', dict())
         self._genSubReport(subreport_name, cell_row)
         return value
 

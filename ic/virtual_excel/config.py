@@ -20,20 +20,20 @@ LOG_FILENAME = os.path.join(os.path.dirname(__file__),
 DETECT_MERGE_CELL_ERROR = False
 
 
-def get_cfg_var(sName):
+def get_cfg_var(name):
     """
     Прочитать значение переменной конфига.
-    @type sName: C{string}
-    @param sName: Имя переменной.
+    @type name: C{string}
+    @param name: Имя переменной.
     """
-    return globals()[sName]
+    return globals()[name]
 
 
-def set_cfg_var(sName, vValue):
+def set_cfg_var(name, value):
     """
     Установить значение переменной конфига.
-    @type sName: C{string}
-    @param sName: Имя переменной.
-    @param vValue: Значение переменной.
+    @type name: C{string}
+    @param name: Имя переменной.
+    @param value: Значение переменной.
     """
-    globals()[sName] = vValue
+    globals()[name] = value

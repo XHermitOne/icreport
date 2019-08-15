@@ -307,8 +307,8 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                 log.info(u'Конвертация отчета <%s> в файл <%s>' % (textfunc.toUnicode(xml_rep_file_name),
                                                                    textfunc.toUnicode(rep_file_name)))
                 v_excel = icexcel.icVExcel()
-                v_excel.Load(xml_rep_file_name)
-                v_excel.SaveAs(rep_file_name)
+                v_excel.load(xml_rep_file_name)
+                v_excel.saveAs(rep_file_name)
             else:
                 # ВНИМАНИЕ! UNOCONV транслирует не все стили и атрибуты ячеек
                 # Поэтому сначала используется Virtual Excel

@@ -49,7 +49,7 @@ def XlsFile2Dict(xls_filename):
         # Загрузить *.xls файл
         excel_app.Workbooks.Open(xls_filename)
         # Сохранить в xml файле
-        excel_app.ActiveWorkbook.SaveAs(xml_file_name, FileFormat=xlXMLSpreadsheet)
+        excel_app.ActiveWorkbook.saveAs(xml_file_name, FileFormat=xlXMLSpreadsheet)
         # Выйти из Excel
         excel_app.Quit()
 

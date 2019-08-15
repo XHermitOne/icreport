@@ -34,7 +34,7 @@ from os.path import splitext as _splitext
 
 __version__ = (0, 1, 1, 1)
 
-# Load ReportMan shared library:
+# load ReportMan shared library:
 _rp_lib = _c.windll.LoadLibrary('ReportMan.ocx')
 
 

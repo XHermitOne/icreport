@@ -22,7 +22,7 @@ __version__ = (0, 1, 1, 1)
 
 # Спецификации и структуры
 # Спецификация стиля ячеек
-SPC_IC_XML_STYLE = {'id': '',                                           # Идентификатор стиля
+SPC_IC_XML_STYLE = {'style_id': '',                                           # Идентификатор стиля
                     'align': {'align_txt': (0, 0), 'wrap_txt': False},  # Выравнивание
                     'font': None,                                       # Шрифт
                     'border': (0, 0, 0, 0),                             # Обрамление
@@ -412,9 +412,9 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
             cell_style['border'] = Cell_['border']
             cell_style['format'] = Cell_['format']
             cell_style['color'] = Cell_['color']
-            cell_style['id'] = 'x'+str(new_idx)
+            cell_style['style_id'] = 'x'+str(new_idx)
             # Прописать в ячейке идентификатор стиля
-            Cell_['style_id'] = cell_style['id']
+            Cell_['style_id'] = cell_style['style_id']
             self._styles.append(cell_style)
             return new_idx
         return cell_style_idx
@@ -430,7 +430,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
 
         # Если такой стиль найден, то вернуть его
         if find_style:
-            Cell_['style_id'] = find_style[0]['id']
+            Cell_['style_id'] = find_style[0]['style_id']
             return self._styles.index(find_style[0])
         return None
         
@@ -498,7 +498,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         
         # Дополнительные стили
         for style in self._styles:
-            self.startElementLevel('Style', {'ss:ID': style['id']})
+            self.startElementLevel('Style', {'ss:ID': style['style_id']})
             # Выравнивание
             align = {}
             h_align = self._alignRep2XML[style['align']['align_txt'][icrepgen.IC_REP_ALIGN_HORIZ]]
@@ -666,17 +666,17 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
                 col_width.append(8.43)
         return col_width
 
-    def getRowHeight(self, Row_):
+    def getRowHeight(self, row):
         """
         Высота строки.
         """
-        return min([cell['height'] for cell in [cell_ for cell_ in Row_ if type(cell_) == dict and 'height' in cell_]])
+        return min([cell['height'] for cell in [cell_ for cell_ in row if type(cell_) == dict and 'height' in cell_]])
             
-    def startRow(self, Row_):
+    def startRow(self, row):
         """
         Начало строки.
         """
-        height_row = self.getRowHeight(Row_)
+        height_row = self.getRowHeight(row)
         self.startElementLevel('Row', {'ss:Height': str(height_row)})
         self._idx_set = False       # Сбросить флаг установки индекса
         self.cell_idx = 1
@@ -696,16 +696,16 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         else:
             style_idx = self.getStyle(Cell_)
             if style_idx is not None:
-                style_id = self._styles[style_idx]['id']
+                style_id = self._styles[style_idx]['style_id']
             else:
                 style_id = 'Default'
             return style_id
         
-    def saveCell(self, Row_, Col_, Cell_, Sheet_=None):
+    def saveCell(self, row, column, Cell_, Sheet_=None):
         """
         Записать ячейку.
-        @param Row_: НОмер строки.
-        @param Col_: Номер колонки.
+        @param row: НОмер строки.
+        @param column: Номер колонки.
         @param Cell_: Атрибуты ячейки.
         """
         if Cell_ is None:
@@ -728,21 +728,21 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
 
         # Объединение ячеек
         if Cell_['merge_col'] > 1:
-            cell_attr['ss:MergeAcross'] = str(Cell_['merge_col']-1)
+            cell_attr['ss:merge_across'] = str(Cell_['merge_col']-1)
             # Обработать верхнюю строку области объединения
-            self._setCellMergeAcross(Row_, Col_, Cell_['merge_col'], Sheet_)
+            self._setCellmerge_across(row, column, Cell_['merge_col'], Sheet_)
             if Cell_['merge_row'] > 1:
                 # Обработать дополнительную область объединения
-                self._setCellMerge(Row_, Col_, Cell_['merge_col'], Cell_['merge_row'], Sheet_)
+                self._setCellMerge(row, column, Cell_['merge_col'], Cell_['merge_row'], Sheet_)
             self._idx_set = False   # Сбросить флаг установки индекса
         # ВНИМАНИЕ!!! Здесь надо увеличивать индекс на 1
         # потому что в Excel индексирование начинается с 1 !!!
-        self.cell_idx = Col_+1
+        self.cell_idx = column+1
     
         if Cell_['merge_row'] > 1:
             cell_attr['ss:MergeDown'] = str(Cell_['merge_row']-1)
             # Обработать левый столбец области объединения
-            self._setCellMergeDown(Row_, Col_, Cell_['merge_row'], Sheet_)
+            self._setCellMergeDown(row, column, Cell_['merge_row'], Sheet_)
 
         # Стиль
         cell_attr['ss:StyleID'] = self._saveCellStyleID(Cell_)
@@ -757,16 +757,16 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
 
         self.endElement('Cell')
         
-    def _getCellValue(self, Value_):
+    def _getCellValue(self, value):
         """
         Подготовить значение для записи в файл.
         """
-        if self._getCellType(Value_) == 'Number':
+        if self._getCellType(value) == 'Number':
             # Это число
-            value = Value_.strip()
+            value = value.strip()
         else:
             # Это не число
-            value = Value_
+            value = value
 
         if not isinstance(value, str):
             try:
@@ -778,67 +778,67 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
             
         return value
 
-    def _getCellType(self, Value_):
+    def _getCellType(self, value):
         """
         Тип ячейки.
         """
         try:
             # Это число
-            float(Value_)
+            float(value)
             return 'Number'
         except:
             # Это не число
             return 'String'
 
-    def _setCellMergeAcross(self, Row_, Col_, MergeAcross_, Sheet_):
+    def _setCellmerge_across(self, row, column, merge_across_, Sheet_):
         """
         Сбросить все ячейки, которые попадают в горизонтальную зону объединения.
-        @param Row_: НОмер строки.
-        @param Col_: Номер колонки.
-        @param MergeAcross_: Количество ячеек, объединенных с текущей.
+        @param row: НОмер строки.
+        @param column: Номер колонки.
+        @param merge_across_: Количество ячеек, объединенных с текущей.
         @param Sheet_: Структура листа.
         """
-        for i in range(1, MergeAcross_):
+        for i in range(1, merge_across_):
             try:
-                cell = Sheet_[Row_-1][Col_+i-1]
+                cell = Sheet_[row-1][column+i-1]
             except IndexError:
                 continue
             if cell and (not cell['value']):
-                Sheet_[Row_-1][Col_+i-1]['hidden'] = True
+                Sheet_[row-1][column+i-1]['hidden'] = True
         return Sheet_
 
-    def _setCellMergeDown(self, Row_, Col_, MergeDown_, Sheet_):
+    def _setCellMergeDown(self, row, column, merge_down, Sheet_):
         """
         Сбросить все ячейки, которые попадают в вертикальную зону объединения.
-        @param Row_: НОмер строки.
-        @param Col_: Номер колонки.
-        @param MergeDown_: Количество ячеек, объединенных с текущей.
+        @param row: НОмер строки.
+        @param column: Номер колонки.
+        @param merge_down: Количество ячеек, объединенных с текущей.
         @param Sheet_: Структура листа.
         """
-        for i in range(1, MergeDown_):
+        for i in range(1, merge_down):
             try:
-                cell = Sheet_[Row_+i-1][Col_-1]
+                cell = Sheet_[row+i-1][column-1]
             except IndexError:
                 continue
             if cell and (not cell['value']):
-                Sheet_[Row_+i-1][Col_-1]['hidden'] = True
+                Sheet_[row+i-1][column-1]['hidden'] = True
         return Sheet_
 
-    def _setCellMerge(self, Row_, Col_, MergeAcross_, MergeDown_, Sheet_):
+    def _setCellMerge(self, row, column, merge_across_, merge_down, Sheet_):
         """
         Сбросить все ячейки, которые попадают в зону объединения.
-        @param Row_: НОмер строки.
-        @param Col_: Номер колонки.
-        @param MergeAcross_: Количество ячеек, объединенных с текущей.
-        @param MergeDown_: Количество ячеек, объединенных с текущей.
+        @param row: НОмер строки.
+        @param column: Номер колонки.
+        @param merge_across_: Количество ячеек, объединенных с текущей.
+        @param merge_down: Количество ячеек, объединенных с текущей.
         @param Sheet_: Структура листа.
         """
-        for x in range(1, MergeAcross_):
-            for y in range(1, MergeDown_):
+        for x in range(1, merge_across_):
+            for y in range(1, merge_down):
                 try:
-                    cell = Sheet_[Row_+y-1][Col_+x-1]
+                    cell = Sheet_[row+y-1][column+x-1]
                 except IndexError:
                     continue
                 if cell is not None and (not cell['value']):
-                    Sheet_[Row_+y-1][Col_+x-1]['hidden'] = True
+                    Sheet_[row+y-1][column+x-1]['hidden'] = True
         return Sheet_

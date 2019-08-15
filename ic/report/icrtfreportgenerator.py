@@ -252,19 +252,19 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                     Data_['__loop__'][loop_name] = loop_body
         return Data_
 
-    def _predGenerateVar(self, DataVar_, Value_=None):
+    def _predGenerateVar(self, DataVar_, value=None):
         """
         Предобработка словаря переменных.
         @param DataVar_: Словарь переменных.
-        @param Value_: Текущее обработываемое значение.
+        @param value: Текущее обработываемое значение.
         """
-        if Value_ is None:
+        if value is None:
             for name, value in DataVar_.items():
                 DataVar_[name] = self._predGenerateVar(DataVar_, str(value))
             return DataVar_
         else:
             # Сначала заменить перевод каретки
-            value = Value_.replace('\r\n', '\n').strip()
+            value = value.replace('\r\n', '\n').strip()
             # Затем распарсить
             parsed = self._funcStrParse(value)
             values = []

@@ -92,10 +92,10 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # Открыть excel в режиме просмотра
             self.PreviewExcel(xml_rep_file_name)
             
-    def PreviewExcel(self, XMLFileName_):
+    def PreviewExcel(self, xml_filename):
         """
         Открыть excel  в режиме предварительного просмотра.
-        @param XMLFileName_: Имя xml файла, содержащего сгенерированный отчет.
+        @param xml_filename: Имя xml файла, содержащего сгенерированный отчет.
         """
         try:
             # Установить связь с Excel
@@ -105,7 +105,7 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # Закрыть все книги
             excel_app.Workbooks.Close()
             # Открыть
-            rep_tmpl_book = excel_app.Workbooks.Open(XMLFileName_)
+            rep_tmpl_book = excel_app.Workbooks.Open(xml_filename)
             # Показать Excel
             excel_app.Visible = 1
             
@@ -126,10 +126,10 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # Открыть печать в excel
             self.PrintExcel(xml_rep_file_name)
 
-    def PrintExcel(self, XMLFileName_):
+    def PrintExcel(self, xml_filename):
         """
         Печать отчета с помощью excel.
-        @param XMLFileName_: Имя xml файла, содержащего сгенерированный отчет.
+        @param xml_filename: Имя xml файла, содержащего сгенерированный отчет.
         """
         try:
             # Установить связь с Excel
@@ -139,7 +139,7 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # Закрыть все книги
             excel_app.Workbooks.Close()
             # Открыть
-            rep_tmpl_book = excel_app.Workbooks.Open(XMLFileName_)
+            rep_tmpl_book = excel_app.Workbooks.Open(xml_filename)
             # Показать Excel
             excel_app.Visible = 1
             return True
@@ -165,10 +165,10 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # Excel
             self.OpenExcel(xml_rep_file_name)
 
-    def OpenExcel(self, XMLFileName_):
+    def OpenExcel(self, xml_filename):
         """
         Открыть excel.
-        @param XMLFileName_: Имя xml файла, содержащего сгенерированный отчет.
+        @param xml_filename: Имя xml файла, содержащего сгенерированный отчет.
         """
         try:
             # Установить связь с Excel
@@ -178,7 +178,7 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             # Закрыть все книги
             excel_app.Workbooks.Close()
             # Открыть
-            rep_tmpl_book = excel_app.Workbooks.Open(XMLFileName_)
+            rep_tmpl_book = excel_app.Workbooks.Open(xml_filename)
             # Показать Excel
             excel_app.Visible = 1
             return True

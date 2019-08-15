@@ -303,8 +303,8 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             if is_virtual_excel:
                 log.info(u'Конвертация отчета <%s> в файл <%s>' % (xml_rep_file_name, rep_file_name))
                 v_excel = icexcel.icVExcel()
-                v_excel.Load(xml_rep_file_name)
-                v_excel.SaveAs(rep_file_name)
+                v_excel.load(xml_rep_file_name)
+                v_excel.saveAs(rep_file_name)
                 # Здесь дописать переконвертацию
             else:
                 # ВНИМАНИЕ! UNOCONV транслирует не все стили и атрибуты ячеек

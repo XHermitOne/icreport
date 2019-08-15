@@ -34,7 +34,7 @@ http://msdn.microsoft.com/en-us/library/aa140066.aspx
 [python]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 { 'name':'Font',
-'FontName':'Times New Roman',
+'FontName':'Times createNew Roman',
 'CharSet':204,
 'Family':'Roman',
 'Bold':1}
@@ -43,7 +43,7 @@ http://msdn.microsoft.com/en-us/library/aa140066.aspx
 Соответстввует XML тегу:
 
 ----------------------------------------------------------------------------------
-<Font ss:FontName="Times New Roman" x:CharSet="204" x:Family="Roman" ss:Bold="1"/>
+<Font ss:FontName="Times createNew Roman" x:CharSet="204" x:Family="Roman" ss:Bold="1"/>
 ----------------------------------------------------------------------------------
 
 [NOTE]

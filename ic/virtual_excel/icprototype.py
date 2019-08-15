@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__version__ = (0, 0, 1, 2)
+__version__ = (0, 1, 1, 2)
 
 PROTOTYPE_ATTR_NAMES = ('name', 'children', 'crc', 'value')
 
@@ -40,18 +40,18 @@ class icVPrototype(object):
         """
         return self._attributes
 
-    def set_attributes(self, Data_={}):
+    def set_attributes(self, data_attr={}):
         """
         Данные об объекте.
         """
-        self._attributes = Data_
+        self._attributes = data_attr
         return self._attributes
 
-    def update_attributes(self, Data_={}):
+    def update_attributes(self, data_attr={}):
         """
         Данные об объекте.
         """
-        self._attributes.update(Data_)
+        self._attributes.update(data_attr)
         return self._attributes
 
     def create(self):
@@ -71,16 +71,16 @@ class icVPrototype(object):
         self._parent.set_attributes(attrs)
         return self._attributes
 
-    def get_parent_by_name(self, Name_):
+    def get_parent_by_name(self, name):
         """
         Поиск родительского объекта по имени.
         """
         if self._parent is None:
             return None
-        elif 'name' in self._parent._attributes and self._parent._attributes['name'] == Name_:
+        elif 'name' in self._parent._attributes and self._parent._attributes['name'] == name:
             return self._parent
         else:
-            return self._parent.get_parent_by_name(Name_)
+            return self._parent.get_parent_by_name(name)
 
     def clear(self):
         """
@@ -95,20 +95,20 @@ class icVPrototype(object):
         """
         pass
 
-    def paste(self, Paste_, To_=None):
+    def paste(self, paste, to=None):
         """
         Вставить копию атрибутов Past_ объекта внутрь текущего объекта
-        по адресу To_. Если To_ None, тогда происходит замена.
+        по адресу to. Если to None, тогда происходит замена.
         """
         pass
 
-    def findChildAttrsByName(self, sName=None):
+    def findChildAttrsByName(self, name=None):
         """
         Поиск атрибутов дочернего элемента по имени.
-        @param sName: Имя дочернего элемента.
+        @param name: Имя дочернего элемента.
         @return: Словарь атрибутов дочернего элемента или None, если не найден.
         """
-        children = [child for child in self._attributes['children'] if child['name'] == sName]
+        children = [child for child in self._attributes['children'] if child['name'] == name]
         if children:
             return children[0]
         return None     
@@ -128,17 +128,16 @@ class icVIndexedPrototype(icVPrototype):
         """
         icVPrototype.__init__(self, parent, *args, **kwargs)
 
-    def _maxElementIdx(self, ElementName_='', Elements_=None):
+    def _maxElementIdx(self, element_name='', elements=None):
         """
         Максимальный индекс указанного элемента в родительском.
         ВНИМАНИЕ! В этой функции индексация начинается с 0.
         """
         cur_idx = -1
-        if Elements_ is None:
+        if elements is None:
             elements = [element for element in self._parent.get_attributes()['children']
-                        if element['name'] == ElementName_]
-        else:
-            elements = Elements_
+                        if element['name'] == element_name]
+
         if elements:
             for i, element_attr in enumerate(elements):
                 if 'Index' in element_attr:
@@ -151,7 +150,7 @@ class icVIndexedPrototype(icVPrototype):
                         cur_idx += 1
         return cur_idx
 
-    def _findElementIdxAttr(self, Idx_, ElementName_):
+    def _findElementIdxAttr(self, idx, element_name):
         """
         Найти атрибуты указанного элемента в родительском объекте по индексу.
         ВНИМАНИЕ! В этой функции индексация начинается с 0.
@@ -162,7 +161,7 @@ class icVIndexedPrototype(icVPrototype):
         ret_attr = None
         flag = True
         for i, element_attr in enumerate(self._parent.get_attributes()['children']):
-            if element_attr['name'] == ElementName_:
+            if element_attr['name'] == element_name:
                 if 'Index' in element_attr:
                     cur_idx = int(element_attr['Index'])
                 else:
@@ -172,47 +171,47 @@ class icVIndexedPrototype(icVPrototype):
 
                 # Учет объединенных ячеек
 
-                if Idx_ == cur_idx and flag:
+                if idx == cur_idx and flag:
                     ret_i = i
                     ret_attr = element_attr
                     flag = False
-                elif Idx_ < cur_idx and flag:
+                elif idx < cur_idx and flag:
                     ret_i = i
                     ret_attr = None
                     flag = False
 
         return indexes, ret_i, ret_attr
 
-    def _reIndexElement(self, ElementName_, Element_, Index_, i_):
+    def _reIndexElement(self, element_name, element, index, idx):
         """
         Переиндексирование элемента в родительском объекте.
         """
-        if i_ > 0:
+        if idx > 0:
             # Предыдущие элементы
-            prev_elements = [element for element in self._parent.get_attributes()['children'][:i_-1]
-                             if element['name'] == ElementName_]
+            prev_elements = [element for element in self._parent.get_attributes()['children'][:idx - 1]
+                             if element['name'] == element_name]
             if prev_elements:
-                max_idx = self._maxElementIdx(ElementName_, prev_elements)
-                if Index_ > (max_idx+1):
-                    Element_.setIndex(Index_)
-                return Element_
-        if Index_ > 1:
-            Element_.setIndex(Index_)
-        return Element_
+                max_idx = self._maxElementIdx(element_name, prev_elements)
+                if index > (max_idx + 1):
+                    element.setIndex(index)
+                return element
+        if index > 1:
+            element.setIndex(index)
+        return element
 
-    def _reIndexAllElements(self, ElementNames_=(), OffsetIndex_=0):
+    def _reIndexAllElements(self, element_names=(), offset_index=0):
         """
         Переиндексирование всех элементов в родительском объекте.
         """
         all_elements = []
         for i, element_attr in enumerate(self._parent.get_attributes()['children']):
-            if element_attr['name'] in ElementNames_:
+            if element_attr['name'] in element_names:
                 if 'Index' in element_attr:
                     cur_idx = int(element_attr['Index'])
                 else:
                     cur_idx += 1
                 if 'Index' in element_attr:
-                    element_attr['Index'] = cur_idx-OffsetIndex_
+                    element_attr['Index'] = cur_idx - offset_index
             all_elements.append(element_attr)
         return all_elements
 
@@ -222,112 +221,112 @@ class icVIndexedPrototype(icVPrototype):
         """
         pass
 
-    def setIndex(self, Index_):
+    def setIndex(self, index):
         """
         Индекс объекта в родительском объекте.
         """
-        self._attributes['Index'] = str(Index_)
+        self._attributes['Index'] = str(index)
 
-    def _delElementIdxAttr(self, Idx_, ElementName_):
+    def _delElementIdxAttr(self, idx, element_name):
         """
         Удалить указанный элемент из родительском объекта по индексу.
         ВНИМАНИЕ! В этой функции индексация начинается с 0.
         @return: Возвращает результат выполнения операции.
         """
-        Idx_ += 1   # Проверка на совпадение индексов все равно делается в понятиях Excel т.е. начинается с 1
+        idx += 1   # Проверка на совпадение индексов все равно делается в понятиях Excel т.е. начинается с 1
         cur_idx = 0
         children_count = len(self._parent.get_attributes()['children'])
         for i,element_attr in enumerate(self._parent.get_attributes()['children']):
-            if element_attr['name'] == ElementName_:
+            if element_attr['name'] == element_name:
 
                 if 'Index' in element_attr:
                     cur_idx = int(element_attr['Index'])
                 else:
                     cur_idx += 1
 
-                if Idx_ == cur_idx:
+                if idx == cur_idx:
                     del self._parent.get_attributes()['children'][i]
-                    self._parent.get_attributes()['children'] = self._reIndexAfterDel(ElementName_, i)
+                    self._parent.get_attributes()['children'] = self._reIndexAfterDel(element_name, i)
                     return True
 
-                elif Idx_ < cur_idx:
+                elif idx < cur_idx:
                     # Переиндексировать после удаления
-                    self._reIndexAfterDel(ElementName_, i)
+                    self._reIndexAfterDel(element_name, i)
                     return True
         return False
 
-    def _reIndexAfterDel(self, ElementName_, Index_):
+    def _reIndexAfterDel(self, element_name, index):
         """
         Переиндексировать после удаления.
         """
         children = self._parent.get_attributes()['children']
-        for element_attr in children[Index_:]:
-            if element_attr['name'] == ElementName_:
+        for element_attr in children[index:]:
+            if element_attr['name'] == element_name:
                 if 'Index' in element_attr:
                     element_attr['Index'] = int(element_attr['Index'])-1
         return children
 
-    def _delElementIdxAttrChild(self, Idx_, ElementName_, IsReIndex_=True):
+    def _delElementIdxAttrChild(self, idx, element_name, bIsReIndex=True):
         """
         Удалить дочерний указанный элемент по индексу.
         ВНИМАНИЕ! В этой функции индексация начинается с 0.
         @return: Возвращает результат выполнения операции.
         """
-        Idx_ += 1   # Проверка на совпадение индексов все равно делается в понятиях Excel т.е. начинается с 1
+        idx += 1   # Проверка на совпадение индексов все равно делается в понятиях Excel т.е. начинается с 1
         cur_idx = 0
         delta = 1
         children_count = len(self.get_attributes()['children'])
         for i, element_attr in enumerate(self.get_attributes()['children']):
-            if element_attr['name'] == ElementName_:
+            if element_attr['name'] == element_name:
 
                 if 'Index' in element_attr:
                     cur_idx = int(element_attr['Index'])
                 else:
                     cur_idx += 1
 
-                if Idx_ == cur_idx:
+                if idx == cur_idx:
                     element = self.get_attributes()['children'][i]
-                    if 'MergeAcross' in element:
-                        delta += int(element['MergeAcross'])
+                    if 'merge_across' in element:
+                        delta += int(element['merge_across'])
 
-                    if not IsReIndex_:
-                        self.get_attributes()['children'] = self._reIndexBeforeClearChild(ElementName_, i, delta)
+                    if not bIsReIndex:
+                        self.get_attributes()['children'] = self._reIndexBeforeClearChild(element_name, i, delta)
                     del self.get_attributes()['children'][i]
-                    if IsReIndex_:
-                        self.get_attributes()['children'] = self._reIndexAfterDelChild(ElementName_, i, delta)
+                    if bIsReIndex:
+                        self.get_attributes()['children'] = self._reIndexAfterDelChild(element_name, i, delta)
                     return True
 
-                elif Idx_ < cur_idx:
+                elif idx < cur_idx:
                     # Переиндексировать после удаления
-                    if IsReIndex_:
-                        self._reIndexAfterDelChild(ElementName_, i, delta)
+                    if bIsReIndex:
+                        self._reIndexAfterDelChild(element_name, i, delta)
                     return True
         return False
 
-    def _reIndexAfterDelChild(self, ElementName_, Index_, Delta_=1):
+    def _reIndexAfterDelChild(self, element_name, index, delta=1):
         """
         Переиндексировать дочерние элементы после удаления.
         """
         children = self.get_attributes()['children']
-        for element_attr in children[Index_:]:
-            if element_attr['name'] == ElementName_:
+        for element_attr in children[index:]:
+            if element_attr['name'] == element_name:
                 if 'Index' in element_attr:
-                    element_attr['Index'] = int(element_attr['Index'])-Delta_
+                    element_attr['Index'] = int(element_attr['Index']) - delta
         return children
 
-    def _reIndexBeforeClearChild(self, ElementName_, Index_, Delta_=1):
+    def _reIndexBeforeClearChild(self, element_name, index, delta=1):
         """
         Переиндексировать дочерние элементы до очистки элемента для объединения.
         """
         children = self.get_attributes()['children']
-        for element_attr in children[Index_+1:]:
-            if element_attr['name'] == ElementName_:
+        for element_attr in children[index + 1:]:
+            if element_attr['name'] == element_name:
                 if 'Index' not in element_attr:
-                    element_attr['Index'] = self._maxElementIdx(ElementName_, children[:Index_+2])+Delta_
+                    element_attr['Index'] = self._maxElementIdx(element_name, children[:index + 2]) + delta
                 break
         return children
 
-    def _findElementIdxAttrChild(self, Idx_, ElementName_):
+    def _findElementIdxAttrChild(self, idx, element_name):
         """
         Найти атрибуты дочернего элемента по индексу.
         ВНИМАНИЕ! В этой функции индексация начинается с 0.
@@ -338,7 +337,7 @@ class icVIndexedPrototype(icVPrototype):
         ret_attr = None
         flag = True
         for i, element_attr in enumerate(self.get_attributes()['children']):
-            if element_attr['name'] == ElementName_:
+            if element_attr['name'] == element_name:
                 if 'Index' in element_attr:
                     cur_idx = int(element_attr['Index'])
                 else:
@@ -348,11 +347,11 @@ class icVIndexedPrototype(icVPrototype):
 
                 indexes.append(cur_idx)
 
-                if Idx_ == cur_idx and flag:
+                if idx == cur_idx and flag:
                     ret_i = i
                     ret_attr = element_attr
                     flag = False
-                elif Idx_ < cur_idx and flag:
+                elif idx < cur_idx and flag:
                     ret_i = i
                     ret_attr = None
                     flag = False

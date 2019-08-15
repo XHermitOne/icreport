@@ -6,7 +6,7 @@ import copy
 from . import icprototype
 from . import iccell
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 RANGE_ROW_IDX = 0
 RANGE_COL_IDX = 1
@@ -39,24 +39,24 @@ class icVRange(icprototype.icVPrototype):
         # Базисная строка
         self._basis_row = None
 
-    def setAddress(self, Row_, Col_, Height_, Width_):
+    def setAddress(self, row, column, height, width):
         """
         Установить адрес.
         """
-        self.row = max(Row_, 1)
-        self.col = max(Col_, 1)
-        self.height = max(Height_, 1)
-        self.width = max(Width_, 1)
+        self.row = max(row, 1)
+        self.col = max(column, 1)
+        self.height = max(height, 1)
+        self.width = max(width, 1)
         self._height_1 = self.height-1
         self._width_1 = self.width-1
         self._address = [self.row, self.col, self.height, self.width]
         return self._address
 
-    def setValues(self, Values_=None):
+    def setValues(self, values=None):
         """
         Установить значения в диапазоне.
         """
-        for i_row, row in enumerate(Values_):
+        for i_row, row in enumerate(values):
             if i_row < self.height:
                 for i_col, col in enumerate(row):
                     if i_col < self.width:
@@ -249,36 +249,36 @@ class icVRange(icprototype.icVPrototype):
                     cell.setStyle(**style_attrs)
         return True
 
-    def _limitOffset(self, RowOffset_, ColOffset_):
+    def _limitOffset(self, offset_row, offset_col):
         """
         Ограничение смещения.
         """
-        row_offset = max(min(RowOffset_, 0), self._height_1)
-        col_offset = max(min(ColOffset_, 0), self._width_1)
+        row_offset = max(min(offset_row, 0), self._height_1)
+        col_offset = max(min(offset_col, 0), self._width_1)
         return row_offset, col_offset
 
-    def spanColumn(self, Step_=1):
+    def spanColumn(self, step=1):
         """
         Взять ячейку в диапазоне по смещению колонки.
         """
         self._cur_span_offset = self._limitOffset(self._cur_span_offset[0],
-                                                  self._cur_span_offset[1]+Step_)
+                                                  self._cur_span_offset[1] + step)
         return self.getCellOffset(*self._cur_span_offset)
 
-    def spanRow(self, Step_=1):
+    def spanRow(self, step=1):
         """
         Взять ячейку в диапазоне по смещению строки.
         """
-        self._cur_span_offset = self._limitOffset(self._cur_span_offset[0]+Step_,
+        self._cur_span_offset = self._limitOffset(self._cur_span_offset[0] + step,
                                                   self._cur_span_offset[1])
         return self.getCellOffset(*self._cur_span_offset)
 
-    def getCellOffset(self, RowOffset_=0, ColOffset_=0):
+    def getCellOffset(self, offset_row=0, offset_column=0):
         """
         Получить ячейку в диапазоне по относительным координатам диапазона.
         """
         # Ограничение смещения
-        row_offset, col_offset = self._limitOffset(RowOffset_, ColOffset_)
+        row_offset, col_offset = self._limitOffset(offset_row, offset_column)
         return self._parent.getCell(self.row+row_offset, self.col+col_offset)
 
     def _getBasisRow(self):
@@ -330,40 +330,40 @@ class icVColumn(icprototype.icVIndexedPrototype, icVRange):
         icVRange.__init__(self, parent, *args, **kwargs)
         self._attributes = {'name': 'Column', 'children': []}
 
-    def setCaption(self, Caption_):
+    def setCaption(self, caption):
         """
         Заголовок колонки.
         """
-        self._attributes['Caption'] = Caption_
+        self._attributes['Caption'] = caption
 
-    def setWidth(self, Width_):
+    def setWidth(self, width):
         """
         Ширина колонки.
         """
-        self._attributes['Width'] = str(Width_)
+        self._attributes['Width'] = str(width)
 
-    def setCharacterWidth(self, CharacterCount_, Font_=None):
+    def setCharacterWidth(self, character_count, font=None):
         """
         Установка ширины колонки по количеству символов в колонке.
-        @param CharacterCount_: Количество символов в колонке.
-        @param Font_: Указание шрифта, если не указано то
+        @param character_count: Количество символов в колонке.
+        @param font: Указание шрифта, если не указано то
         берется Arial размера 10.
         """
-        width = self._calcWidthByCharacter(CharacterCount_, Font_)
+        width = self._calcWidthByCharacter(character_count, font)
         self.setWidth(width)
 
-    def _calcWidthByCharacter(self, CharacterCount_, Font_=None):
+    def _calcWidthByCharacter(self, character_count, font=None):
         """
         Функция преобразования количества символов в колонке в ширину.
         """
-        return int(CharacterCount_*6)
+        return int(character_count * 6)
 
-    def setHidden(self, Hidden_=True):
+    def setHidden(self, bHidden=True):
         """
         Скрытие колонки.
         """
-        if Hidden_:
-            self._attributes['Hidden'] = str(int(Hidden_))
+        if bHidden:
+            self._attributes['Hidden'] = str(int(bHidden))
         else:
             if 'Hidden' in self._attributes:
                 del self._attributes['Hidden']
@@ -395,24 +395,24 @@ class icVRow(icprototype.icVIndexedPrototype, icVRange):
         # Базисная ячейка
         self._basis_cell = None
 
-#     def setIndex(self,Index_):
+#     def setIndex(self,index):
 #         """
 #         Индекс строки в таблице.
 #         """
-#         self._attributes['Index']=text(Index_)
+#         self._attributes['Index']=text(index)
 
-    def setHeight(self, Height_):
+    def setHeight(self, height):
         """
         Высота строки.
         """
-        self._attributes['Height'] = str(Height_)
+        self._attributes['Height'] = str(height)
 
-    def setHidden(self, Hidden_=True):
+    def setHidden(self, bHidden=True):
         """
         Скрытие строки.
         """
-        if Hidden_:
-            self._attributes['Hidden'] = str(int(Hidden_))
+        if bHidden:
+            self._attributes['Hidden'] = str(int(bHidden))
         else:
             if 'Hidden' in self._attributes:
                 del self._attributes['Hidden']
@@ -425,19 +425,19 @@ class icVRow(icprototype.icVIndexedPrototype, icVRange):
         attrs = cell.create()
         return cell
 
-    def insertCellIdx(self, Cell_, Idx_):
+    def insertCellIdx(self, cell, idx):
         """
         Вставить ячейку в строку по индексу.
         """
-        indexes, cell_attr = self._findCellIdxAttr(Idx_)
-        ins_i = max(0, len([i for i in indexes if i < Idx_]))
+        indexes, cell_attr = self._findCellIdxAttr(idx)
+        ins_i = max(0, len([i for i in indexes if i < idx]))
 
         if cell_attr is None:
-            Cell_.setIndex(Idx_)
-        self._attributes['children'].insert(ins_i, Cell_.get_attributes())
-        return Cell_
+            cell.setIndex(idx)
+        self._attributes['children'].insert(ins_i, cell.get_attributes())
+        return cell
 
-    def createCellIdx(self, Idx_):
+    def createCellIdx(self, idx):
         """
         Создать/Добавить в строку ячейку.
         """
@@ -445,7 +445,7 @@ class icVRow(icprototype.icVIndexedPrototype, icVRange):
         self._attributes['children'] = self._attributes['children'][:-1]
 
         # Переместить ячейку по индексу
-        cell = self.insertCellIdx(cell, Idx_)
+        cell = self.insertCellIdx(cell, idx)
         return cell
 
     def _getBasisCell(self):
@@ -456,32 +456,32 @@ class icVRow(icprototype.icVIndexedPrototype, icVRange):
             self._basis_cell = iccell.icVCell(self)
         return self._basis_cell
 
-    def _findCellIdxAttr(self, Idx_):
+    def _findCellIdxAttr(self, idx):
         """
         Найти атрибуты ячеки в строке по индексу.
         ВНИМАНИЕ! В этой функции индексация начинается с 0.
         """
-        return self._getBasisCell()._findElementIdxAttr(Idx_, 'Cell')
+        return self._getBasisCell()._findElementIdxAttr(idx, 'Cell')
 
-    def getCellIdx(self, Idx_):
+    def getCellIdx(self, idx):
         """
         Получить ячейку из строки по номеру.
         """
-        indexes, cell_attr = self._findCellIdxAttr(Idx_)
+        indexes, cell_attr = self._findCellIdxAttr(idx)
 
         if cell_attr is None:
-            cell = self.createCellIdx(Idx_)
+            cell = self.createCellIdx(idx)
         else:
             cell = iccell.icVCell(self)
             cell.set_attributes(cell_attr)
         return cell
 
-    def delCell(self, Idx_):
+    def delCell(self, idx):
         """
         Удалить ячейку из строки.
         """
-        cell = self.getCellIdx(Idx_-1)
+        cell = self.getCellIdx(idx - 1)
         if cell:
             # Удалить ячейку из строки
-            return cell._delElementIdxAttr(Idx_-1, 'Cell')
+            return cell._delElementIdxAttr(idx - 1, 'Cell')
         return False

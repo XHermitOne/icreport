@@ -229,7 +229,7 @@ class icReportGeneratorSystem:
             return True
         except:
             # Вывести сообщение об ошибке в лог
-            log.fatal(u'New report template by LibreOffice Calc')
+            log.fatal(u'createNew report template by LibreOffice Calc')
 
     def Edit(self, report=None):
         """

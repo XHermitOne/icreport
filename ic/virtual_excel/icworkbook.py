@@ -8,7 +8,7 @@ from . import icprototype
 from . import icworksheet
 from . import icstyle
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 
 class icVWorkbook(icprototype.icVPrototype):
@@ -29,25 +29,25 @@ class icVWorkbook(icprototype.icVPrototype):
         # Управление стилями
         self.styles = None
 
-    def Load(self, Name_):
+    def load(self, name):
         """
         Загрузить.
         """
-        self.Name=os.path.abspath(Name_.strip())
-        return self._parent.Load(Name_)
+        self.Name=os.path.abspath(name.strip())
+        return self._parent.load(name)
 
-    def Save(self):
+    def save(self):
         """
         Сохранить книгу.
         """
-        return self._parent.Save()
+        return self._parent.save()
 
-    def SaveAs(self, Name_):
+    def saveAs(self, name):
         """
         Сохранить как...
         """
-        self.Name = os.path.abspath(Name_.strip())
-        return self._parent.SaveAs(self.Name)
+        self.Name = os.path.abspath(name.strip())
+        return self._parent.saveAs(self.Name)
     
     def get_worksheet_dict(self):
         """
@@ -84,37 +84,37 @@ class icVWorkbook(icprototype.icVPrototype):
         self.init_worksheet_dict()
         return work_sheet
 
-    def _find_worksheet_attr_name(self, Worksheets_, Name_):
+    def _find_worksheet_attr_name(self, worksheets, name):
         """
         Найти лист в списке по имени.
         """
         work_sheet_attr = None
 
-        if not isinstance(Name_, str):
-            Name_ = str(Name_)  # 'utf-8')
+        if not isinstance(name, str):
+            name = str(name)  # 'utf-8')
             
-        for sheet in Worksheets_:
+        for sheet in worksheets:
             if not isinstance(sheet['Name'], str):
-                name = str(sheet['Name'])   #  'utf-8')
+                sheet_name = str(sheet['Name'])   #  'utf-8')
             else:
-                name = sheet['Name']
-            if name == Name_:
+                sheet_name = sheet['Name']
+            if sheet_name == name:
                 work_sheet_attr = sheet
                 break
         return work_sheet_attr
             
-    def findWorksheet(self, Name_):
+    def findWorksheet(self, name):
         """
         Поиск листа по имени.
         """
         work_sheet = None
-        if Name_ in self._worksheet_dict:
+        if name in self._worksheet_dict:
             work_sheet = icworksheet.icVWorksheet(self)
-            work_sheet.set_attributes(self._worksheet_dict[Name_])
+            work_sheet.set_attributes(self._worksheet_dict[name])
         else:
             # Попробовать поискать в списке
             find_worksheet = self._find_worksheet_attr_name([element for element in self._attributes['children'] \
-                                                             if element['name'] == 'Worksheet'], Name_)
+                                                             if element['name'] == 'Worksheet'], name)
             if find_worksheet:
                 work_sheet = icworksheet.icVWorksheet(self)
                 work_sheet.set_attributes(find_worksheet)
@@ -122,13 +122,13 @@ class icVWorkbook(icprototype.icVPrototype):
                 self.init_worksheet_dict()
         return work_sheet
 
-    def getWorksheetIdx(self, Idx_=0):
+    def getWorksheetIdx(self, idx=0):
         """
         Лист по индексу.
         """    
         work_sheets = [element for element in self._attributes['children'] if element['name'] == 'Worksheet']
         try:
-            worksheet_attr = work_sheets[Idx_]
+            worksheet_attr = work_sheets[idx]
             work_sheet = icworksheet.icVWorksheet(self)
             work_sheet.set_attributes(worksheet_attr)
             return work_sheet

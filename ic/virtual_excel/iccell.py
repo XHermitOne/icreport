@@ -12,7 +12,7 @@ except ImportError:
     # Если Virtual Excel работает в окружении icServices
     from services.ic_std.log import log
 
-__version__ = (0, 1, 1, 1)
+__version__ = (0, 1, 1, 2)
 
 
 class icVCell(icprototype.icVIndexedPrototype):
@@ -72,22 +72,22 @@ class icVCell(icprototype.icVIndexedPrototype):
         data = self.getData()
         return data.getValue()
 
-    def isFormula(self, sValue):
+    def isFormula(self, value):
         """
         Проверка является ли значение формулой.
-        @param sValue: Проверяемое значение.
+        @param value: Проверяемое значение.
         """
-        return type(sValue) == str and bool(sValue) and sValue[0] == '='
+        return type(value) == str and bool(value) and value[0] == '='
     
-    def setValue(self, sValue, sType='String'):
+    def setValue(self, value, value_type='String'):
         """
         Записать значение в ячейку.
         """
-        if self.isFormula(sValue):
-            self.setFormulaR1C1(sValue)
+        if self.isFormula(value):
+            self.setFormulaR1C1(value)
         else:
             data = self.getData()
-            data.setValue(sValue, sType)
+            data.setValue(value, value_type)
 
     def setStyle(self, alignment=None,
                  borders=None, font=None, interior=None,
@@ -124,12 +124,12 @@ class icVCell(icprototype.icVIndexedPrototype):
             self._attributes['StyleID'] = style.get_attributes()['ID']
         return style
 
-    def setStyleID(self, StyleID_):
+    def setStyleID(self, style_id):
         """
         Установить идентификатор стиля для ячейки.
         """
-        if StyleID_:
-            self._attributes['StyleID'] = str(StyleID_)
+        if style_id:
+            self._attributes['StyleID'] = str(style_id)
 
     def getStyleID(self):
         """
@@ -181,37 +181,37 @@ class icVCell(icprototype.icVIndexedPrototype):
 
     A1_FORMAT = r'[a-zA-Z]{1,2}\d{1,5}'
 
-    def _A1Fmt2R1C1Fmt(self, Formula_):
+    def _A1Fmt2R1C1Fmt(self, formula):
         """
         Конвертация адресации ячеек из формата A1 в формат R1C1.
         """
-        parse_all = re.findall(self.A1_FORMAT, Formula_)
+        parse_all = re.findall(self.A1_FORMAT, formula)
         for replace_addr in parse_all:
             r1c1 = 'R%dC%d' % self._get_row_col_A1(replace_addr)
-            Formula_ = Formula_.replace(replace_addr, r1c1)
-        return Formula_
+            formula = formula.replace(replace_addr, r1c1)
+        return formula
 
-    def setFormulaR1C1(self, Formula_):
+    def setFormulaR1C1(self, formula):
         """
         Установить формулу в формате RC.
         """
-        self._attributes['Formula'] = self._A1Fmt2R1C1Fmt(Formula_)
+        self._attributes['Formula'] = self._A1Fmt2R1C1Fmt(formula)
 
-    def setMerge(self, Across_, Down_):
+    def setMerge(self, across, down):
         """
         Установить объединение ячеек.
         """
         # Удалить ячейки попавшие в зону объединения.
-        self._delMergeArreaCells(self._row_idx, self._col_idx, Down_, Across_)
+        self._delMergeArreaCells(self._row_idx, self._col_idx, down, across)
 
-        if Across_ > 0:
-            self._attributes['MergeAcross'] = str(Across_)
+        if across > 0:
+            self._attributes['merge_across'] = str(across)
         else:
-            if 'MergeAcross' in self._attributes:
-                del self._attributes['MergeAcross']
+            if 'merge_across' in self._attributes:
+                del self._attributes['merge_across']
 
-        if Down_ > 0:
-            self._attributes['MergeDown'] = str(Down_)
+        if down > 0:
+            self._attributes['MergeDown'] = str(down)
         else:
             if 'MergeDown' in self._attributes:
                 del self._attributes['MergeDown']
@@ -221,22 +221,22 @@ class icVCell(icprototype.icVIndexedPrototype):
         # table=self.get_parent_by_name('Table')
         # table._merge_cells=None
 
-    def _delMergeArreaCells(self, Row_, Col_, MergeDown_, MergeAcross_):
+    def _delMergeArreaCells(self, row, column, merge_down, merge_across):
         """
         Удалить ячейки попавшие в зону объединения.
-        @param Row_: Номер строки.
-        @param Col_: Номер колонки.
-        @param MergeDown_: Количество строк объединения.
-        @param MergeAcross_: Количество колонок объединения.
+        @param row: Номер строки.
+        @param column: Номер колонки.
+        @param merge_down: Количество строк объединения.
+        @param merge_across: Количество колонок объединения.
         """
         table = self.get_parent_by_name('Table')
-        for i_row in range(Row_, Row_+MergeDown_+1):
+        for i_row in range(row, row + merge_down + 1):
             row_obj = table.getRow(i_row)
-            for i_col in range(Col_, Col_+MergeAcross_+1):
-                if not (i_row == Row_ and i_col == Col_):
+            for i_col in range(column, column + merge_across + 1):
+                if not (i_row == row and i_col == column):
                     row_obj._delElementIdxAttrChild(i_col-1, 'Cell', False)
 
-    def _findElementIdxAttr(self, Idx_, ElementName_):
+    def _findElementIdxAttr(self, idx, element_name):
         """
         Найти атрибуты ячеки в строке по индексу.
         ВНИМАНИЕ! В этой функции индексация начинается с 0.
@@ -252,22 +252,22 @@ class icVCell(icprototype.icVIndexedPrototype):
             indexes.append(cur_idx)
 
             # Учет объединенных ячеек
-            if 'MergeAcross' in cell_attr:
-                cur_idx += int(cell_attr['MergeAcross'])
+            if 'merge_across' in cell_attr:
+                cur_idx += int(cell_attr['merge_across'])
 
-        if Idx_ in indexes:
+        if idx in indexes:
             # Ячейка с указанным индексом есть
-            return indexes, self._parent.get_attributes()['children'][indexes.index(Idx_)]
+            return indexes, self._parent.get_attributes()['children'][indexes.index(idx)]
         return indexes, None
 
-    def getOffset(self, OffsetRow_=0, OffsetCol_=0):
+    def getOffset(self, offset_row=0, offset_column=0):
         """
         Получить ячейку по смещению с учетом объединенных ячеек.
-        @param OffsetRow_: Смещение по строкам.
-        @param OffsetCol_: Смещение по колонкам.
+        @param offset_row: Смещение по строкам.
+        @param offset_column: Смещение по колонкам.
         @return: Возвращает объект ячейки по смещению или None в случае ошибки.
         """
-        if OffsetRow_ <= 0 and OffsetCol_ <= 0:
+        if offset_row <= 0 and offset_column <= 0:
             return self
         # Определение адреса новой ячейки
         cell_row = 1
@@ -277,15 +277,15 @@ class icVCell(icprototype.icVIndexedPrototype):
         if self._col_idx > 0:
             cell_col = self._col_idx
 
-        if OffsetRow_ > 0:
+        if offset_row > 0:
             if 'MergeDown' in self._attributes:
                 cell_row += int(self._attributes['MergeDown'])
-        if OffsetCol_ > 0:
-            if 'MergeAcross' in self._attributes:
-                cell_col += int(self._attributes['MergeAcross'])
+        if offset_column > 0:
+            if 'merge_across' in self._attributes:
+                cell_col += int(self._attributes['merge_across'])
 
-        cell_row += OffsetRow_
-        cell_col += OffsetCol_
+        cell_row += offset_row
+        cell_col += offset_column
 
         tab = self.get_parent_by_name('Table')
         if tab:
@@ -310,8 +310,8 @@ class icVCell(icprototype.icVIndexedPrototype):
         if 'MergeDown' in self._attributes:
             merge_down = int(self._attributes['MergeDown'])
         merge_across = 0
-        if 'MergeAcross' in self._attributes:
-            merge_across = int(self._attributes['MergeAcross'])
+        if 'merge_across' in self._attributes:
+            merge_across = int(self._attributes['merge_across'])
         return self._row_idx, self._col_idx, merge_down, merge_across
 
     def getNext(self):
@@ -320,12 +320,12 @@ class icVCell(icprototype.icVIndexedPrototype):
         """
         return self.getOffset(0, 1)
 
-    def set_xmlns(self, XMLNS_='http://www.w3.org/TR/REC-html40'):
+    def set_xmlns(self, xmlns='http://www.w3.org/TR/REC-html40'):
         """
         Установить способ форматирования текста в ячейке.
         """
         data = self.getData()
-        data.set_xmlns(XMLNS_)
+        data.set_xmlns(xmlns)
 
 
 DEFAULT_PERCENTAGE_TYPE = 'Percentage'
@@ -362,25 +362,25 @@ class icVData(icprototype.icVPrototype):
             (('%' in number_format['Format']) or ('Percent' in number_format['Format']))
         return analize_type or analize_style
     
-    def setValue(self, Value_, Type_='String'):
+    def setValue(self, value, value_type='String'):
         """
         Установить значение.
         """
-        val = Value_
-        val_type = Type_
+        val = value
+        val_type = value_type
         
         if self._isPersentageType():
             # ВНИМАНИЕ! Здесь идет проверка на принадлежность данных к процентному типу
             # т. к. нет возможности отделить проценты от числовых типов
             val_type = DEFAULT_PERCENTAGE_TYPE
-        elif type(Value_) in (int, float):
+        elif type(value) in (int, float):
             val_type = DEFAULT_NUMBER_TYPE
         # elif isinstance(value, text):
         #    val = val.encode(self.getApp().encoding)
         
         # Обработка формул
-        if self.get_parent().isFormula(Value_):
-            self.get_parent().setFormulaR1C1(Value_)
+        if self.get_parent().isFormula(value):
+            self.get_parent().setFormulaR1C1(value)
             if self._isPersentageType():
                 val_type = DEFAULT_PERCENTAGE_TYPE
             else:
@@ -389,11 +389,11 @@ class icVData(icprototype.icVPrototype):
         self._attributes['value'] = str(val)
         self._attributes['Type'] = val_type
 
-    def set_xmlns(self, XMLNS_='http://www.w3.org/TR/REC-html40'):
+    def set_xmlns(self, xmlns='http://www.w3.org/TR/REC-html40'):
         """
         Установить способ форматирования текста в ячейке.
         """
-        self._attributes['xmlns'] = str(XMLNS_)
+        self._attributes['xmlns'] = str(xmlns)
 
 
 if __name__ == '__main__':
