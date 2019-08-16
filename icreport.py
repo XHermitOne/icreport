@@ -182,6 +182,7 @@ def main(argv):
                                stylelib_filename=stylelib, variables=variables)
 
     app.MainLoop()
+    # print('ok')
 
 
 if __name__ == '__main__':

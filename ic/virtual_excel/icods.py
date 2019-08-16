@@ -5,7 +5,7 @@ import os.path
 import re
 import uuid
 
-from . import config
+# from . import config
 
 try:
     # Если Virtual Excel работает в окружении icReport
@@ -14,7 +14,7 @@ except ImportError:
     # Если Virtual Excel работает в окружении icServices
     from services.ic_std.log import log
 
-log.init(config)
+# log.init(config)
     
 try:
     import odf.opendocument
@@ -25,7 +25,7 @@ try:
 except ImportError:
     log.error(u'Ошибка импорта ODFpy')
 
-__version__ = (0, 1, 1, 3)
+__version__ = (0, 1, 1, 4)
 
 DIMENSION_CORRECT = 35
 DEFAULT_STYLE_ID = 'Default'
@@ -1827,7 +1827,7 @@ def test_save(xml_filename):
     """
     Функция тестирования.
     """
-    import icexcel
+    from . import icexcel
     excel = icexcel.icVExcel()
     excel.load(xml_filename)
     data = excel.getData()
@@ -1851,7 +1851,7 @@ def test_complex(src_ods_filename, dst_ods_filename):
     ods = icODS()
     data = ods.load(src_ods_filename)
     
-    import icexcel
+    from . import icexcel
     excel = icexcel.icVExcel()
     excel._data = data
     excel.saveAs(dst_ods_filename)

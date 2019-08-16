@@ -46,6 +46,13 @@ REP_BROWSER_BUTTONS_HEIGHT = 30
 # Не обрабатываемые имена папок
 NOT_WORK_DIRNAMES = ('__pycache__',)
 
+# Размер диалогового окна
+REP_BROWSER_DLG_WIDTH = 1000
+REP_BROWSER_DLG_HEIGHT = 460
+
+# Заголовок
+TITLE = 'icReport'
+
 
 def getReportList(report_dir, is_sort=True):
     """
@@ -154,14 +161,25 @@ def get_img_dirname():
     return os.path.join(cur_dirname, 'img')
 
 
-class icReportBrowserPrototype:
+class icReportBrowserDialog(wx.Dialog):
     """
     Форма браузера отчетов.
     """
-    def __init__(self, mode=IC_REPORT_VIEWER_MODE, report_dir=''):
+    def __init__(self, parent=None, mode=IC_REPORT_VIEWER_MODE, report_dir=''):
         """
         Конструктор.
+        @param parent: Родительская форма.
+        @param mode: Режим работы.
+        @param report_dir: Папка отчетов.
         """
+        # Версия в строковом виде
+        ver = '.'.join([str(ident) for ident in config.__version__])
+        # Создать экземпляр главного окна
+        wx.Dialog.__init__(self, parent, wx.NewId(),
+                           title=u'%s. Система управления отчетами. v. %s' % (TITLE, ver),
+                           pos=wx.DefaultPosition, size=wx.Size(REP_BROWSER_DLG_WIDTH, REP_BROWSER_DLG_HEIGHT),
+                           style=wx.MINIMIZE_BOX | wx.SYSTEM_MENU | wx.CAPTION)
+
         # Папка отчетов
         self._ReportDir = report_dir
 
@@ -332,7 +350,7 @@ class icReportBrowserPrototype:
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
         item_data = self.rep_tree.GetItemData(item)
-        log.debug(u'Предварительный просмотр <%s>' % item_data[REP_FILE_IDX])
+        log.debug(u'Предварительный просмотр <%s>' % str(item_data[REP_FILE_IDX] if item_data else u'-'))
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
@@ -341,7 +359,8 @@ class icReportBrowserPrototype:
                                                       bRefresh=True).preview()
         # Если это папка, то вывести сообщение
         else:
-            dlg.getMsgBox(u'Необходимо выбрать отчет!', parent=self)
+            dlg.getWarningBox(title=u'ВНИМАНИЕ', message=u'Необходимо выбрать отчет!', parent=self)
+        event.Skip()
             
     def onPrintRepButton(self, event):
         """
@@ -350,7 +369,7 @@ class icReportBrowserPrototype:
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
         item_data = self.rep_tree.GetItemData(item)
-        log.debug(u'Печать <%s>' % item_data[REP_FILE_IDX])
+        log.debug(u'Печать <%s>' % item_data[REP_FILE_IDX] if item_data else u'-')
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
@@ -359,7 +378,7 @@ class icReportBrowserPrototype:
                                                       bRefresh=True).Print()
         # Если это папка, то вывести сообщение
         else:
-            dlg.getMsgBox(u'Необходимо выбрать отчет!', parent=self)
+            dlg.getWarningBox(title=u'ВНИМАНИЕ', message=u'Необходимо выбрать отчет!', parent=self)
         event.Skip()
 
     def onPageSetupButton(self, event):
@@ -375,7 +394,8 @@ class icReportBrowserPrototype:
             report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX], parent=self).setPageSetup()
         # Если это папка, то вывести сообщение
         else:
-            dlg.getMsgBox(u'Необходимо выбрать отчет!', parent=self)
+            dlg.getWarningBox(title=u'ВНИМАНИЕ', message=u'Необходимо выбрать отчет!', parent=self)
+        event.Skip()
 
     def onSetRepDirButton(self, event):
         """
@@ -402,12 +422,14 @@ class icReportBrowserPrototype:
             self.dir_txt.SetLabel(self._ReportDir)
             # и обновить дерево отчетов
             self._fillReportTree(self._ReportDir)
+        event.Skip()
 
     def onExitButton(self, event):
         """
         Обработчик нажатия кнопки 'Выход'.
         """
-        self.Close()
+        self.EndModal(wx.ID_OK)
+        event.Skip()
 
     def onNewRepButton(self, event):
         """
@@ -462,7 +484,7 @@ class icReportBrowserPrototype:
         # Определить выбранный пункт дерева
         item = self.rep_tree.GetSelection()
         item_data = self.rep_tree.GetItemData(item)
-        log.debug(u'Конвертация <%s>' % item_data[REP_FILE_IDX])
+        log.debug(u'Конвертация <%s>' % item_data[REP_FILE_IDX] if item_data else u'-')
         # Если это файл отчета, то получить его
         if item_data is not None and item_data[REP_ITEMS_IDX] is None:
             # Получение отчета
@@ -470,7 +492,7 @@ class icReportBrowserPrototype:
                                                       parent=self,
                                                       bRefresh=True).convert()
         else:
-            dlg.getMsgBox(u'Необходимо выбрать отчет!', parent=self)
+            dlg.getWarningBox(title=u'ВНИМАНИЕ', message=u'Необходимо выбрать отчет!', parent=self)
 
         event.Skip()
 
@@ -486,7 +508,7 @@ class icReportBrowserPrototype:
             report_generator.getReportGeneratorSystem(item_data[REP_FILE_IDX],
                                                       parent=self).openModule(item_data[REP_FILE_IDX])
         else:
-            dlg.getMsgBox(u'Необходимо выбрать отчет!', parent=self)
+            dlg.getWarningBox(title=u'ВНИМАНИЕ', message=u'Необходимо выбрать отчет!', parent=self)
 
         event.Skip()
 
@@ -500,6 +522,7 @@ class icReportBrowserPrototype:
         popup_menu.Append(id_rename, u'Переименовать отчет')
         self.Bind(wx.EVT_MENU, self.onRenameReport, id=id_rename)
         self.rep_tree.PopupMenu(popup_menu,event.GetPosition())
+        event.Skip()
 
     def onRenameReport(self, event):
         """
@@ -521,7 +544,9 @@ class icReportBrowserPrototype:
                 if not os.path.isfile(new_rep_file_name):
                     self.renameReport(item_data[REP_FILE_IDX], new_rep_name)
                 else:
-                    dlg.getMsgBox(self, u'Невозможно поменять имя отчета. Отчет с таким именем уже существует.')
+                    dlg.getWarningBox(title=u'ВНИМАНИЕ',
+                                      message=u'Невозможно поменять имя отчета. Отчет с таким именем уже существует.',
+                                      parent=self)
 
         event.Skip()
 
@@ -582,8 +607,8 @@ class icReportBrowserPrototype:
         """
         Изменение выделенного компонента.
         """
-        pass
-        
+        event.Skip()
+
     def _fillReportTree(self, report_dir):
         """
         Наполнить дерево отчетов данными об отчетах.
@@ -638,34 +663,3 @@ class icReportBrowserPrototype:
         Папка отчетов.
         """
         return self._ReportDir
-        
-
-# Размер диалогового окна
-REP_BROWSER_DLG_WIDTH = 1000
-REP_BROWSER_DLG_HEIGHT = 460
-
-# Заголовок
-TITLE = 'icReport'
-
-
-class icReportBrowserDialog(icReportBrowserPrototype, wx.Dialog):
-    """
-    Диалоговое окно браузера отчетов.
-    """
-
-    def __init__(self, parent=None, mode=IC_REPORT_VIEWER_MODE, report_dir=''):
-        """
-        Конструктор.
-        @param parent: Родительская форма.
-        @param mode: Режим работы.
-        @param report_dir: Папка отчетов.
-        """
-        # Версия в строковом виде
-        ver = '.'.join([str(ident) for ident in config.__version__])
-        # Создать экземпляр главного окна
-        wx.Dialog.__init__(self, parent, wx.NewId(),
-                           title=u'%s. Система управления отчетами. v. %s' % (TITLE, ver),
-                           pos=wx.DefaultPosition, size=wx.Size(REP_BROWSER_DLG_WIDTH, REP_BROWSER_DLG_HEIGHT),
-                           style=wx.MINIMIZE_BOX | wx.SYSTEM_MENU | wx.CAPTION)
-
-        icReportBrowserPrototype.__init__(self, mode, report_dir)

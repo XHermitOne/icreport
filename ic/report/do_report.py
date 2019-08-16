@@ -162,19 +162,19 @@ def openReportBrowser(parent_form=None, report_dir='', mode=icreportbrowser.IC_R
     @param report_dir: Директорий, где хранятся отчеты.
     @return: Возвращает результат выполнения операции True/False.
     """
+    dlg = None
     try:
-        app = None
-        if parent_form is None:
-            app = wx.App()
-
         # Иначе вывести окно выбора отчета
-        rep_gen_dlg = icreportbrowser.icReportBrowserDialog(parent_form, mode,
-                                                            report_dir=report_dir)
-        rep_gen_dlg.ShowModal()
+        dlg = icreportbrowser.icReportBrowserDialog(parent=parent_form, mode=mode,
+                                                    report_dir=report_dir)
+        dlg.ShowModal()
 
+        dlg.Destroy()
         return True
     except:
         log.fatal(u'Ошибка запуска браузера отчетов')
+        if dlg:
+            dlg.Destroy()
     return False
 
 
@@ -356,10 +356,6 @@ def doReport(parent_form=None, report_filename='', report_dir='', db_url='', sql
     @return: Возвращает результат выполнения операции True/False.
     """
     try:
-        app = None
-        if parent_form is None:
-            app = wx.PySimpleApp()
-
         if not report_filename:
             return openReportViewer(parent_form, report_dir)
         else:
@@ -381,7 +377,7 @@ def doReport(parent_form=None, report_filename='', report_dir='', db_url='', sql
                 elif command == DO_COMMAND_SELECT:
                     repgen_system.doSelectAction(data)
                 else:
-                    log.warning(u'Not define command Report System <%s>' % command)
+                    log.warning(u'Не обрабатываемая команда запуска <%s>' % command)
             else:
                 repgen_system.save(data)
         return True

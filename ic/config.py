@@ -27,10 +27,12 @@ NO_GUI_MODE = False
 
 # Имя папки прфиля программы
 PROFILE_DIRNAME = '.icreport'
+# Путь до папки профиля
+PROFILE_PATH = os.path.join(os.environ.get('HOME', os.path.dirname(__file__)),
+                            PROFILE_DIRNAME)
 
 # Имя файла журнала
-LOG_FILENAME = os.path.join(os.environ.get('HOME', os.path.dirname(__file__)+'/log'),
-                            PROFILE_DIRNAME,
+LOG_FILENAME = os.path.join(PROFILE_PATH,
                             'icreport_%s.log' % datetime.date.today().isoformat())
 
 
