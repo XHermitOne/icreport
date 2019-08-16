@@ -450,8 +450,8 @@ class icODS(object):
         @param data_dict: Словарь данных.
         """
         # log.debug(u'Параметры листа <%s>' % data_dict)
-        page_setup = self.getChildrenByName(data_dict, 'setPageSetup')
-        print_setup = self.getChildrenByName(data_dict, 'print')
+        page_setup = self.getChildrenByName(data_dict, 'PageSetup')
+        print_setup = self.getChildrenByName(data_dict, 'Print')
         fit_to_page = self.getChildrenByName(data_dict, 'FitToPage')
         ods_properties = {'writingmode': 'lr-tb'}
         orientation = None
@@ -1422,7 +1422,7 @@ class icODS(object):
 
         # log.debug(u'Set default worksheet options')
         options = {'name': 'WorksheetOptions',
-                   'children': [{'name': 'setPageSetup',
+                   'children': [{'name': 'PageSetup',
                                  'children': [{'name': 'Layout',
                                                'Orientation': PORTRAIT_ORIENTATION},
                                               {'name': 'PageMargins',
@@ -1432,7 +1432,7 @@ class icODS(object):
                                                'Right': str(DEFAULT_XML_MARGIN_RIGHT)},
                                               ]
                                  },
-                                {'name': 'print',
+                                {'name': 'Print',
                                  'children': [{'name': 'PaperSizeIndex',
                                                'value': '9'}
                                               ]

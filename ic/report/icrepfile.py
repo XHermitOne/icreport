@@ -249,7 +249,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
         self.startElementLevel('WorksheetOptions', {'xmlns': 'urn:schemas-microsoft-com:office:excel'})
         if 'page_setup' in report:
             # Параметры страницы
-            self.startElementLevel('setPageSetup', {})
+            self.startElementLevel('PageSetup', {})
 
             # Ориентация листа
             if 'orientation' in report['page_setup']:
@@ -283,10 +283,10 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
                                         'x:Data': data})
                 self.endElementLevel('Footer')
                 
-            self.endElementLevel('setPageSetup')
+            self.endElementLevel('PageSetup')
 
             # Параметры печати
-            self.startElementLevel('print', {})
+            self.startElementLevel('Print', {})
 
             if 'paper_size' in report['page_setup']:
                 self.startElementLevel('PaperSizeIndex', {})
@@ -314,7 +314,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
                 self.characters(str(report['page_setup']['fit'][1]))
                 self.endElementLevel('FitHeight')
         
-            self.endElementLevel('print')
+            self.endElementLevel('Print')
 
         self.endElementLevel('WorksheetOptions')
 

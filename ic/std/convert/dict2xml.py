@@ -631,7 +631,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         self.startElementLevel('WorksheetOptions', attrs)
 
         # setPageSetup
-        page_setup = [element for element in data['children'] if element['name'] == 'setPageSetup']
+        page_setup = [element for element in data['children'] if element['name'] == 'PageSetup']
         if page_setup:
             self.setPageSetup(page_setup[0])
 
@@ -641,7 +641,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
             self.setFitToPage(fit_to_page[0])
 
         # print
-        print_tag = [element for element in data['children'] if element['name'] == 'print']
+        print_tag = [element for element in data['children'] if element['name'] == 'Print']
         if print_tag:
             self.setPrint(print_tag[0])
 
@@ -658,7 +658,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         """
         Начало параметров печати.
         """
-        self.startElementLevel('setPageSetup', {})
+        self.startElementLevel('PageSetup', {})
 
         # Ориентация
         layouts = [element for element in data['children'] if element['name'] == 'Layout']
@@ -670,7 +670,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         if page_margins:
             self.setPageMargins(page_margins[0])
 
-        self.endElementLevel('setPageSetup')
+        self.endElementLevel('PageSetup')
 
     def setLayout(self, data=None):
         """
@@ -710,7 +710,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         """
         Начало атрибутов печати.
         """
-        self.startElementLevel('print', {})
+        self.startElementLevel('Print', {})
 
         # Валидность информации в шаблоне
         valid_info = [element for element in data['children'] if element['name'] == 'ValidPrinterInfo']
@@ -753,7 +753,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         if n_copies:
             self.setNumberofCopies(n_copies[0])
 
-        self.endElementLevel('print')
+        self.endElementLevel('Print')
 
     def setValidPrinterInfo(self, data=None):
         """

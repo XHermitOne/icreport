@@ -613,16 +613,16 @@ class icExcelXMLReportTemplate(icReportTemplate):
                         # Определить бэнд внутри объекта
                         rep = self._defBand(self.__cur_band, cur_row, col_count, title_row, rep)
                 else:
-                    log.error(u'Не корректный тег строки [%d]' % cur_row)
+                    log.error(u'Не корректный тег <%s> строки [%d]' % (tag, cur_row))
 
             # Прочитать в шаблон параметры страницы
             rep['page_setup'] = copy.deepcopy(icrepgen.IC_REP_PAGESETUP)
             sheet_options = [rep_obj for rep_obj in self._rep_worksheet['children']
                              if rep_obj['name'] == 'WorksheetOptions']
 
-            page_setup = [rep_obj for rep_obj in sheet_options[0]['children'] if rep_obj['name'] == 'setPageSetup'][0]
+            page_setup = [rep_obj for rep_obj in sheet_options[0]['children'] if rep_obj['name'] == 'PageSetup'][0]
             rep['page_setup'].update(self._getPageSetup(page_setup))
-            print_setup = [rep_obj for rep_obj in sheet_options[0]['children'] if rep_obj['name'] == 'print']
+            print_setup = [rep_obj for rep_obj in sheet_options[0]['children'] if rep_obj['name'] == 'Print']
             if print_setup:
                 rep['page_setup'].update(self._getPrintSetup(print_setup[0]))
 
@@ -643,7 +643,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
             что весь шаблон - это  заголовок отчета [header].
         @return: True - колонка тегов бендов есть в шаблоне / False - нет.
         """
-        log.info(u'Колонка тегов бендов: %s' % str(self._tag_band_col))
+        log.info(u'Колонка тегов бендов [%s]' % str(self._tag_band_col))
         return self._tag_band_col is not None
 
     def _getColumnCount(self, rows):
@@ -689,6 +689,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
                             value = None
                         if self._isTag(value):
                             tag_col = max(tag_col, col)
+                        log.debug(u'Поиск индекса тега бенда. Ячейка [%d : %d]. Значение <%s>. Колонка тега бенда [%d]' % (row, col, value, tag_col))
             self._tag_band_col = tag_col
         return self._tag_band_col
         
@@ -810,7 +811,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
         if 'data' not in band:
             worksheet_options = [element for element in worksheet_data['children'] if element['name'] == 'WorksheetOptions']
             if worksheet_options:
-                page_setup = [element for element in worksheet_options[0]['children'] if element['name'] == 'setPageSetup']
+                page_setup = [element for element in worksheet_options[0]['children'] if element['name'] == 'PageSetup']
                 if page_setup:
                     header = [element for element in page_setup[0]['children'] if element['name'] == 'Header']
                     if header:
@@ -831,7 +832,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
         if 'data' not in band:
             worksheet_options = [element for element in worksheet_data['children'] if element['name'] == 'WorksheetOptions']
             if worksheet_options:
-                page_setup = [element for element in worksheet_options[0]['children'] if element['name'] == 'setPageSetup']
+                page_setup = [element for element in worksheet_options[0]['children'] if element['name'] == 'PageSetup']
                 if page_setup:
                     footer = [element for element in page_setup[0]['children'] if element['name'] == 'Footer']
                     if footer:

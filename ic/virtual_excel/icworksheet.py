@@ -30,7 +30,7 @@ class icVWorksheet(icprototype.icVPrototype):
         icprototype.icVPrototype.__init__(self, parent, *args, **kwargs)
         self._attributes = {'name': 'Worksheet', 'Name': 'default',
                             'children': [{'name': 'WorksheetOptions',
-                                          'children': [{'name': 'setPageSetup',
+                                          'children': [{'name': 'PageSetup',
                                                         'children': [{'name': 'PageMargins',
                                                                       'Bottom': 0.984251969, 'Left': 0.787401575,
                                                                       'Top': 0.984251969, 'Right': 0.787401575,
@@ -693,7 +693,7 @@ class icVWorksheetOptions(icprototype.icVPrototype):
         """
         Параметры печати.
         """
-        page_setup_attr = [element for element in self._attributes['children'] if element['name'] == 'setPageSetup']
+        page_setup_attr = [element for element in self._attributes['children'] if element['name'] == 'PageSetup']
         if page_setup_attr:
             page_setup = icVPageSetup(self)
             page_setup.set_attributes(page_setup_attr[0])
@@ -713,7 +713,7 @@ class icVWorksheetOptions(icprototype.icVPrototype):
         """
         Параметры принтера.
         """
-        print_attr = [element for element in self._attributes['children'] if element['name'] == 'print']
+        print_attr = [element for element in self._attributes['children'] if element['name'] == 'Print']
         if print_attr:
             print_setup = icVPrint(self)
             print_setup.set_attributes(print_attr[0])
@@ -746,7 +746,7 @@ class icVPageSetup(icprototype.icVPrototype):
         Конструктор.
         """
         icprototype.icVPrototype.__init__(self, parent, *args, **kwargs)
-        self._attributes = {'name': 'setPageSetup', 'children': []}
+        self._attributes = {'name': 'PageSetup', 'children': []}
 
     def getLayout(self):
         """
@@ -830,7 +830,7 @@ class icVPrint(icprototype.icVPrototype):
         Конструктор.
         """
         icprototype.icVPrototype.__init__(self, parent, *args, **kwargs)
-        self._attributes = {'name': 'print', 'children': []}
+        self._attributes = {'name': 'Print', 'children': []}
 
     def getPaperSizeIndex(self):
         """
