@@ -148,6 +148,7 @@ def init(config_module=None, log_filename=None):
     """
     Инициализация файла лога.
     @param config_module: Модуль конфигурации.
+    @param log_filename: Полное имя файла журнала/лога.
     """
     global CONFIG
     CONFIG = config_module
