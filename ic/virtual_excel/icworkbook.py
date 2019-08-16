@@ -3,10 +3,16 @@
 
 import os.path
 
-from . import icprototype
+try:
+    from . import icprototype
+    from . import icworksheet
+    from . import icstyle
+except ImportError:
+    # Для запуска тестов
+    import icprototype
+    import icworksheet
+    import icstyle
 
-from . import icworksheet
-from . import icstyle
 
 __version__ = (0, 1, 1, 2)
 

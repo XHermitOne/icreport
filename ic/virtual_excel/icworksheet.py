@@ -2,21 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import copy
-import sys
-
-from . import icprototype
-from . import icrange
-from . import paper_size
-from . import config
+# import sys
 
 try:
-    # Если Virtual Excel работает в окружении icReport
-    from ic.std import icexceptions
+    from . import icprototype
+    from . import icrange
+    from . import paper_size
+    from . import config
+    from . import icexceptions
 except ImportError:
-    # Если Virtual Excel работает в окружении icServices
-    from services.ic_std import icexceptions
+    # Для запуска тестов
+    import icprototype
+    import icrange
+    import paper_size
+    import config
+    import icexceptions
 
-__version__ = (0, 1, 1, 2)
+
+__version__ = (0, 1, 2, 2)
 
 
 class icVWorksheet(icprototype.icVPrototype):
@@ -414,12 +417,12 @@ class icVTable(icprototype.icVPrototype):
         """
         col_count = self.getColumnCount()
         if col > col_count:
-            for i in range(col-col_count):
+            for i in range(col - col_count):
                 self.createColumn()
 
         row_count = self.getRowCount()
         if row > row_count:
-            for i in range(row-row_count):
+            for i in range(row - row_count):
                 self.createRow()
 
         # Проверка на попадание в объединенную ячейку
@@ -602,17 +605,17 @@ class icVTable(icprototype.icVPrototype):
                     else:
                         i_col += 1
 
-                    if 'merge_across' in cell or 'MergeDown' in cell:
+                    if 'MergeAcross' in cell or 'MergeDown' in cell:
                         cur_row = self.getRow(i_row+1)
                         cell_obj = cur_row.getCellIdx(i_col)
                         # Установить координаты ячейки
                         cell_obj._row_idx = i_row+1
                         cell_obj._col_idx = i_col
                         merge_cells[cell_obj.getRegion()] = cell_obj
-                    if 'merge_across' in cell:
+                    if 'MergeAcross' in cell:
                         # Учет объекдиненных ячеек ДЕЛАТЬ ОБЯЗАТЕЛЬНО!!!
                         # иначе не происходит учет предыдущих объединенных ячеек
-                        i_col += int(cell['merge_across'])-1
+                        i_col += int(cell['MergeAcross'])-1
 
         return merge_cells
 

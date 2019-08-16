@@ -3,7 +3,11 @@
 
 import hashlib
 
-from . import icprototype
+try:
+    from . import icprototype
+except ImportError:
+    # Для запуска тестов
+    import icprototype
 
 __version__ = (0, 1, 1, 2)
 

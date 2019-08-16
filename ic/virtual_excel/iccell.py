@@ -3,14 +3,18 @@
 
 import re
 
-from . import icprototype
+try:
+    from . import icprototype
+except ImportError:
+    # Для запуска тестов
+    import icprototype
 
 try:
     # Если Virtual Excel работает в окружении icReport
     from ic.std.log import log
 except ImportError:
-    # Если Virtual Excel работает в окружении icServices
-    from services.ic_std.log import log
+    # Если Virtual Excel работает в окружении DEFIS
+    from ic.log import log
 
 __version__ = (0, 1, 1, 2)
 
@@ -205,10 +209,10 @@ class icVCell(icprototype.icVIndexedPrototype):
         self._delMergeArreaCells(self._row_idx, self._col_idx, down, across)
 
         if across > 0:
-            self._attributes['merge_across'] = str(across)
+            self._attributes['MergeAcross'] = str(across)
         else:
-            if 'merge_across' in self._attributes:
-                del self._attributes['merge_across']
+            if 'MergeAcross' in self._attributes:
+                del self._attributes['MergeAcross']
 
         if down > 0:
             self._attributes['MergeDown'] = str(down)
@@ -252,8 +256,8 @@ class icVCell(icprototype.icVIndexedPrototype):
             indexes.append(cur_idx)
 
             # Учет объединенных ячеек
-            if 'merge_across' in cell_attr:
-                cur_idx += int(cell_attr['merge_across'])
+            if 'MergeAcross' in cell_attr:
+                cur_idx += int(cell_attr['MergeAcross'])
 
         if idx in indexes:
             # Ячейка с указанным индексом есть
@@ -281,8 +285,8 @@ class icVCell(icprototype.icVIndexedPrototype):
             if 'MergeDown' in self._attributes:
                 cell_row += int(self._attributes['MergeDown'])
         if offset_column > 0:
-            if 'merge_across' in self._attributes:
-                cell_col += int(self._attributes['merge_across'])
+            if 'MergeAcross' in self._attributes:
+                cell_col += int(self._attributes['MergeAcross'])
 
         cell_row += offset_row
         cell_col += offset_column
@@ -310,8 +314,8 @@ class icVCell(icprototype.icVIndexedPrototype):
         if 'MergeDown' in self._attributes:
             merge_down = int(self._attributes['MergeDown'])
         merge_across = 0
-        if 'merge_across' in self._attributes:
-            merge_across = int(self._attributes['merge_across'])
+        if 'MergeAcross' in self._attributes:
+            merge_across = int(self._attributes['MergeAcross'])
         return self._row_idx, self._col_idx, merge_down, merge_across
 
     def getNext(self):

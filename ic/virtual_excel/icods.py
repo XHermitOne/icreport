@@ -11,8 +11,8 @@ try:
     # Если Virtual Excel работает в окружении icReport
     from ic.std.log import log
 except ImportError:
-    # Если Virtual Excel работает в окружении icServices
-    from services.ic_std.log import log
+    # Если Virtual Excel работает в окружении DEFIS
+    from ic.log import log
 
 # log.init(config)
     
@@ -697,7 +697,7 @@ class icODS(object):
                 ods_row.addElement(ods_cell)
 
             # Учет объединенных ячеек
-            merge = int(cell.get('merge_across', 0))
+            merge = int(cell.get('MergeAcross', 0))
             if merge > 0:
                 kwargs = dict()
                 kwargs['numbercolumnsrepeated'] = merge
@@ -896,7 +896,7 @@ class icODS(object):
             ods_style = self._styles_.get(style_id, None)
             properties['stylename'] = ods_style
         
-        merge_across = int(data_dict.get('merge_across', 0))
+        merge_across = int(data_dict.get('MergeAcross', 0))
         if merge_across:
             merge_across = str(merge_across+1)
             properties['numbercolumnsspanned'] = merge_across
@@ -1706,6 +1706,7 @@ class icODS(object):
         
         i = 1
         set_idx = False
+        # log.debug(u'Количество ячеек строки [%d]' % len(ods_cells))
         for ods_cell in ods_cells:
             if ods_cell.qname[-1] == 'covered-table-new_cell':
                 repeated = ods_cell.getAttribute('numbercolumnsrepeated')
@@ -1775,7 +1776,7 @@ class icODS(object):
             numbercolumnsspanned = ods_element.getAttribute('numbercolumnsspanned')
             if numbercolumnsspanned:
                 merge_across = int(numbercolumnsspanned)-1
-                data['merge_across'] = merge_across
+                data['MergeAcross'] = merge_across
             
         merge_down = None
         if self.hasODSAttribute(ods_element, 'numberrowsspanned'):

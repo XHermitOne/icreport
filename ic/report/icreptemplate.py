@@ -474,8 +474,8 @@ class icExcelXMLReportTemplate(icReportTemplate):
                     lst += [element_template] * (int(element['Index'])-len(lst)-1)
             lst.append(element)
             # Проверка на объединенные ячейки
-            if 'merge_across' in element:
-                lst += [element_template] * int(element['merge_across'])
+            if 'MergeAcross' in element:
+                lst += [element_template] * int(element['MergeAcross'])
                 
         if length:
             if length > len(lst):
@@ -983,8 +983,8 @@ class icExcelXMLReportTemplate(icReportTemplate):
 
                 if 'MergeDown' in template_cell:
                     cell['merge_row'] = int(template_cell['MergeDown']) + 1
-                if 'merge_across' in template_cell:
-                    cell['merge_col'] = int(template_cell['merge_across']) + 1
+                if 'MergeAcross' in template_cell:
+                    cell['merge_col'] = int(template_cell['MergeAcross']) + 1
             except:
                 template_cell = None
                 

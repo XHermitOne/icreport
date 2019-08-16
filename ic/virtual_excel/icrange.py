@@ -3,8 +3,13 @@
 
 import copy
 
-from . import icprototype
-from . import iccell
+try:
+    from . import icprototype
+    from . import iccell
+except ImportError:
+    # Для запуска тестов
+    import icprototype
+    import iccell
 
 __version__ = (0, 1, 1, 2)
 

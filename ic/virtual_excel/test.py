@@ -329,6 +329,17 @@ def test_schm19():
     excel.saveAs('./testfiles/schm/result_19.xml')
 
 
+def test_save():
+    try:
+        from . import icexcel
+    except ImportError:
+        import icexcel
+
+    excel = icexcel.icVExcel()
+    excel.load('./testfiles/test.ods')
+    excel.saveAs('./testfiles/test.xml')
+
+
 if __name__ == '__main__':
     # test_oc1()
     # test_sum()
@@ -338,4 +349,5 @@ if __name__ == '__main__':
     # test_ods()
     # test_worksheet_options()
     # test_report()
-    test_schm19()
+    # test_schm19()
+    test_save()

@@ -286,8 +286,8 @@ class icVIndexedPrototype(icVPrototype):
 
                 if idx == cur_idx:
                     element = self.get_attributes()['children'][i]
-                    if 'merge_across' in element:
-                        delta += int(element['merge_across'])
+                    if 'MergeAcross' in element:
+                        delta += int(element['MergeAcross'])
 
                     if not bIsReIndex:
                         self.get_attributes()['children'] = self._reIndexBeforeClearChild(element_name, i, delta)
