@@ -11,11 +11,11 @@ from . import std_dialogs_proto
 
 SQL_TEMPLATE = '''
 SELECT DISTINCT
-    %text AS cod,
-    %text AS name
+    %s AS cod,
+    %s AS name
 FROM
-    public.%text
-%text;
+    public.%s
+%s;
 '''
 
 

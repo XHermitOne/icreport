@@ -289,7 +289,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
             начала и конца функционала.
         @return: Возвращает словарь следующей структуры:
             {
-            'fmt': Формат строки без строк исполняемого кода вместо него стоит %text;
+            'fmt': Формат строки без строк исполняемого кода вместо него стоит %s;
             'func': Список строк исполняемого кода.
             }
             В случае ошибки возвращает None.
@@ -321,8 +321,8 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                     # Какой-то функционал
                     if re.search(cur_patt, parsed_str[i_parse]):
                         ret['func'].append(parsed_str[i_parse])
-                        # И добавить в формат %text
-                        ret['fmt'] += '%text'
+                        # И добавить в формат %s
+                        ret['fmt'] += '%s'
                         func_find = True
                         break
                 # Обычная строка
@@ -330,7 +330,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                     ret['fmt'] += parsed_str[i_parse]
             return ret
         except:
-            # win32api.MessageBox(0, '%text' % (sys.exc_info()[1].args[1]))
+            # win32api.MessageBox(0, '%s' % (sys.exc_info()[1].args[1]))
             log.fatal()
         return None
 

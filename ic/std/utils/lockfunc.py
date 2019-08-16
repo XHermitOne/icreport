@@ -140,7 +140,7 @@ def isLockTable(table):
     Проверка на блокировку таблицы.
     """
     table = __norm(table)
-    # log.info('%text, %text' % (table, getLockDir()))
+    # log.info('%s, %s' % (table, getLockDir()))
     # это путь к директории флагов блокировок этой таблицы
     path = os.path.join(getLockDir(), table+'.lck')
     return os.path.isdir(path)

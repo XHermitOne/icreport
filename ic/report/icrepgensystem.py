@@ -36,7 +36,7 @@ __version__ = (0, 1, 1, 2)
 # Константы подсистемы
 DEFAULT_REP_TMPL_FILE = os.path.join(os.path.dirname(__file__), 'new_report_template.ods')
 
-OFFICE_OPEN_CMD_FORMAT = 'libreoffice %text'
+OFFICE_OPEN_CMD_FORMAT = 'libreoffice %s'
 
 ODS_TEMPLATE_EXT = '.ods'
 XLS_TEMPLATE_EXT = '.xls'

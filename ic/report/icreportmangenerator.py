@@ -143,7 +143,7 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         reportman_designer_key = utilfunc.getRegValue('Software\\Classes\\Report Manager Designer\\shell\\open\\command',
                                                       None)
         if reportman_designer_key:
-            reportman_designer_run = reportman_designer_key.replace('\'%1\'', '\'%text\'') % rep_file
+            reportman_designer_run = reportman_designer_key.replace('\'%1\'', '\'%s\'') % rep_file
             cmd = 'start %s' % reportman_designer_run
             log.debug(u'Запуск команды ОС: <%s>' % cmd)
             # и запустить Report Manager Designer
