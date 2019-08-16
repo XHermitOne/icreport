@@ -259,9 +259,10 @@ class icReportGeneratorSystem:
         @return: Имя файла файла шаблона или None в случае ошибки.
         """
         if tmpl_filename is None:
-            filename = dlg.getFileDlg(self._ParentForm, u'Выберите шаблон отчета:',
-                                      u'Электронные таблицы ODF (*.ods)|*.ods|Microsoft Excel 2003 XML (*.xml)|*.xml',
-                                      self.getReportDir())
+            filename = dlg.getFileDlg(parent=self._ParentForm,
+                                      title=u'Выберите шаблон отчета:',
+                                      wildcard=u'Электронные таблицы ODF (*.ods)|*.ods|Microsoft Excel 2003 XML (*.xml)|*.xml',
+                                      default_path=self.getReportDir())
         else:
             filename = os.path.abspath(os.path.normpath(tmpl_filename))
 
