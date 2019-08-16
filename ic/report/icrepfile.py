@@ -728,7 +728,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
 
         # Объединение ячеек
         if cell['merge_col'] > 1:
-            cell_attr['ss:merge_across'] = str(cell['merge_col'] - 1)
+            cell_attr['ss:MergeAcross'] = str(cell['merge_col'] - 1)
             # Обработать верхнюю строку области объединения
             self._setCellmerge_across(row, column, cell['merge_col'], sheet)
             if cell['merge_row'] > 1:

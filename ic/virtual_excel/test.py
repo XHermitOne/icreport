@@ -341,6 +341,10 @@ def test_save():
 
 
 if __name__ == '__main__':
+    import config
+    from ic.log import log
+    log.init(config)
+
     # test_oc1()
     # test_sum()
     # test_12()

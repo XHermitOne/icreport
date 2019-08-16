@@ -25,7 +25,7 @@ LOG_MODE = True
 # Консольный режим работы
 NO_GUI_MODE = False
 
-# Имя папки прфиля программы
+# Имя папки профиля программы
 PROFILE_DIRNAME = '.icreport'
 # Путь до папки профиля
 PROFILE_PATH = os.path.join(os.environ.get('HOME', os.path.dirname(__file__)),

@@ -20,7 +20,7 @@ __version__ = (1, 1, 1, 3)
 FONT_NAME_CYRILIC_DEL = not bool(sys.platform[:3].lower == 'win')
 
 
-def Dict2XmlssFile(data, xml_filename, encoding='utf-8'):
+def dict2XmlssFile(data, xml_filename, encoding='utf-8'):
     """
     Функция конвертирования.
     """
@@ -547,7 +547,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
         if 'StyleID' in data:
             attrs['ss:StyleID'] = str(data['StyleID'])
         if 'MergeAcross' in data:
-            attrs['ss:merge_across'] = str(data['MergeAcross'])
+            attrs['ss:MergeAcross'] = str(data['MergeAcross'])
         if 'MergeDown' in data:
             attrs['ss:MergeDown'] = str(data['MergeDown'])
         if 'Formula' in data:

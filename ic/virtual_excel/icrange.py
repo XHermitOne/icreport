@@ -11,7 +11,7 @@ except ImportError:
     import icprototype
     import iccell
 
-__version__ = (0, 1, 1, 2)
+__version__ = (0, 1, 2, 1)
 
 RANGE_ROW_IDX = 0
 RANGE_COL_IDX = 1

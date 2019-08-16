@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
+import datetime
 
 # Режим отладки
 DEBUG_MODE = True
@@ -12,8 +13,14 @@ LOG_MODE = True
 # Кодировка консоли по умолчанию
 DEFAULT_ENCODING = 'utf-8'
 
-LOG_FILENAME = os.path.join(os.path.dirname(__file__),
-                            'log', 'virtual_excel.log')
+# Имя папки профиля программы
+PROFILE_DIRNAME = '.icreport'
+# Путь до папки профиля
+PROFILE_PATH = os.path.join(os.environ.get('HOME', os.path.dirname(__file__)),
+                            PROFILE_DIRNAME)
+
+LOG_FILENAME = os.path.join(PROFILE_PATH,
+                            'virtual_excel_%s.log' % datetime.date.today().isoformat())
 
 
 # Определять адресацию внутри объединенной ячейки как ошибку

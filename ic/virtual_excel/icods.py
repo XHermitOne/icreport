@@ -25,7 +25,7 @@ try:
 except ImportError:
     log.error(u'Ошибка импорта ODFpy')
 
-__version__ = (0, 1, 1, 4)
+__version__ = (0, 1, 2, 1)
 
 DIMENSION_CORRECT = 35
 DEFAULT_STYLE_ID = 'Default'
@@ -334,7 +334,7 @@ class icODS(object):
     
         style_id = data_dict['ID']
         properties_args['name'] = style_id
-        properties_args['family'] = 'table-new_cell'
+        properties_args['family'] = 'table-cell'
         ods_style = odf.style.Style(**properties_args)
 
         properties_args = {}
@@ -976,7 +976,7 @@ class icODS(object):
             try:
                 return self._loadODS(filename)
             except:
-                log.error(u'Ошибка открытия файла <%s>' % filename)
+                log.fatal(u'Ошибка открытия файла <%s>' % filename)
                 raise                
         
     def _loadODS(self, filename):
@@ -1708,7 +1708,8 @@ class icODS(object):
         set_idx = False
         # log.debug(u'Количество ячеек строки [%d]' % len(ods_cells))
         for ods_cell in ods_cells:
-            if ods_cell.qname[-1] == 'covered-table-new_cell':
+            # log.debug(u'Обработка ячейки <%s>' % ods_cell.qname[-1])
+            if ods_cell.qname[-1] == 'covered-table-cell':
                 repeated = ods_cell.getAttribute('numbercolumnsrepeated')
                 if repeated and (repeated not in ('None', 'none', 'NONE')):
                     # Учет индекса и пропущенных ячеек
@@ -1718,7 +1719,7 @@ class icODS(object):
                     # Стоит просто ячейка и ее надо учесть
                     i += 1
                     set_idx = True
-            elif ods_cell.qname[-1] == 'table-new_cell':
+            elif ods_cell.qname[-1] == 'table-cell':
                 cell_data = self.readCell(ods_cell, i if set_idx else None)
                 data['children'].append(cell_data)
                 if set_idx:
@@ -1789,6 +1790,7 @@ class icODS(object):
         if ods_data:
             value = ods_element.getAttribute('value')
             valuetype = ods_element.getAttribute('valuetype')
+            # log.debug(u'Значение ячейки <%s : %s>' % (value, valuetype))
             cur_data = None
             for i, ods_txt in enumerate(ods_data):
                 data_data = self.readData(ods_txt, value, valuetype)
@@ -1798,7 +1800,7 @@ class icODS(object):
                     cur_data['value'] += SPREADSHEETML_CR+data_data['value']
             data['children'].append(cur_data)
         
-        # log.debug('CELL Style: %s merge_across: %s MergeDown: %s' % (style_name, merge_across, merge_down))
+        # log.debug('CELL Style: %s MergeAcross: %s MergeDown: %s' % (style_name, merge_across, merge_down))
         
         return data
    

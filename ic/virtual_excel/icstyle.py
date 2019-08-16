@@ -9,7 +9,7 @@ except ImportError:
     # Для запуска тестов
     import icprototype
 
-__version__ = (0, 1, 1, 2)
+__version__ = (0, 1, 2, 1)
 
 COLOR_ENUM = ('#000000',)
 
