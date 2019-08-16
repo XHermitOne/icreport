@@ -38,7 +38,9 @@ def _pathFilter(path, path_filter):
 
 
 # Папки, которые не надо обрабатывать по умолчанию
-DEFAULT_DIR_FILTER = ('.svn', '.SVN', '.Svn', '.idea', '.Idea', '.IDEA')
+DEFAULT_DIR_FILTER = ('.svn', '.SVN', '.Svn',
+                      '.idea', '.Idea', '.IDEA',
+                      '.git', '.Git', '.GIT')
 
 
 def getSubDirsFilter(path, dir_filter=DEFAULT_DIR_FILTER):
@@ -51,7 +53,7 @@ def getSubDirsFilter(path, dir_filter=DEFAULT_DIR_FILTER):
     try:
         dir_list = [os.path.normpath(os.path.join(path, path)) for path in os.listdir(path)]
         dir_list = [path for path in dir_list if os.path.isdir(path)]
-        dir_list = [dir for dir in dir_list if _pathFilter(dir, dir_filter)]
+        dir_list = [directory for directory in dir_list if _pathFilter(dir, dir_filter)]
         return dir_list
     except:
         log.fatal(u'Ошибка чтения списка поддиректорий <%s>' % path)

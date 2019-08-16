@@ -62,8 +62,8 @@ def getReportList(report_dir, is_sort=True):
     @param is_sort: Сортировать список по именам?
     @return: Возвращает список списков следующего формата:
         [
-        [полное имя файла/директория отчета,имя отчета/директория,
-            описание отчета/директория,None/вложенные объекты,индекс образа],
+        [полное имя файла/директория отчета, имя отчета/директория,
+            описание отчета/директория, None/вложенные объекты, индекс образа],
         .
         .
         .
@@ -76,6 +76,7 @@ def getReportList(report_dir, is_sort=True):
     try:
         # Коррекция аргументов
         report_dir = os.path.abspath(os.path.normpath(report_dir))
+        log.debug(u'Сканирование папки отчетов <%s>' % report_dir)
 
         # Выходой список
         dir_list = list()
@@ -112,7 +113,8 @@ def getReportList(report_dir, is_sort=True):
 
         # Получить список всех файлов
         file_rep_list = [filename for filename in filefunc.getFilesByExt(report_dir, '.rprt')
-                         if filename[-8:].lower() != '_pkl.rprt']
+                         if not filename.lower().endswith('_pkl.rprt')]
+        log.debug(u'Список файлов отчетов %s' % str(file_rep_list))
 
         for rep_file_name in file_rep_list:
             # записать данные о этом файле в выходной список
@@ -139,7 +141,7 @@ def getReportList(report_dir, is_sort=True):
     except:
         # Вывести сообщение об ошибке в лог
         log.fatal(u'Ошибка заполнения информации о файлах отчетов <%s>.' % report_dir)
-
+    return list()
 
 def get_root_dirname():
     """
@@ -635,6 +637,9 @@ class icReportBrowserDialog(wx.Dialog):
         @param parent_id: Идентификатор родительского узла.
         @param items: Ветка описаний отчетов.
         """
+        if not items:
+            log.warning(u'Пустой список описаний отчетов при построении дерева отчетов')
+
         # Перебрать описания отчетов в описании.
         for item_data in items:
             item = self.rep_tree.AppendItem(parent_id, item_data[REP_DESCRIPT_IDX], -1, -1, data=None)
