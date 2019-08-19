@@ -114,7 +114,7 @@ def getReportList(report_dir, is_sort=True):
         # Получить список всех файлов
         file_rep_list = [filename for filename in filefunc.getFilesByExt(report_dir, '.rprt')
                          if not filename.lower().endswith('_pkl.rprt')]
-        log.debug(u'Список файлов отчетов %s' % str(file_rep_list))
+        # log.debug(u'Список файлов отчетов %s' % filefunc.getFilesByExt(report_dir, '.rprt'))
 
         for rep_file_name in file_rep_list:
             # записать данные о этом файле в выходной список

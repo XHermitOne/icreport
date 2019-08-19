@@ -57,7 +57,7 @@ def getSubDirsFilter(path, dir_filter=DEFAULT_DIR_FILTER):
         return dir_list
     except:
         log.fatal(u'Ошибка чтения списка поддиректорий <%s>' % path)
-        return None
+    return None
 
 
 def getFilesByExt(path, ext):
@@ -76,12 +76,12 @@ def getFilesByExt(path, ext):
             ext = '.' + ext
         ext = ext.lower()
 
-        file_list = [os.path.normpath(os.path.join(path, path)) for path in os.listdir(path)]
-        file_list = [path for path in file_list if os.path.isfile(path) and os.path.splitext(path)[1].lower() == ext]
+        file_list = [os.path.normpath(os.path.join(path, filename)) for filename in os.listdir(path)]
+        file_list = [filename for filename in file_list if os.path.isfile(filename) and os.path.splitext(filename)[1].lower() == ext]
         return file_list
     except:
         log.fatal(u'Ошибка чтения списка файлов директории. ext: <%s>, path: <%s>, list: <%s>' % (ext, path, file_list))
-        return None
+    return None
 
 
 def getHomePath():
