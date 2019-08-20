@@ -965,9 +965,14 @@ class icReportGenerator:
         exec_func = cur_func[2:-2].strip()
         try:
             exec(exec_func, globals, locals)
+            # ВНИМАНИЕ! При выполнении блока кода значение переменной располагается
+            # в пространстве имен locals.
+            # Поэтому необходимо после выполнения блока кода вернуть переменную обратно в
+            # текущую функцию
+            value = locals.get('value', u'')
         except:
             log.fatal(u'Ошибка выполнения блока кода <%s>' % textfunc.toUnicode(exec_func))
-        log.debug(u'Выполнение блока кода <%s>. Значение <%s>' % (exec_func, str(value)))
+        # log.debug(u'Выполнение блока кода <%s>. Значение <%s>' % (exec_func, str(value)))
         return str(value)
 
     def _get_variable(self, cur_func, locals, globals):
