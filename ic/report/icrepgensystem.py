@@ -28,6 +28,7 @@ from ic.std.utils import filefunc
 from ic.std.utils import resfunc
 from ic.std.dlg import dlg
 from ic.std.utils import textfunc
+from ic.std.utils import txtgen
 
 from ic.report import icreptemplate
 
@@ -53,7 +54,7 @@ CODE_SIGNATURE = 'PRG:'
 PY_SIGNATURE = 'PY:'
 
 
-class icReportGeneratorSystem:
+class icReportGeneratorSystem(object):
     """
     Класс системы генерации отчетов. Абстрактный класс.
     """
@@ -533,6 +534,16 @@ class icReportGeneratorSystem:
                 else:
                     log.warning(u'Не указана сигнатура в запросе <%s>' % query)
                     return None
+                # ВНИМАНИЕ! Запрос может параметризироваться переменными передаваемыми
+                # явным образом. Поэтому необходимо произвести генерацию
+                if kwargs:
+                    try:
+                        # Для замен используем другой генератор
+                        # необходимо только заменить открывающий и закрывающие сигнатуры тега
+                        query_txt = query.replace(u'[&', u'{{ ').replace(u'&]', u' }}')
+                        query = txtgen.gen(query_txt, kwargs)
+                    except:
+                        log.fatal(u'Ошибка преобразования запроса\n<%s>\nпри получении таблицы запроса для отчета' % str(query))
 
             query_tbl = None
             if not self._QueryTab:

@@ -214,6 +214,11 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                 self._Rep = report
 
             # 1. Получить таблицу запроса
+            # Переменные могут учавствовать в генерации текста запроса
+            variables = kwargs.get('variables', None)
+            if variables:
+                kwargs.update(variables)
+
             query_tbl = self.getQueryTbl(self._Rep, *args, **kwargs)
             if self._isEmptyQueryTbl(query_tbl):
                 if not config.get_glob_var('NO_GUI_MODE'):
@@ -226,7 +231,6 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
 
             # 2. Запустить генерацию
             rep = icrepgen.icReportGenerator()
-            variables = kwargs.get('variables', None)
             coord_fill = kwargs.get('coord_fill', None)
             data_rep = rep.generate(self._Rep, query_tbl,
                                     name_space=variables, coord_fill=coord_fill)

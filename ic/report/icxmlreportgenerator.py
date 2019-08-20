@@ -198,7 +198,7 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
         # и запустить MSExcel
         os.system(cmd)
 
-    def generateReport(self, report=None):
+    def generateReport(self, report=None, *args, **kwargs):
         """
         Запустить генератор отчета.
         @param report: Шаблон отчета.
@@ -209,6 +209,11 @@ class icXMLReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
                 self._Rep = report
 
             # 1. Получить таблицу запроса
+            # Переменные могут учавствовать в генерации текста запроса
+            variables = kwargs.get('variables', None)
+            if variables:
+                kwargs.update(variables)
+
             query_tbl = self.getQueryTbl(self._Rep)
             if not query_tbl or not query_tbl['__data__']:
                 if not config.get_glob_var('NO_GUI_MODE'):
