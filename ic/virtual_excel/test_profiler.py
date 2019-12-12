@@ -38,7 +38,7 @@ def test_1():
 def do_profiling(testFunction):
     """
     Выполнение профилирования тестовой функции.
-    @param testFunction: Объект тестовой функции.
+    :param testFunction: Объект тестовой функции.
     """
     # Удалить старые логи
     if os.path.exists(PROF_LOG_FILENAME):

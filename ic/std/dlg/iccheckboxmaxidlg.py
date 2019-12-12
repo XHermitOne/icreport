@@ -59,7 +59,7 @@ class icCheckBoxMaxiDialog(std_dialogs_proto.checkBoxMaxiDialogProto):
     def getValue(self):
         """
         Выбранные элементы.
-        @return: Кортеж выбранных элементов либо None при отмене выбора.
+        :return: Кортеж выбранных элементов либо None при отмене выбора.
             Например (False, True, True, False).
         """
         return self._check_items
@@ -68,15 +68,15 @@ class icCheckBoxMaxiDialog(std_dialogs_proto.checkBoxMaxiDialogProto):
              defaults=()):
         """
         Инициализация диалогового окна.
-        @param title: Заголовок окна.
-        @param label: Текст приглашения ввода.
-        @param choices: Список выбора.
+        :param title: Заголовок окна.
+        :param label: Текст приглашения ввода.
+        :param choices: Список выбора.
             Максимальное количество элементов выбора 15.
             При большем количестве элементов необходимо использовать 
             другую диалоговую форму выбора.
-        @param do_fit_dlg: Переразмерить диалоговое окно для удаления
+        :param do_fit_dlg: Переразмерить диалоговое окно для удаления
             не заполненной области отсутствующих элементов?
-        @param defaults: Список отметок по умолчанию.
+        :param defaults: Список отметок по умолчанию.
         """
         if title:
             self.SetTitle(title)
@@ -111,7 +111,7 @@ class icCheckBoxMaxiDialog(std_dialogs_proto.checkBoxMaxiDialogProto):
     def getCheckedList(self):
         """
         Список выбранных отметок.
-        @return: Кортеж выбранных элементов.
+        :return: Кортеж выбранных элементов.
             Например (False, True, True, False).
         """
         result = list()

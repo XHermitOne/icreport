@@ -57,10 +57,10 @@ TITLE = 'icReport'
 def getReportList(report_dir, is_sort=True):
     """
     Получить список отчетов.
-    @param report_dir: Директорий, в котором лежат файлы отчетов.
-    @type is_sort: bool.
-    @param is_sort: Сортировать список по именам?
-    @return: Возвращает список списков следующего формата:
+    :param report_dir: Директорий, в котором лежат файлы отчетов.
+    :type is_sort: bool.
+    :param is_sort: Сортировать список по именам?
+    :return: Возвращает список списков следующего формата:
         [
         [полное имя файла/директория отчета, имя отчета/директория,
             описание отчета/директория, None/вложенные объекты, индекс образа],
@@ -143,6 +143,7 @@ def getReportList(report_dir, is_sort=True):
         log.fatal(u'Ошибка заполнения информации о файлах отчетов <%s>.' % report_dir)
     return list()
 
+
 def get_root_dirname():
     """
     Путь к корневой папке.
@@ -170,9 +171,10 @@ class icReportBrowserDialog(wx.Dialog):
     def __init__(self, parent=None, mode=IC_REPORT_VIEWER_MODE, report_dir=''):
         """
         Конструктор.
-        @param parent: Родительская форма.
-        @param mode: Режим работы.
-        @param report_dir: Папка отчетов.
+
+        :param parent: Родительская форма.
+        :param mode: Режим работы.
+        :param report_dir: Папка отчетов.
         """
         # Версия в строковом виде
         ver = '.'.join([str(ident) for ident in config.__version__])
@@ -614,7 +616,7 @@ class icReportBrowserDialog(wx.Dialog):
     def _fillReportTree(self, report_dir):
         """
         Наполнить дерево отчетов данными об отчетах.
-        @param report_dir: Директория отчетов.
+        :param report_dir: Директория отчетов.
         """
         # Получить описание всех отчетов
         rep_data = getReportList(report_dir)
@@ -634,8 +636,8 @@ class icReportBrowserDialog(wx.Dialog):
     def _appendItemsReportTree(self, parent_id, items):
         """
         Добавить пункты дерева по полученному описанию отчетов.
-        @param parent_id: Идентификатор родительского узла.
-        @param items: Ветка описаний отчетов.
+        :param parent_id: Идентификатор родительского узла.
+        :param items: Ветка описаний отчетов.
         """
         if not items:
             log.warning(u'Пустой список описаний отчетов при построении дерева отчетов')
@@ -659,7 +661,7 @@ class icReportBrowserDialog(wx.Dialog):
     def setReportDir(self, rep_dir):
         """
         Установить директорий/папку отчетов.
-        @param rep_dir: Папка отчетов.
+        :param rep_dir: Папка отчетов.
         """
         self._ReportDir = rep_dir
 

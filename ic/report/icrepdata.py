@@ -80,7 +80,7 @@ class icReportData:
         """
         Конвертация из первоначального представления данные в представление
             данных отчета.
-        @param src_data: Исходные данные.
+        :param src_data: Исходные данные.
         """
         pass
         
@@ -105,7 +105,7 @@ class icXMLReportData(icReportData):
         """
         Конвертация из первоначального представления данные в представление
             данных отчета.
-        @param xml_filename: Исходные данные.
+        :param xml_filename: Исходные данные.
         """
         xml_data = self.open(xml_filename)
         self._rep_data = self.data_convert(xml_data)
@@ -114,7 +114,7 @@ class icXMLReportData(icReportData):
     def open(self, xml_filename):
         """
         Открыть XML файл.
-        @param xml_filename: Имя XML файла данных отчета.
+        :param xml_filename: Имя XML файла данных отчета.
         """
         return xml2dict.XmlFile2Dict(xml_filename)
 

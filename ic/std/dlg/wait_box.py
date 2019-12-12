@@ -25,12 +25,12 @@ def wait_func(parent, message,
               art_frames=None):
     """
     Окно ожидания.
-    @param parent: Ссылка на окно.
-    @param message: Текст диалога.
-    @param function: Функция, которую необходимо подождать.
-    @param func_args: Аргументы функции.
-    @param func_kwargs: Именованные аргументы функции.
-    @param art_frames: Файлы-кадры.
+    :param parent: Ссылка на окно.
+    :param message: Текст диалога.
+    :param function: Функция, которую необходимо подождать.
+    :param func_args: Аргументы функции.
+    :param func_kwargs: Именованные аргументы функции.
+    :param art_frames: Файлы-кадры.
     """
     global ic_wait_process_dlg
     

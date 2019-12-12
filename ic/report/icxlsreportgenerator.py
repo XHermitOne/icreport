@@ -33,8 +33,8 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def __init__(self, report=None, parent=None):
         """
         Конструктор класса.
-        @param report: Шаблон отчета.
-        @param parent: Родительская форма, необходима для вывода сообщений.
+        :param report: Шаблон отчета.
+        :param parent: Родительская форма, необходима для вывода сообщений.
         """
         # вызов конструктора предка
         icrepgensystem.icReportGeneratorSystem.__init__(self, report, parent)
@@ -50,7 +50,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def reloadRepData(self, tmpl_filename=None):
         """
         Перегрузить данные отчета.
-        @param tmpl_filename: Имя файла шаблона отчета.
+        :param tmpl_filename: Имя файла шаблона отчета.
         """
         if tmpl_filename is None:
             tmpl_filename = self.RepTmplFileName
@@ -72,8 +72,8 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def _genXLSReport(self, report, *args, **kwargs):
         """
         Генерация отчета и сохранение его в XLS файл.
-        @param report: Полное описание шаблона отчета.
-        @return: Возвращает имя xml файла или None в случае ошибки.
+        :param report: Полное описание шаблона отчета.
+        :return: Возвращает имя xml файла или None в случае ошибки.
         """
         if report is None:
             report = self._Rep
@@ -83,7 +83,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def selectAction(self, report=None, *args, **kwargs):
         """
         Запуск генерации отчета с последующим выбором действия.
-        @param report: Полное описание шаблона отчета.
+        :param report: Полное описание шаблона отчета.
         """
         xls_rep_file_name = self._genXLSReport(report, *args, **kwargs)
         if xls_rep_file_name and os.path.exists(xls_rep_file_name):
@@ -94,7 +94,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def doSelectAction(self, data):
         """
         Запуск выбора действия над отчетом.
-        @param data: Данные об отчете.
+        :param data: Данные об отчете.
         """
         action = icreportactiondlg.getReportActionDlg(title=self.getReportDescription())
         if action == icreportactiondlg.PRINT_ACTION_ID:
@@ -110,7 +110,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def preview(self, report=None, *args, **kwargs):
         """
         Предварительный просмотр.
-        @param report: Полное описание шаблона отчета.
+        :param report: Полное описание шаблона отчета.
         """
         xls_rep_file_name = self._genXLSReport(report, *args, **kwargs)
         if xls_rep_file_name and os.path.exists(xls_rep_file_name):
@@ -120,7 +120,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def previewOffice(self, xls_filename):
         """
         Открыть отчет в режиме предварительного просмотра.
-        @param xls_filename: Имя xls файла, содержащего сгенерированный отчет.
+        :param xls_filename: Имя xls файла, содержащего сгенерированный отчет.
         """
         if not os.path.exists(xls_filename):
             log.warning(u'Предварительный просмотр. Файл <%s> не найден' % xls_filename)
@@ -144,7 +144,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def print(self, report=None, *args, **kwargs):
         """
         Печать.
-        @param report: Полное описание шаблона отчета.
+        :param report: Полное описание шаблона отчета.
         """
         xls_rep_file_name = self._genXLSReport(report, *args, **kwargs)
         if xls_rep_file_name and os.path.exists(xls_rep_file_name):
@@ -154,7 +154,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def printOffice(self, xls_filename):
         """
         Печать отчета с помощью CALC.
-        @param xls_filename: Имя xls файла, содержащего сгенерированный отчет.
+        :param xls_filename: Имя xls файла, содержащего сгенерированный отчет.
         """
         if xls_filename and os.path.exists(xls_filename):
             cmd = 'libreoffice -p %s&' % xls_filename
@@ -172,8 +172,8 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def convert(self, report=None, to_filename=None, *args, **kwargs):
         """
         Вывод результатов отчета в Excel.
-        @param report: Полное описание шаблона отчета.
-        @param to_filename: Имя файла, куда необходимо сохранить отчет.
+        :param report: Полное описание шаблона отчета.
+        :param to_filename: Имя файла, куда необходимо сохранить отчет.
         """
         rep_file_name = self._genXLSReport(report, *args, **kwargs)
         if rep_file_name:
@@ -183,7 +183,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def openOffice(self, xls_filename):
         """
         Открыть.
-        @param xls_filename: Имя xls файла, содержащего сгенерированный отчет.
+        :param xls_filename: Имя xls файла, содержащего сгенерированный отчет.
         """
         if xls_filename and os.path.exists(xls_filename):
             cmd = 'libreoffice %s&' % xls_filename
@@ -195,7 +195,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def edit(self, rep_filename=None):
         """
         Редактирование отчета.
-        @param rep_filename: Полное имя файла шаблона отчета.
+        :param rep_filename: Полное имя файла шаблона отчета.
         """
         # Определить файл *.xls
         xls_file = os.path.abspath(os.path.splitext(rep_filename)[0]+'.xls')
@@ -206,8 +206,8 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def generateReport(self, report=None, *args, **kwargs):
         """
         Запустить генератор отчета.
-        @param report: Шаблон отчета.
-        @return: Возвращает сгенерированный отчет или None в случае ошибки.
+        :param report: Шаблон отчета.
+        :return: Возвращает сгенерированный отчет или None в случае ошибки.
         """
         try:
             if report is not None:
@@ -244,13 +244,13 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def generate(self, report=None, db_url=None, sql=None, stylelib=None, vars=None, *args, **kwargs):
         """
         Запустить генератор отчета.
-        @param report: Шаблон отчета.
-        @param db_url: Connection string в виде url. Например
+        :param report: Шаблон отчета.
+        :param db_url: Connection string в виде url. Например
             postgresql+psycopg2://postgres:postgres@10.0.0.3:5432/realization.
-        @param sql: Запрос SQL.
-        @param stylelib: Библиотека стилей.
-        @param vars: Словарь переменных отчета.
-        @return: Возвращает сгенерированный отчет или None в случае ошибки.
+        :param sql: Запрос SQL.
+        :param stylelib: Библиотека стилей.
+        :param vars: Словарь переменных отчета.
+        :return: Возвращает сгенерированный отчет или None в случае ошибки.
         """
         try:
             if report is not None:
@@ -285,13 +285,13 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def save(self, report_data=None, is_virtual_excel=True):
         """
         Сохранить результаты генерации в файл
-        @param report_data: Сгенерированный отчет.
-        @param is_virtual_excel: Сохранение произвести с помощью VirtualExcel?
+        :param report_data: Сгенерированный отчет.
+        :param is_virtual_excel: Сохранение произвести с помощью VirtualExcel?
             True - да, False - Сохранение производится конвертацией с помощью UNOCONV.
             ВНИМАНИЕ! При конвертации с помощью UNOCONV ячейки не образмериваются.
                 Размеры ячеек остаются по умолчанию.
                 UNOCONV транслирует не все стили и атрибуты ячеек.
-        @return: Имя сохраненного файла или None, если сохранения не произошло.
+        :return: Имя сохраненного файла или None, если сохранения не произошло.
         """
         if report_data:
             rep_file = icrepfile.icExcelXMLReportFile()
@@ -324,7 +324,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def previewResult(self, report_data=None):
         """
         Предварительный просмотр.
-        @param report_data: Сгенерированный отчет.
+        :param report_data: Сгенерированный отчет.
         """
         report_filename = self.save(report_data)
         if report_filename:
@@ -333,7 +333,7 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def printResult(self, report_data=None):
         """
         Печать.
-        @param report_data: Сгенерированный отчет.
+        :param report_data: Сгенерированный отчет.
         """
         report_filename = self.save(report_data)
         if report_filename:
@@ -342,8 +342,8 @@ class icXLSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def convertResult(self, report_data=None, to_filename=None):
         """
         Конвертирование результатов отчета.
-        @param report_data: Сгенерированный отчет.
-        @param to_filename: Имя результирующего файла.
+        :param report_data: Сгенерированный отчет.
+        :param to_filename: Имя результирующего файла.
         """
         report_filename = self.save(report_data)
         if report_filename:

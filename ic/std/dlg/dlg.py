@@ -19,11 +19,11 @@ __version__ = (0, 1, 1, 1)
 def getFileDlg(parent=None, title='', wildcard='', default_path=''):
     """
     Открыть диалог выбора файла для открытия/записи.
-    @param parent: Ссылка на окно.
-    @param title: Заголовок диалогового окна.
-    @param wildcard: Фильтр файлов.
-    @param default_path: Путь по умолчанию.
-    @return: Возвращает полное имя выбранного файла.
+    :param parent: Ссылка на окно.
+    :param title: Заголовок диалогового окна.
+    :param wildcard: Фильтр файлов.
+    :param default_path: Путь по умолчанию.
+    :return: Возвращает полное имя выбранного файла.
     """
     result = ''
     dlg = None
@@ -59,9 +59,9 @@ def getFileDlg(parent=None, title='', wildcard='', default_path=''):
 def getDirDlg(parent=None, title='', default_path=''):
     """
     Диалог выбора каталога.
-    @param parent: Ссылка на окно.
-    @param title: Заголовок диалогового окна.
-    @param default_path: Путь по умолчанию.
+    :param parent: Ссылка на окно.
+    :param title: Заголовок диалогового окна.
+    :param default_path: Путь по умолчанию.
     """
     result = ''
     dlg = None
@@ -92,9 +92,9 @@ def getDirDlg(parent=None, title='', default_path=''):
 def getImageDlg(parent=None, default_img_dir=None):
     """
     Диалог выбора графических файлов.
-    @param parent: Ссылка на окно.
-    @param default_img_dir: Указание папки образа.
-    @return: Возвращает полное имя выбранного файла.
+    :param parent: Ссылка на окно.
+    :param default_img_dir: Указание папки образа.
+    :return: Возвращает полное имя выбранного файла.
     """
     result = ''
     dlg = None
@@ -128,10 +128,10 @@ def getImageDlg(parent=None, default_img_dir=None):
 def getColorDlg(parent=None, title='', default=wx.BLACK):
     """
     Диалог выбора цвета
-    @param parent: Ссылка на окно.
-    @param title: Заголовок диалогового окна.
-    @param default: Значение по умолчанию.
-    @return: Возвращает выбранный цвет или default.
+    :param parent: Ссылка на окно.
+    :param title: Заголовок диалогового окна.
+    :param default: Значение по умолчанию.
+    :return: Возвращает выбранный цвет или default.
     """
     result = (0, 0, 0)
     dlg = None
@@ -160,11 +160,11 @@ def getColorDlg(parent=None, title='', default=wx.BLACK):
 def getTextInputDlg(parent=None, title='', message='', default=''):
     """
     Диалог ввода строки.
-    @param parent: Ссылка на окно.
-    @param title: Заголовок диалогового окна.
-    @param message: Текст диалога.
-    @param default: Значение по умолчанию.
-    @return: Возвращает введеную строку, если нажата отмена, то пустую строку.
+    :param parent: Ссылка на окно.
+    :param title: Заголовок диалогового окна.
+    :param message: Текст диалога.
+    :param default: Значение по умолчанию.
+    :return: Возвращает введеную строку, если нажата отмена, то пустую строку.
     """
     result = ''
     dlg = None
@@ -193,10 +193,10 @@ def getTextInputDlg(parent=None, title='', message='', default=''):
 def getAskDlg(title='', message='', style=wx.YES_NO | wx.ICON_QUESTION):
     """
     Диалог вопроса.
-    @param title: Заголовок диалогового окна.
-    @param message: Текст диалога.
-    @param style: Стиль диалога.
-    @return: Код нажатой кнопки (Например: wx.YES или wx.NO).
+    :param title: Заголовок диалогового окна.
+    :param message: Текст диалога.
+    :param style: Стиль диалога.
+    :return: Код нажатой кнопки (Например: wx.YES или wx.NO).
     """
     try:
         return wx.MessageBox(message, title, style)
@@ -214,10 +214,10 @@ def getAskBox(*args, **kwargs):
 def getMsgBox(title='', message='', parent=None):
     """
     Вывод сообщения.
-    @param parent: Родительское окно.
-    @param title: Заголовок диалогового окна.
-    @param message: Текст диалога.
-    @return: Код нажатой кнопки (Например: wx.YES или wx.NO).
+    :param parent: Родительское окно.
+    :param title: Заголовок диалогового окна.
+    :param message: Текст диалога.
+    :return: Код нажатой кнопки (Например: wx.YES или wx.NO).
     """
     try:
         return wx.MessageBox(message, title, wx.OK, parent)
@@ -228,10 +228,10 @@ def getMsgBox(title='', message='', parent=None):
 def getErrBox(title='', message='', parent=None):
     """
     Вывод сообщения об ошибке.
-    @param parent: Родительское окно.
-    @param title: Заголовок диалогового окна.
-    @param message: Текст диалога.
-    @return: Код нажатой кнопки (Например: wx.YES или wx.NO).
+    :param parent: Родительское окно.
+    :param title: Заголовок диалогового окна.
+    :param message: Текст диалога.
+    :return: Код нажатой кнопки (Например: wx.YES или wx.NO).
     """
     try:
         return wx.MessageBox(message, title, wx.OK | wx.ICON_ERROR, parent)
@@ -242,10 +242,10 @@ def getErrBox(title='', message='', parent=None):
 def getWarningBox(title='', message='', parent=None):
     """
     Вывод предупреждающего сообщения.
-    @param parent: Родительское окно.
-    @param title: Заголовок диалогового окна.
-    @param message: Текст диалога.
-    @return: Код нажатой кнопки (Например: wx.YES или wx.NO).
+    :param parent: Родительское окно.
+    :param title: Заголовок диалогового окна.
+    :param message: Текст диалога.
+    :return: Код нажатой кнопки (Например: wx.YES или wx.NO).
     """
     try:
         return wx.MessageBox(message, title, wx.OK | wx.ICON_WARNING, parent)
@@ -256,10 +256,10 @@ def getWarningBox(title='', message='', parent=None):
 def getSingleChoiceDlg(parent=None, title='', message='', choice=None):
     """
     Диалог выбора.
-    @param parent: Родительское окно.
-    @param title: Заголовок диалогового окна.
-    @param message: Текст диалога.
-    @return: Выбранный текст или None, если нажата Cancel.
+    :param parent: Родительское окно.
+    :param title: Заголовок диалогового окна.
+    :param message: Текст диалога.
+    :return: Выбранный текст или None, если нажата Cancel.
     """
     result = None
     dlg = None
@@ -288,11 +288,11 @@ def getSingleChoiceDlg(parent=None, title='', message='', choice=None):
 def getSingleChoiceIdxDlg(parent=None, title='', message='', choice=None):
     """
     Диалог выбора.
-    @param parent: Родительское окно.
-    @param title: Заголовок диалогового окна.
-    @param message: Текст диалога.
-    @param choice: Список выбора. Список строк.
-    @return: Выбранный индекс в списке выбора или -1, если нажата Cancel.
+    :param parent: Родительское окно.
+    :param title: Заголовок диалогового окна.
+    :param message: Текст диалога.
+    :param choice: Список выбора. Список строк.
+    :return: Выбранный индекс в списке выбора или -1, если нажата Cancel.
     """
     idx = -1
     dlg = None

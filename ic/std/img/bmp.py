@@ -18,7 +18,7 @@ __version__ = (0, 1, 1, 1)
 def getImageFileType(img_filename):
     """
     Определить тип файла образа по его расширению ( .jpg, ... ).
-    @param img_filename: Полное имя файла.
+    :param img_filename: Полное имя файла.
     """
     if img_filename == '' or not os.path.exists(img_filename):
         log.warning(u'Файл <%s> не найден' % img_filename)
@@ -56,10 +56,10 @@ def getImageFileType(img_filename):
 def createBitmap(img_filename, bMakeMask=False):
     """
     Создать объект Bitmap из файла ImgFileName_.
-    @param img_filename: Имя файла.
-    @param bMakeMask: Флаг создания маски по изображению.
+    :param img_filename: Имя файла.
+    :param bMakeMask: Флаг создания маски по изображению.
         Фон д.б. CYAN (0, 255, 255)
-    @return: Возвращает созданный объект или None в случае ошибки.
+    :return: Возвращает созданный объект или None в случае ошибки.
     """
     try:
         # Преобразовать относительные пути в абсолютные
@@ -82,8 +82,8 @@ def createBitmap(img_filename, bMakeMask=False):
 def createEmptyBitmap(width, height, colour):
     """
     Создать пустой битмап.
-    @param width, height: Размер битмапа.
-    @param colour: Цвет фона.
+    :param width, height: Размер битмапа.
+    :param colour: Цвет фона.
     """
     try:
         # Пустой квадратик

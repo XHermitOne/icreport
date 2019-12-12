@@ -44,9 +44,9 @@ class icReportFile:
     def write(self, rep_filename, rec_data):
         """
         Сохранить заполненный отчет в файле.
-        @param rep_filename: Имя файла отчета.
-        @param rec_data: Данные отчета.
-        @return: Функция возвращает имя созданного xml файла, 
+        :param rep_filename: Имя файла отчета.
+        :param rec_data: Данные отчета.
+        :return: Функция возвращает имя созданного xml файла,
             или None в случае ошибки.
         """
         pass
@@ -66,9 +66,9 @@ class icExcelXMLReportFile(icReportFile):
     def write(self, rep_filename, rec_data):
         """
         Сохранить заполненный отчет в файле.
-        @param rep_filename: Имя файла отчета XML.
-        @param rec_data: Данные отчета.
-        @return: Функция возвращает имя созданного xml файла, 
+        :param rep_filename: Имя файла отчета XML.
+        :param rec_data: Данные отчета.
+        :return: Функция возвращает имя созданного xml файла,
             или None в случае ошибки.
         """
         xml_file = None
@@ -116,9 +116,9 @@ class icExcelXMLReportFile(icReportFile):
     def write_book(self, rep_filename, *rep_sheet_data):
         """
         Сохранить список листов заполненного отчета в файле.
-        @param rep_filename: Имя файла отчета XML.
-        @param rep_sheet_data: Данные отчета, разобранные по листам.
-        @return: Функция возвращает имя созданного xml файла, 
+        :param rep_filename: Имя файла отчета XML.
+        :param rep_sheet_data: Данные отчета, разобранные по листам.
+        :return: Функция возвращает имя созданного xml файла,
             или None в случае ошибки.
         """
         xml_file = None
@@ -244,7 +244,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def savePageSetup(self, report):
         """
         Записать в xml файле параметры страницы.
-        @param report: Тело отчета.
+        :param report: Тело отчета.
         """
         self.startElementLevel('WorksheetOptions', {'xmlns': 'urn:schemas-microsoft-com:office:excel'})
         if 'page_setup' in report:
@@ -347,8 +347,8 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def startSheet(self, rep_name, report):
         """
         Теги начала страницы.
-        @param rep_name: Имя отчета.
-        @param report: Тело отчета.
+        :param rep_name: Имя отчета.
+        :param report: Тело отчета.
         """
         rep_name = str(rep_name)    # , self._encoding)
         self.startElementLevel('Worksheet', {'ss:Name': rep_name})
@@ -379,7 +379,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def endSheet(self, report):
         """
         Теги начала страницы.
-        @param report: Тело отчета.
+        :param report: Тело отчета.
         """
         self.endElementLevel('Table')
         self.savePageSetup(report)
@@ -399,8 +399,8 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def setStyle(self, cell):
         """
         Определить стиль ячейки.
-        @param cell: Атрибуты ячейки.
-        @return: Возвращает индекс стиля в списке стилей.
+        :param cell: Атрибуты ячейки.
+        :return: Возвращает индекс стиля в списке стилей.
         """
         cell_style_idx = self.getStyle(cell)
         if cell_style_idx is None:
@@ -422,8 +422,8 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def getStyle(self, cell):
         """
         Определить стиль ячейки из уже имеющихся.
-        @param cell: Атрибуты ячейки.
-        @return: Возвращает индекс стиля в списке стилей.
+        :param cell: Атрибуты ячейки.
+        :return: Возвращает индекс стиля в списке стилей.
         """
         # сначала поискать в списке стилей
         find_style = [style for style in self._styles if self._equalStyles(style, cell)]
@@ -704,9 +704,9 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def saveCell(self, row, column, cell, sheet=None):
         """
         Записать ячейку.
-        @param row: НОмер строки.
-        @param column: Номер колонки.
-        @param cell: Атрибуты ячейки.
+        :param row: НОмер строки.
+        :param column: Номер колонки.
+        :param cell: Атрибуты ячейки.
         """
         if cell is None:
             self._idx_set = False   # Сбросить флаг установки индекса
@@ -793,10 +793,10 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def _setCellmerge_across(self, row, column, merge_across_, sheet):
         """
         Сбросить все ячейки, которые попадают в горизонтальную зону объединения.
-        @param row: НОмер строки.
-        @param column: Номер колонки.
-        @param merge_across_: Количество ячеек, объединенных с текущей.
-        @param sheet: Структура листа.
+        :param row: НОмер строки.
+        :param column: Номер колонки.
+        :param merge_across_: Количество ячеек, объединенных с текущей.
+        :param sheet: Структура листа.
         """
         for i in range(1, merge_across_):
             try:
@@ -810,10 +810,10 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def _setCellMergeDown(self, row, column, merge_down, sheet):
         """
         Сбросить все ячейки, которые попадают в вертикальную зону объединения.
-        @param row: НОмер строки.
-        @param column: Номер колонки.
-        @param merge_down: Количество ячеек, объединенных с текущей.
-        @param sheet: Структура листа.
+        :param row: НОмер строки.
+        :param column: Номер колонки.
+        :param merge_down: Количество ячеек, объединенных с текущей.
+        :param sheet: Структура листа.
         """
         for i in range(1, merge_down):
             try:
@@ -827,11 +827,11 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def _setCellMerge(self, row, column, merge_across_, merge_down, sheet):
         """
         Сбросить все ячейки, которые попадают в зону объединения.
-        @param row: НОмер строки.
-        @param column: Номер колонки.
-        @param merge_across_: Количество ячеек, объединенных с текущей.
-        @param merge_down: Количество ячеек, объединенных с текущей.
-        @param sheet: Структура листа.
+        :param row: НОмер строки.
+        :param column: Номер колонки.
+        :param merge_across_: Количество ячеек, объединенных с текущей.
+        :param merge_down: Количество ячеек, объединенных с текущей.
+        :param sheet: Структура листа.
         """
         for x in range(1, merge_across_):
             for y in range(1, merge_down):

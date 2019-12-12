@@ -26,12 +26,12 @@ Buff_readAndEvalFile = {}
 def loadResourceFile(filename, replace_dict={}, bRefresh=False, *arg, **kwarg):
     """
     Загрузить ресурс из файла. Функция читает файл и выполняет его.
-    @type filename: C{string}
-    @param filename: Имя ресурсного файла.
-    @type replace_dict: C{dictionary}
-    @param replace_dict: Словарь замен.
-    @type bRefresh: C{bool}
-    @param bRefresh: Признак того, что файл надо перечитать даже если он
+    :type filename: C{string}
+    :param filename: Имя ресурсного файла.
+    :type replace_dict: C{dictionary}
+    :param replace_dict: Словарь замен.
+    :type bRefresh: C{bool}
+    :param bRefresh: Признак того, что файл надо перечитать даже если он
         буферезирован.
     """
     obj = None
@@ -118,7 +118,7 @@ def loadResourceFile(filename, replace_dict={}, bRefresh=False, *arg, **kwarg):
 def loadResource(filename):
     """
     Получить ресурс в ресурсном файле.
-    @param filename: Полное имя ресурсного файла.
+    :param filename: Полное имя ресурсного файла.
     """
     # Сначала предположим что файл в формате Pickle.
     struct = loadResourcePickle(filename)
@@ -135,7 +135,7 @@ def loadResource(filename):
 def loadResourcePickle(filename):
     """
     Получить ресурс из ресурсного файла в формате Pickle.
-    @param filename: Полное имя ресурсного файла.
+    :param filename: Полное имя ресурсного файла.
     """
     if os.path.isfile(filename):
         f = None
@@ -156,7 +156,7 @@ def loadResourcePickle(filename):
 def loadResourceText(filename):
     """
     Получить ресурс из ресурсного файла в текстовом формате.
-    @param filename: Полное имя ресурсного файла.
+    :param filename: Полное имя ресурсного файла.
     """
     if os.path.isfile(filename):
         f = None
@@ -177,9 +177,9 @@ def loadResourceText(filename):
 def saveResourcePickle(filename, resource):
     """
     Сохранить ресурс в файле в формате Pickle.
-    @param filename: Полное имя ресурсного файла.
-    @param resource: Словарно-списковая структура спецификации.
-    @return: Возвращает результат выполнения операции True/False.
+    :param filename: Полное имя ресурсного файла.
+    :param resource: Словарно-списковая структура спецификации.
+    :return: Возвращает результат выполнения операции True/False.
     """
     f = None
     try:
@@ -206,9 +206,9 @@ def saveResourcePickle(filename, resource):
 def saveResourceText(filename, resource):
     """
     Сохранить ресурс в файле в текстовом формате.
-    @param filename: Полное имя ресурсного файла.
-    @param resource: Словарно-списковая структура спецификации.
-    @return: Возвращает результат выполнения операции True/False.
+    :param filename: Полное имя ресурсного файла.
+    :param resource: Словарно-списковая структура спецификации.
+    :return: Возвращает результат выполнения операции True/False.
     """
     f = None
     try:

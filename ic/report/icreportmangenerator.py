@@ -39,8 +39,8 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def __init__(self, report=None, parent=None):
         """
         Конструктор класса.
-        @param report: Шаблон отчета.
-        @param parent: Родительская форма, необходима для вывода сообщений.
+        :param report: Шаблон отчета.
+        :param parent: Родительская форма, необходима для вывода сообщений.
         """
         # вызов конструктора предка
         icrepgensystem.icReportGeneratorSystem.__init__(self, report, parent)
@@ -62,7 +62,7 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def preview(self, report=None):
         """
         Предварительный просмотр.
-        @param report: Полное описание шаблона отчета.
+        :param report: Полное описание шаблона отчета.
         """
         if report is None:
             report = self._Rep
@@ -83,7 +83,7 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def print(self, report=None):
         """
         Печать.
-        @param report: Полное описание шаблона отчета.
+        :param report: Полное описание шаблона отчета.
         """
         if report is None:
             report = self._Rep
@@ -110,8 +110,8 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def convert(self, report=None, to_xls_filename=None, *args, **kwargs):
         """
         Вывод результатов отчета в Excel.
-        @param report: Полное описание шаблона отчета.
-        @param to_xls_filename: Имя файла, куда необходимо сохранить отчет.
+        :param report: Полное описание шаблона отчета.
+        :param to_xls_filename: Имя файла, куда необходимо сохранить отчет.
         """
         if report is None:
             report = self._Rep
@@ -132,7 +132,7 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def edit(self, rep_filename=None):
         """
         Редактирование отчета.
-        @param rep_filename: Полное имя файла шаблона отчета.
+        :param rep_filename: Полное имя файла шаблона отчета.
         """
         # Создание связи с ActiveX
         rprt_file_name = os.path.abspath(rep_filename)
@@ -163,8 +163,8 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def _getReportParameters(self, report=None):
         """
         Запустить генератор отчета.
-        @param report: Шаблон отчета.
-        @return: Возвращает словарь параметров. {'Имя параметра отчета':Значение параметра отчета}.
+        :param report: Шаблон отчета.
+        :return: Возвращает словарь параметров. {'Имя параметра отчета':Значение параметра отчета}.
         """
         try:
             if report is not None:
@@ -189,9 +189,9 @@ class icReportManagerGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def _setReportParameters(self, report_obj, parameters):
         """
         Установить параметры для отчета.
-        @param report_obj: Объект отчета ReportManger.
-        @param parameters: Словарь параметров. {'Имя параметра отчета':Значение параметра отчета}.
-        @return: Возвращает результат выполнения операции.
+        :param report_obj: Объект отчета ReportManger.
+        :param parameters: Словарь параметров. {'Имя параметра отчета':Значение параметра отчета}.
+        :return: Возвращает результат выполнения операции.
         """
         try:
             if parameters:

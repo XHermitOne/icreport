@@ -6,10 +6,10 @@
 
 Параметры:
 
-@type DEBUG_MODE: C{bool}
-@var DEBUG_MODE: Режим отладки (вкл./выкл.)
-@type LOG_MODE: C{bool}
-@var LOG_MODE: Режим журналирования (вкл./выкл.)
+:type DEBUG_MODE: C{bool}
+:var DEBUG_MODE: Режим отладки (вкл./выкл.)
+:type LOG_MODE: C{bool}
+:var LOG_MODE: Режим журналирования (вкл./выкл.)
 """
 
 import os.path
@@ -39,8 +39,8 @@ LOG_FILENAME = os.path.join(PROFILE_PATH,
 def get_glob_var(name):
     """
     Прочитать значение глобальной переменной.
-    @type name: C{string}
-    @param name: Имя переменной.
+    :type name: C{string}
+    :param name: Имя переменной.
     """
     return globals()[name]
 
@@ -48,9 +48,9 @@ def get_glob_var(name):
 def set_glob_var(name, value):
     """
     Установить значение глобальной переменной.
-    @type name: C{string}
-    @param name: Имя переменной.
-    @param value: Значение переменной.
+    :type name: C{string}
+    :param name: Имя переменной.
+    :param value: Значение переменной.
     """
     globals()[name] = value
     return value

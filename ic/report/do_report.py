@@ -29,9 +29,9 @@ DEFAULT_REPORT_FILE_EXT = '.rprt'
 def getReportResourceFilename(report_filename='', report_dir=''):
     """
     Получить полное имя файла шаблона отчета.
-    @param report_filename: Имя файла отчета в кратком виде.
-    @param report_dir: Папка отчетов.
-    @return: Полное имя файла отчета.
+    :param report_filename: Имя файла отчета в кратком виде.
+    :param report_dir: Папка отчетов.
+    :return: Полное имя файла отчета.
     """
     # Проверить расширение
     rprt_filename = report_filename
@@ -64,9 +64,9 @@ def getReportResourceFilename(report_filename='', report_dir=''):
 def getPathFilename(filename='', report_dir=''):
     """
     Получить полное имя файла отчета.
-    @param report_filename: Имя файла отчета в кратком виде.
-    @param report_dir: Папка отчетов.
-    @return: Полное имя файла отчета.
+    :param report_filename: Имя файла отчета в кратком виде.
+    :param report_dir: Папка отчетов.
+    :return: Полное имя файла отчета.
     """
     return filefunc.normal_path(os.path.join(report_dir, filename))
 
@@ -76,7 +76,7 @@ def isNewReportTemplateFile(src_filename, rprt_filename):
     Проверить актуальность шаблона.
     Если исходный шаблон изменен позже чем рабочий файл шаблона *.rprt
     то необходимо сделать изменения.
-    @return: True-внесены измененияв исходный шаблон/False-изменений нет.
+    :return: True-внесены измененияв исходный шаблон/False-изменений нет.
     """
     src_modify_dt = filefunc.file_modify_dt(src_filename)
     rprt_modify_dt = filefunc.file_modify_dt(rprt_filename)
@@ -88,9 +88,9 @@ def isNewReportTemplateFile(src_filename, rprt_filename):
 def updateReportTemplateFile(src_filename, rprt_filename):
     """
     Произвести обновления шаблона отчета.
-    @param src_filename: Имя файла шаблона источника.
-    @param rprt_filename: Имя результирующего файла шаблона *.rprt.
-    @return: Скорректированное имя созданного файла шаблона или None в случае ошибки.
+    :param src_filename: Имя файла шаблона источника.
+    :param rprt_filename: Имя результирующего файла шаблона *.rprt.
+    :return: Скорректированное имя созданного файла шаблона или None в случае ошибки.
     """
     # Удаляем результирующий файл
     filefunc.remove_file(rprt_filename)
@@ -108,8 +108,8 @@ def updateReportTemplateFile(src_filename, rprt_filename):
 def createReportResourceFile(template_filename):
     """
     Создать ресурсный файл шаблона по имени запрашиваемого.
-    @param template_filename: Имя запрашиваемого файла шаблона.
-    @return: Скорректированное имя созданного файла шаблона или None в случае ошибки.
+    :param template_filename: Имя запрашиваемого файла шаблона.
+    :return: Скорректированное имя созданного файла шаблона или None в случае ошибки.
     """
     # Коррекция имени файла с учетом русских букв в имени файла
     dir_name = os.path.dirname(template_filename)
@@ -141,8 +141,8 @@ def createReportResourceFile(template_filename):
 def loadStyleLib(stylelib_filename=None):
     """
     Загрузить библиотеку стилей из файла.
-    @param stylelib_filename: Файл библиотеки стилей.
-    @return: Библиотека стилей.
+    :param stylelib_filename: Файл библиотеки стилей.
+    :return: Библиотека стилей.
     """
     # Загрузить библлиотеку стилей из файла
     stylelib = None
@@ -157,10 +157,10 @@ def loadStyleLib(stylelib_filename=None):
 def openReportBrowser(parent_form=None, report_dir='', mode=icreportbrowser.IC_REPORT_EDITOR_MODE):
     """
     Запуск браузера отчетов.
-    @param parent_form: Родительская форма, если не указана, 
+    :param parent_form: Родительская форма, если не указана, 
         то создается новое приложение.
-    @param report_dir: Директорий, где хранятся отчеты.
-    @return: Возвращает результат выполнения операции True/False.
+    :param report_dir: Директорий, где хранятся отчеты.
+    :return: Возвращает результат выполнения операции True/False.
     """
     dlg = None
     try:
@@ -181,10 +181,10 @@ def openReportBrowser(parent_form=None, report_dir='', mode=icreportbrowser.IC_R
 def openReportEditor(parent_form=None, report_dir=''):
     """
     Запуск редактора отчетов. Редактор - режим работы браузера.
-    @param parent_form: Родительская форма, если не указана, 
+    :param parent_form: Родительская форма, если не указана, 
         то создается новое приложение.
-    @param report_dir: Директорий, где хранятся отчеты.
-    @return: Возвращает результат выполнения операции True/False.
+    :param report_dir: Директорий, где хранятся отчеты.
+    :return: Возвращает результат выполнения операции True/False.
     """
     return openReportBrowser(parent_form, report_dir, icreportbrowser.IC_REPORT_EDITOR_MODE)
 
@@ -192,10 +192,10 @@ def openReportEditor(parent_form=None, report_dir=''):
 def openReportViewer(parent_form=None, report_dir=''):
     """
     Запуск просмотрщика отчетов. Просмотрщик - режим работы браузера.
-    @param parent_form: Родительская форма, если не указана, 
+    :param parent_form: Родительская форма, если не указана, 
         то создается новое приложение.
-    @param report_dir: Директорий, где хранятся отчеты.
-    @return: Возвращает результат выполнения операции True/False.
+    :param report_dir: Директорий, где хранятся отчеты.
+    :return: Возвращает результат выполнения операции True/False.
     """
     return openReportBrowser(parent_form, report_dir, icreportbrowser.IC_REPORT_VIEWER_MODE)
 
@@ -205,17 +205,17 @@ def printReport(parent_form=None, report_filename='', report_dir='',
                 stylelib_filename=None, variables=None):
     """
     Функция запускает генератор отчетов и вывод на печать.
-    @param parent_form: Родительская форма, если не указана,
+    :param parent_form: Родительская форма, если не указана,
         то создается новое приложение.
-    @param report_filename: Файл отчета.
-    @param report_dir: Директорий, где хранятся отчеты.
-    @param db_url: Connection string в виде url. Например
+    :param report_filename: Файл отчета.
+    :param report_dir: Директорий, где хранятся отчеты.
+    :param db_url: Connection string в виде url. Например
         postgresql+psycopg2://postgres:postgres@10.0.0.3:5432/realization.
-    @param sql: Запрос SQL.
-    @param command: Комманда после генерации. print/preview/export.
-    @param stylelib_filename: Файл библиотеки стилей.
-    @param variables: Словарь переменных для заполнения отчета.
-    @return: Возвращает результат выполнения операции True/False.
+    :param sql: Запрос SQL.
+    :param command: Комманда после генерации. print/preview/export.
+    :param stylelib_filename: Файл библиотеки стилей.
+    :param variables: Словарь переменных для заполнения отчета.
+    :return: Возвращает результат выполнения операции True/False.
     """
     report_filename = getReportResourceFilename(report_filename, report_dir)
     try:
@@ -238,17 +238,17 @@ def previewReport(parent_form=None, report_filename='', report_dir='',
                   stylelib_filename=None, variables=None):
     """
     Функция запускает генератор отчетов и вывод на экран предварительного просмотра.
-    @param parent_form: Родительская форма, если не указана,
+    :param parent_form: Родительская форма, если не указана,
         то создается новое приложение.
-    @param report_filename: Файл отчета.
-    @param report_dir: Директорий, где хранятся отчеты.
-    @param db_url: Connection string в виде url. Например
+    :param report_filename: Файл отчета.
+    :param report_dir: Директорий, где хранятся отчеты.
+    :param db_url: Connection string в виде url. Например
         postgresql+psycopg2://postgres:postgres@10.0.0.3:5432/realization.
-    @param sql: Запрос SQL.
-    @param command: Комманда после генерации. print/preview/export.
-    @param stylelib_filename: Файл библиотеки стилей.
-    @param variables: Словарь переменных для заполнения отчета.
-    @return: Возвращает результат выполнения операции True/False.
+    :param sql: Запрос SQL.
+    :param command: Комманда после генерации. print/preview/export.
+    :param stylelib_filename: Файл библиотеки стилей.
+    :param variables: Словарь переменных для заполнения отчета.
+    :return: Возвращает результат выполнения операции True/False.
     """
     report_filename = getReportResourceFilename(report_filename, report_dir)
     try:
@@ -271,17 +271,17 @@ def exportReport(parent_form=None, report_filename='', report_dir='',
                  stylelib_filename=None, variables=None):
     """
     Функция запускает генератор отчетов и вывод в Office.
-    @param parent_form: Родительская форма, если не указана,
+    :param parent_form: Родительская форма, если не указана,
         то создается новое приложение.
-    @param report_filename: Файл отчета.
-    @param report_dir: Директорий, где хранятся отчеты.
-    @param db_url: Connection string в виде url. Например
+    :param report_filename: Файл отчета.
+    :param report_dir: Директорий, где хранятся отчеты.
+    :param db_url: Connection string в виде url. Например
         postgresql+psycopg2://postgres:postgres@10.0.0.3:5432/realization.
-    @param sql: Запрос SQL.
-    @param command: Комманда после генерации. print/preview/export.
-    @param stylelib_filename: Файл библиотеки стилей.
-    @param variables: Словарь переменных для заполнения отчета.
-    @return: Возвращает результат выполнения операции True/False.
+    :param sql: Запрос SQL.
+    :param command: Комманда после генерации. print/preview/export.
+    :param stylelib_filename: Файл библиотеки стилей.
+    :param variables: Словарь переменных для заполнения отчета.
+    :return: Возвращает результат выполнения операции True/False.
     """
     report_filename = getReportResourceFilename(report_filename, report_dir)
     try:
@@ -304,17 +304,17 @@ def selectReport(parent_form=None, report_filename='', report_dir='',
                  stylelib_filename=None, variables=None):
     """
     Функция запускает генератор отчетов с последующим выбором действия.
-    @param parent_form: Родительская форма, если не указана,
+    :param parent_form: Родительская форма, если не указана,
         то создается новое приложение.
-    @param report_filename: Файл отчета.
-    @param report_dir: Директорий, где хранятся отчеты.
-    @param db_url: Connection string в виде url. Например
+    :param report_filename: Файл отчета.
+    :param report_dir: Директорий, где хранятся отчеты.
+    :param db_url: Connection string в виде url. Например
         postgresql+psycopg2://postgres:postgres@10.0.0.3:5432/realization.
-    @param sql: Запрос SQL.
-    @param command: Комманда после генерации. print/preview/export.
-    @param stylelib_filename: Файл библиотеки стилей.
-    @param variables: Словарь переменных для заполнения отчета.
-    @return: Возвращает результат выполнения операции True/False.
+    :param sql: Запрос SQL.
+    :param command: Комманда после генерации. print/preview/export.
+    :param stylelib_filename: Файл библиотеки стилей.
+    :param variables: Словарь переменных для заполнения отчета.
+    :return: Возвращает результат выполнения операции True/False.
     """
     report_filename = getReportResourceFilename(report_filename, report_dir)
     try:
@@ -343,17 +343,17 @@ def doReport(parent_form=None, report_filename='', report_dir='', db_url='', sql
              stylelib_filename=None, variables=None):
     """
     Функция запускает генератор отчетов.
-    @param parent_form: Родительская форма, если не указана,
+    :param parent_form: Родительская форма, если не указана,
         то создается новое приложение.
-    @param report_filename: Файл отчета.
-    @param report_dir: Директорий, где хранятся отчеты.
-    @param db_url: Connection string в виде url. Например
+    :param report_filename: Файл отчета.
+    :param report_dir: Директорий, где хранятся отчеты.
+    :param db_url: Connection string в виде url. Например
         postgresql+psycopg2://postgres:postgres@10.0.0.3:5432/realization.
-    @param sql: Запрос SQL.
-    @param command: Комманда после генерации. print/preview/export.
-    @param stylelib_filename: Файл библиотеки стилей.
-    @param variables: Словарь переменных для заполнения отчета.
-    @return: Возвращает результат выполнения операции True/False.
+    :param sql: Запрос SQL.
+    :param command: Комманда после генерации. print/preview/export.
+    :param stylelib_filename: Файл библиотеки стилей.
+    :param variables: Словарь переменных для заполнения отчета.
+    :return: Возвращает результат выполнения операции True/False.
     """
     try:
         if not report_filename:

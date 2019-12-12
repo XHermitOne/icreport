@@ -96,7 +96,7 @@ class icVStyles(icprototype.icVPrototype):
     def _equalStyleElement(self, style_element_attr1, style_element_attr2):
         """
         Сравнение элементов стилей.
-        @return: True - элементы равны, False - не равны.
+        :return: True - элементы равны, False - не равны.
         """
         if ((style_element_attr1 is None) and (style_element_attr2 is not None)) or \
            ((style_element_attr1 is not None) and (style_element_attr2 is None)):
@@ -319,7 +319,7 @@ class icVStyles(icprototype.icVPrototype):
     def _isCrcStyleID(self, style_id):
         """
         Есть ли в кеше стиль с таким идентификатором?
-        @return: Возвращает контрольную сумму стиля в кеше или None,
+        :return: Возвращает контрольную сумму стиля в кеше или None,
             если стиль не найден.
         """
         result = [i_style for i_style in self._md5_styles_dict.items() if i_style[1]['ID'] == style_id]
@@ -336,7 +336,7 @@ class icVStyles(icprototype.icVPrototype):
     def _createDefaultStyle(self):
         """
         Создать стиль по умолчанию, если его нет.
-        @return: Возвращает True-если стиль Default создан,
+        :return: Возвращает True-если стиль Default создан,
         и False-если нет.
         """
         styles_id = [style_element['ID'] for style_element in self._attributes['children']]
@@ -351,7 +351,7 @@ class icVStyles(icprototype.icVPrototype):
     def clearUnUsedStyles(self):
         """
         Удаление не используемых стилей.
-        @return: Возвращает список идентификаторов удаленных стилей.
+        :return: Возвращает список идентификаторов удаленных стилей.
         """
         # Создать стиль по умолчанию если он создан
         self._createDefaultStyle()
@@ -424,7 +424,7 @@ class icVStyle(icprototype.icVPrototype):
     def setID(self, id_name):
         """
         Идентификатор стиля.
-        @param id_name: Имя идентификатора.
+        :param id_name: Имя идентификатора.
         """
         self._attributes['ID'] = str(id_name)
     
@@ -515,7 +515,7 @@ class icVStyle(icprototype.icVPrototype):
     def getAttrs(self):
         """
         Содержание стиля.
-        @return: Словарь внутреннего содержания стиля.
+        :return: Словарь внутреннего содержания стиля.
         """
         attrs = {}
         for element in self._attributes['children']:

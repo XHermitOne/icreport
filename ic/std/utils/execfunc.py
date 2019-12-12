@@ -18,10 +18,10 @@ def loadSource(name, path):
     """
     Возвращает загруженный модуль.
 
-    @type name: C{string}
-    @param name: Имя модуля.
-    @type path: C{string}
-    @param path: Полный путь до модуля.
+    :type name: C{string}
+    :param name: Имя модуля.
+    :type path: C{string}
+    :param path: Полный путь до модуля.
     """
     f = open(path)
     mod = imp.load_source(name, path, f)
@@ -32,8 +32,8 @@ def loadSource(name, path):
 def unLoadSource(name):
     """
     Выгрузить модуль.
-    @type name: C{string}
-    @param name: Имя модуля.
+    :type name: C{string}
+    :param name: Имя модуля.
     """
     if name in sys.modules:
         del sys.modules[name]
@@ -44,10 +44,10 @@ def unLoadSource(name):
 def reLoadSource(name, path=None):
     """
     Перезагрузить модуль.
-    @type name: C{string}
-    @param name: Имя модуля.
-    @type path: C{string}
-    @param path: Полный путь до модуля.
+    :type name: C{string}
+    :param name: Имя модуля.
+    :type path: C{string}
+    :param path: Полный путь до модуля.
     """
     if path is None:
         if name in sys.modules:
@@ -64,16 +64,16 @@ def reLoadSource(name, path=None):
 def exec_code(sCode='', bReImport=False, name_space=None, kwargs=None):
     """
     Выполнить блок кода.
-    @type sCode: C{string}
-    @param sCode: Блок кода.
+    :type sCode: C{string}
+    :param sCode: Блок кода.
         Блок кода - строка в формате:
             ИмяПакета.ИмяМодуля.ИмяФункции(аргументы).
-    @type bReImport: C{bool}
-    @param bReImport: Переимпортировать модуль функции?
-    @type name_space: C{dictionary}
-    @param name_space: Пространство имен.
-    @type kwargs: C{dictionary}
-    @param kwargs: Дополнительные аргументы функции.
+    :type bReImport: C{bool}
+    :param bReImport: Переимпортировать модуль функции?
+    :type name_space: C{dictionary}
+    :param name_space: Пространство имен.
+    :type kwargs: C{dictionary}
+    :param kwargs: Дополнительные аргументы функции.
     """
     result = None
 
@@ -126,8 +126,8 @@ def view_file_ext(filename):
     """
     Запуск просмотра файла внешней программой.
     Определение какой программой производить просмотр определяется по расширению файла.
-    @param filename: Полное имя файла.
-    @return: True/False.
+    :param filename: Полное имя файла.
+    :return: True/False.
     """
     if not os.path.exists(filename):
         log.warning(u'Просмотр файла внешней программой. Файл <%s> не наден.' % filename)

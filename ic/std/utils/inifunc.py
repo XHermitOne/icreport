@@ -32,11 +32,11 @@ DEFAULT_ENCODE = 'utf-8'
 def loadParamCFG(cfg_filename, param_name):
     """
     Чтение параметра из файла настроек.
-    @type cfg_filename: C{string}
-    @param cfg_filename: Полное имя файла настроек.
-    @type param_name: C{string}
-    @param param_name: Имя параметра.
-    @return: Возвращает значение параметра или 
+    :type cfg_filename: C{string}
+    :param cfg_filename: Полное имя файла настроек.
+    :type param_name: C{string}
+    :param param_name: Имя параметра.
+    :return: Возвращает значение параметра или
         None(если параметра нет или ошибка).
     """
     cfg_file = None
@@ -65,12 +65,12 @@ def loadParamCFG(cfg_filename, param_name):
 def saveParamCFG(cfg_filename, param_name, param_value):
     """
     Запись параметра в файл настроек.
-    @type cfg_filename: C{string}
-    @param cfg_filename: Полное имя файла настроек.
-    @type param_name: C{string}
-    @param param_name: Имя параметра.
-    @param param_value: Значение параметра.
-    @return: Возвращает результат выполнения операции True/False.
+    :type cfg_filename: C{string}
+    :param cfg_filename: Полное имя файла настроек.
+    :type param_name: C{string}
+    :param param_name: Имя параметра.
+    :param param_value: Значение параметра.
+    :return: Возвращает результат выполнения операции True/False.
     """
     old_cfg = None
     new_cfg = None
@@ -110,13 +110,13 @@ def saveParamCFG(cfg_filename, param_name, param_value):
 def loadParamINI(ini_filename, section, param_name):
     """
     Чтение параметра из файла настроек.
-    @type ini_filename: C{string}
-    @param ini_filename: Полное имя файла настроек.
-    @type section: C{string}
-    @param section: Имя секции.
-    @type param_name: C{string}
-    @param param_name: Имя параметра.
-    @return: Возвращает значение параметра или 
+    :type ini_filename: C{string}
+    :param ini_filename: Полное имя файла настроек.
+    :type section: C{string}
+    :param section: Имя секции.
+    :type param_name: C{string}
+    :param param_name: Имя параметра.
+    :return: Возвращает значение параметра или
         None(если параметра нет или ошибка).
     """
     try:
@@ -135,7 +135,7 @@ def loadParamINI(ini_filename, section, param_name):
 def loadParamINIValue(*args, **kwargs):
     """
     Чтение параметра из файла настроек.
-    @return: Происходит попытка прееобразование из строки возвращаемого
+    :return: Происходит попытка прееобразование из строки возвращаемого
         значения к реальному типу по средством <eval>.
         Если при преобразовании возникла ошибка, то возвращается строка.
     """
@@ -150,14 +150,14 @@ def loadParamINIValue(*args, **kwargs):
 def saveParamINI(ini_filename, section, param_name, param_value):
     """
     Запись параметра в файл настроек.
-    @type ini_filename: C{string}
-    @param ini_filename: Полное имя файла настроек.
-    @type section: C{string}
-    @param section: Имя секции.
-    @type param_name: C{string}
-    @param param_name: Имя параметра.
-    @param param_value: Значение параметра.
-    @return: Возвращает результат выполнения операции True/False.
+    :type ini_filename: C{string}
+    :param ini_filename: Полное имя файла настроек.
+    :type section: C{string}
+    :param section: Имя секции.
+    :type param_name: C{string}
+    :param param_name: Имя параметра.
+    :param param_value: Значение параметра.
+    :return: Возвращает результат выполнения операции True/False.
     """
     ini_file = None
     try:
@@ -202,13 +202,13 @@ def saveParamINI(ini_filename, section, param_name, param_value):
 def delParamINI(ini_filename, section, param_name):
     """
     Удалить параметр из секции конфигурационного файла.
-    @type ini_filename: C{string}
-    @param ini_filename: Полное имя файла настроек.
-    @type section: C{string}
-    @param section: Имя секции.
-    @type param_name: C{string}
-    @param param_name: Имя параметра.
-    @return: Возвращает результат выполнения операции True/False.
+    :type ini_filename: C{string}
+    :param ini_filename: Полное имя файла настроек.
+    :type section: C{string}
+    :param section: Имя секции.
+    :type param_name: C{string}
+    :param param_name: Имя параметра.
+    :return: Возвращает результат выполнения операции True/False.
     """
     ini_file = None
     try:
@@ -246,11 +246,11 @@ def delParamINI(ini_filename, section, param_name):
 def getParamCountINI(ini_filename, section):
     """
     Количество параметров в секции.
-    @type ini_filename: C{string}
-    @param ini_filename: Полное имя файла настроек.
-    @type section: C{string}
-    @param section: Имя секции.
-    @return: Возвращает количеств опараметров в секции или -1 в случае ошибки.
+    :type ini_filename: C{string}
+    :param ini_filename: Полное имя файла настроек.
+    :type section: C{string}
+    :param section: Имя секции.
+    :return: Возвращает количеств опараметров в секции или -1 в случае ошибки.
     """
     ini_file = None
     try:
@@ -280,11 +280,11 @@ def getParamCountINI(ini_filename, section):
 def getParamNamesINI(ini_filename, section):
     """
     Имена параметров в секции.
-    @type ini_filename: C{string}
-    @param ini_filename: Полное имя файла настроек.
-    @type section: C{string}
-    @param section: Имя секции.
-    @return: Возвращает список имен параметров в секции или None в случае ошибки.
+    :type ini_filename: C{string}
+    :param ini_filename: Полное имя файла настроек.
+    :type section: C{string}
+    :param section: Имя секции.
+    :return: Возвращает список имен параметров в секции или None в случае ошибки.
     """
     ini_file = None
     try:
@@ -314,9 +314,9 @@ def getParamNamesINI(ini_filename, section):
 def INI2Dict(ini_filename):
     """
     Представление содержимого INI файла в виде словаря.
-    @type ini_filename: C{string}
-    @param ini_filename: Полное имя файла настроек.
-    @return: Заполненный словарь или None в случае ошибки.
+    :type ini_filename: C{string}
+    :param ini_filename: Полное имя файла настроек.
+    :return: Заполненный словарь или None в случае ошибки.
     """
     ini_file = None
     try:
@@ -358,12 +358,12 @@ def INI2Dict(ini_filename):
 def Dict2INI(dictionary, ini_filename, bRewrite=False):
     """
     Представление/запись словаря в виде INI файла.
-    @type dictionary: C{dictionary}
-    @param dictionary: Исходный словарь.
-    @type ini_filename: C{string}
-    @param ini_filename: Полное имя файла настроек.
-    @param bRewrite: Переписать полностью существующий INI файл?
-    @return: Возвращает результат сохранения True/False.
+    :type dictionary: C{dictionary}
+    :param dictionary: Исходный словарь.
+    :type ini_filename: C{string}
+    :param ini_filename: Полное имя файла настроек.
+    :param bRewrite: Переписать полностью существующий INI файл?
+    :return: Возвращает результат сохранения True/False.
     """
     ini_file = None
     try:

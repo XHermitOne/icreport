@@ -45,15 +45,15 @@ class icRadioChoiceMaxiDialog(std_dialogs_proto.radioChoiceMaxiDialogProto):
              default=None):
         """
         Инициализация диалогового окна.
-        @param title: Заголовок окна.
-        @param label: Текст приглашения ввода.
-        @param choices: Список выбора.
+        :param title: Заголовок окна.
+        :param label: Текст приглашения ввода.
+        :param choices: Список выбора.
             Максимальное количество элементов выбора 5.
             При большем количестве элементов необходимо использовать 
             другую диалоговую форму выбора.
-        @param do_fit_dlg: Переразмерить диалоговое окно для удаления
+        :param do_fit_dlg: Переразмерить диалоговое окно для удаления
             не заполненной области отсутствующих элементов?
-        @param default: ИНдекс выставляемый по умолчанию.
+        :param default: ИНдекс выставляемый по умолчанию.
         """
         if title:
             self.SetTitle(title)

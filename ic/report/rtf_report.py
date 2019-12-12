@@ -66,12 +66,12 @@ def findNextVar(rep, pos=0):
     """
     Ищет следующую переменную.
     
-    @type rep: C{string}
-    @param rep: Шаблон.
-    @type pos: C{int}
-    @param pos: Позиция, с которой искать.
-    @rtype: C{tuple}
-    @return: Возвращает картеж. 1-й элемент начальная позиция текста замены;
+    :type rep: C{string}
+    :param rep: Шаблон.
+    :type pos: C{int}
+    :param pos: Позиция, с которой искать.
+    :rtype: C{tuple}
+    :return: Возвращает картеж. 1-й элемент начальная позиция текста замены;
         2-й элемент конечная позиция; 3-й элемент - имя переменной.
     """
     p1 = rep.find('#', pos)

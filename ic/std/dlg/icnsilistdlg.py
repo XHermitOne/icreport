@@ -22,8 +22,8 @@ FROM
 class icNSIListDialog(std_dialogs_proto.NSIListDialogProto):
     """
     Диалоговое окно выбора значения из простого спискового справочника.
-    @param nsi_codes: Список кодов справочника.
-    @param selected_code: Выбранный код справочника.
+    :param nsi_codes: Список кодов справочника.
+    :param selected_code: Выбранный код справочника.
     """
 
     def __init__(self, *args, **kwargs):
@@ -42,15 +42,15 @@ class icNSIListDialog(std_dialogs_proto.NSIListDialogProto):
     def setDbURL(self, db_url):
         """
         Установить URL связи с БД.
-        @param db_url: URL связи с БД.
+        :param db_url: URL связи с БД.
         """
         self.db_url = db_url
 
     def connect(self, db_url=None):
         """
         Установить связь с БД.
-        @param db_url: URL связи с БД.
-        @return: Объект связи с БД.
+        :param db_url: URL связи с БД.
+        :return: Объект связи с БД.
         """
         if db_url is None:
             db_url = self.db_url
@@ -60,8 +60,8 @@ class icNSIListDialog(std_dialogs_proto.NSIListDialogProto):
     def disconnect(self, connection=None):
         """
         Разорвать соединение с БД.
-        @param connection: Объект связи с БД.
-        @return: True / False.
+        :param connection: Объект связи с БД.
+        :return: True / False.
         """
         if connection:
             connection.dispose()
@@ -74,11 +74,11 @@ class icNSIListDialog(std_dialogs_proto.NSIListDialogProto):
                    ext_filter=''):
         """
         Получить датасет для просмотра.
-        @param tabname: Имя таблицы справочника.
-        @param code_fieldname: Имя поля кода в таблице справочника.
-        @param name_fieldname: Имя поля наименования в таблице справочника.
-        @param ext_filter: Дополнительный фильтр записей.
-        @return: Возвращает список словарей записей.
+        :param tabname: Имя таблицы справочника.
+        :param code_fieldname: Имя поля кода в таблице справочника.
+        :param name_fieldname: Имя поля наименования в таблице справочника.
+        :param ext_filter: Дополнительный фильтр записей.
+        :return: Возвращает список словарей записей.
         """
         connection = self.connect()
 
@@ -97,11 +97,11 @@ class icNSIListDialog(std_dialogs_proto.NSIListDialogProto):
                    ext_filter=''):
         """
         Инициализация списка выбора диалогового окна.
-        @param tabname: Имя таблицы справочника.
-        @param code_fieldname: Имя поля кода в таблице справочника.
-        @param name_fieldname: Имя поля наименования в таблице справочника.
-        @param ext_filter: Дополнительный фильтр записей.
-        @return: True/False.
+        :param tabname: Имя таблицы справочника.
+        :param code_fieldname: Имя поля кода в таблице справочника.
+        :param name_fieldname: Имя поля наименования в таблице справочника.
+        :param ext_filter: Дополнительный фильтр записей.
+        :return: True/False.
         """
         dataset = self.getDataset(tabname, code_fieldname, name_fieldname, ext_filter)
         self.nsi_codes = [rec['cod'] for rec in dataset]

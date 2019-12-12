@@ -210,8 +210,8 @@ class icVWorksheet(icprototype.icVPrototype):
     def getColumns(self, start_idx=0, stop_idx=None):
         """
         Список объектов колонок.
-        @param start_idx: Индекс первой колонки. По умолчанию с первой.
-        @param stop_idx: Индекс последней колонки. По умолчанию до последней.
+        :param start_idx: Индекс первой колонки. По умолчанию с первой.
+        :param stop_idx: Индекс последней колонки. По умолчанию до последней.
         """
         return self.getTable().getColumns(start_idx, stop_idx)
 
@@ -273,8 +273,8 @@ class icVTable(icprototype.icVPrototype):
     def getColumns(self, start_idx=0, stop_idx=None):
         """
         Список объектов колонок.
-        @param start_idx: Индекс первой колонки. По умолчанию с первой.
-        @param stop_idx: Индекс последней колонки. По умолчанию до последней.
+        :param start_idx: Индекс первой колонки. По умолчанию с первой.
+        :param stop_idx: Индекс последней колонки. По умолчанию до последней.
         """
         col_count = self.getColumnCount()
         if stop_idx is None:
@@ -305,8 +305,8 @@ class icVTable(icprototype.icVPrototype):
     def _createColIdx(self, index, idx):
         """
         Создать колонку с индексом.
-        @param index: Индекс Excel.
-        @param idx: Индекс в списке children.
+        :param index: Индекс Excel.
+        :param idx: Индекс в списке children.
         """
         col = icrange.icVColumn(self)
         idx = 0
@@ -348,9 +348,9 @@ class icVTable(icprototype.icVPrototype):
     def cloneRow(self, bClearCell=True, row=-1):
         """
         Клонировать строку таблицы.
-        @param bClearCell: Очистить значения в ячейках.
-        @param row: Индекс(Начинаяется с 0) клонируемой ячейки. -1 - Последняя.
-        @return: Возвращает объект клонированной строки. Если строк в таблице нет, то возвращает None.
+        :param bClearCell: Очистить значения в ячейках.
+        :param row: Индекс(Начинаяется с 0) клонируемой ячейки. -1 - Последняя.
+        :return: Возвращает объект клонированной строки. Если строк в таблице нет, то возвращает None.
         """
         if self._attributes['children']:
             row_attr = copy.deepcopy(self._attributes['children'][row])
@@ -933,7 +933,7 @@ class icVPageBreaks(icprototype.icVPrototype):
     def addRowBreak(self, row):
         """
         Добавить разрыв страницы по строке.
-        @param row: Номер строки.
+        :param row: Номер строки.
         """
         row_break = {'name': 'RowBreak', 'children': [{'name': 'Row', 'value': row}]}
         self._attributes['children'][0]['children'].append(row_break)

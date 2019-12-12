@@ -34,9 +34,9 @@ def isSubClass(class1, class2):
     """
     Функция определяет является ли Class1_ базовым для class2. Проверка
     производится рекурсивно.
-    @param class1: Объект класса.
-    @param class2: Объект класса.
-    @return: Возвращает результат отношения (1/0).
+    :param class1: Объект класса.
+    :param class2: Объект класса.
+    :return: Возвращает результат отношения (1/0).
     """
     return issubclass(class2, class1)
 
@@ -44,8 +44,8 @@ def isSubClass(class1, class2):
 def getAttrValue(attr_name, spc):
     """
     Получить нормированное значение свойства из спецификации.
-    @param attr_name: Имя атрибута.
-    @param spc: Спецификация.
+    :param attr_name: Имя атрибута.
+    :param spc: Спецификация.
     """
     try:
         # Нормализация по типам
@@ -77,11 +77,11 @@ def getStrInQuotes(value):
 def KeyToText(key, bShift=True, bAlt=True, bCtrl=True):
     """
     Функция преабразует код клавиши в текстовый эквивалент.
-    @param key: код клавиши.
-    @param bShift: флаг клавиши Shift.
-    @param bAlt: флаг клавиши Alt.
-    @param bCtrl: флаг клавиши Ctrl.
-    @return: Возвращает текстовую строку, например 'Alt+X'.
+    :param key: код клавиши.
+    :param bShift: флаг клавиши Shift.
+    :param bAlt: флаг клавиши Alt.
+    :param bCtrl: флаг клавиши Ctrl.
+    :return: Возвращает текстовую строку, например 'Alt+X'.
     """
     result = ''
     if bShift:
@@ -174,8 +174,8 @@ def KeyToText(key, bShift=True, bAlt=True, bCtrl=True):
 def delKeyInDictTree(dictionary, key):
     """
     Функция удаляет из словаря рекурсивно все указанные ключи.
-    @param dictionary: Непосредственно словарь или список.
-    @param key: Ключ, который необходимо удалить.
+    :param dictionary: Непосредственно словарь или список.
+    :param key: Ключ, который необходимо удалить.
     """
     # Если это у нас словарь, то ...
     if type(dictionary) is dict:
@@ -199,9 +199,9 @@ def delKeyInDictTree(dictionary, key):
 def setKeyInDictTree(dictionary, key, value):
     """
     Функция устанавливает значенеи ключа в словаре рекурсивно.
-    @param dictionary: Непосредственно словарь или список.
-    @param key: Ключ, который необходимо установить.
-    @param value: Значение ключа.
+    :param dictionary: Непосредственно словарь или список.
+    :param key: Ключ, который необходимо установить.
+    :param value: Значение ключа.
     """
     # Если это у нас словарь, то ...
     if type(dictionary) is dict:
@@ -225,8 +225,8 @@ def setKeyInDictTree(dictionary, key, value):
 def setObjToGlobal(objname, obj):
     """
     Поместить объект в глобальное пространство имен.
-    @param objname: Имя объекта в глобальном пространстве имен.
-    @param obj: Сам объект.
+    :param objname: Имя объекта в глобальном пространстве имен.
+    :param obj: Сам объект.
     """
     globals()[objname] = obj
 
@@ -234,9 +234,9 @@ def setObjToGlobal(objname, obj):
 def recodeText(text, txt_codepage, new_codepage):
     """
     Перекодировать из одной кодировки в другую.
-    @param text: Строка.
-    @param txt_codepage: Кодовая страница строки.
-    @param new_codepage: Новая кодовая страница строки.
+    :param text: Строка.
+    :param txt_codepage: Кодовая страница строки.
+    :param new_codepage: Новая кодовая страница строки.
     """
     if new_codepage.upper() == 'UNICODE':
         # Кодировка в юникоде.
@@ -257,10 +257,10 @@ def toOctHexText(text, coding):
     """
     Закодировать строку в восьмеричном/шестнадцатеричном виде.
     Символы с кодом < 128 не кодируются.
-    @param text:
-    @param coding: Кодировка 'OCT'-восьмеричное представление.
+    :param text:
+    :param coding: Кодировка 'OCT'-восьмеричное представление.
                             'HEX'-шестнадцатеричное представление.
-    @return: Возвращает закодированную строку.
+    :return: Возвращает закодированную строку.
     """
     try:
         if coding.upper() == 'OCT':
@@ -290,10 +290,10 @@ def recodeListStrings(cur_list, txt_codepage, new_codepage):
     """
     Перекодировать все строки в списке рекурсивно в другую кодировку.
     Перекодировка производится также внутри вложенных словарей и кортежей.
-    @param cur_list: Сам список.
-    @param txt_codepage: Кодовая страница строки.
-    @param new_codepage: Новая кодовая страница строки.
-    @return: Возвращает преобразованный список.
+    :param cur_list: Сам список.
+    :param txt_codepage: Кодовая страница строки.
+    :param new_codepage: Новая кодовая страница строки.
+    :return: Возвращает преобразованный список.
     """
     lst = []
     # Перебор всех элементов списка
@@ -329,10 +329,10 @@ def recodeDictStrings(dictionary, txt_codepage, new_codepage):
     """
     Перекодировать все строки в словаре рекурсивно в другую кодировку.
     Перекодировка производится также внутри вложенных словарей и кортежей.
-    @param dictionary: Сам словарь.
-    @param txt_codepage: Кодовая страница строки.
-    @param new_codepage: Новая кодовая страница строки.
-    @return: Возвращает преобразованный словарь.
+    :param dictionary: Сам словарь.
+    :param txt_codepage: Кодовая страница строки.
+    :param new_codepage: Новая кодовая страница строки.
+    :return: Возвращает преобразованный словарь.
     """
     keys_ = dictionary.keys()
     # Перебор всех ключей словаря
@@ -364,10 +364,10 @@ def recodeTupleStrings(cur_tuple, txt_codepage, new_codepage):
     """
     Перекодировать все строки в кортеже рекурсивно в другую кодировку.
     Перекодировка производится также внутри вложенных словарей и кортежей.
-    @param cur_tuple: Сам кортеж.
-    @param txt_codepage: Кодовая страница строки.
-    @param new_codepage: Новая кодовая страница строки.
-    @return: Возвращает преобразованный кортеж.
+    :param cur_tuple: Сам кортеж.
+    :param txt_codepage: Кодовая страница строки.
+    :param new_codepage: Новая кодовая страница строки.
+    :return: Возвращает преобразованный кортеж.
     """
     # Перевести кортеж в список
     lst = list(cur_tuple)
@@ -380,10 +380,10 @@ def recodeTupleStrings(cur_tuple, txt_codepage, new_codepage):
 def recodeStructStrings(struct, txt_codepage, new_codepage):
     """
     Перекодировать все строки в структуре рекурсивно в другую кодировку.
-    @param struct: Сруктура (список, словарь, кортеж).
-    @param txt_codepage: Кодовая страница строки.
-    @param new_codepage: Новая кодовая страница строки.
-    @return: Возвращает преобразованную структру.
+    :param struct: Сруктура (список, словарь, кортеж).
+    :param txt_codepage: Кодовая страница строки.
+    :param new_codepage: Новая кодовая страница строки.
+    :return: Возвращает преобразованную структру.
     """
     if isinstance(struct, list):
         # Список
@@ -406,9 +406,9 @@ def recodeStructStrings(struct, txt_codepage, new_codepage):
 def list2str(cur_list, delimeter):
     """
     Конвертация списка в строку с разделением символом разделителя.
-    @param cur_list: Список.
-    @param delimeter: Символ разделителя.
-    @return: Возвращает сформированную строку.
+    :param cur_list: Список.
+    :param delimeter: Символ разделителя.
+    :return: Возвращает сформированную строку.
     """
     return delimeter.join(cur_list)
 
@@ -429,8 +429,8 @@ def getHDDSerialNo():
 def getRegValue(reg_key, reg_value=None):
     """
     Взять информацию из реестра относительно данного проекта.
-    @param reg_key: Ключ реестра.
-    @param reg_value: Имя значения из реестра.
+    :param reg_key: Ключ реестра.
+    :param reg_value: Имя значения из реестра.
     """
     hkey = None
     try:
@@ -449,9 +449,9 @@ def getRegValue(reg_key, reg_value=None):
 def findChildResByName(children_res, child_name):
     """
     Поиск ресурсного описания дочернего объекта по имени.
-    @param children_res: Список ресурсов-описаний дечерних объектов.
-    @return child_name: Имя искомого дочернего объекта.
-    @return: Индекс ресурсного описания в списке, если 
+    :param children_res: Список ресурсов-описаний дечерних объектов.
+    :return child_name: Имя искомого дочернего объекта.
+    :return: Индекс ресурсного описания в списке, если
         описания с таким именем не найдено, то возвращается -1.
     """
     try:
@@ -464,9 +464,9 @@ def findChildResByName(children_res, child_name):
 def getFuncListInModule(module=None):
     """
     Получить список имен функций в модуле.
-    @param module: Объект модуля. 
+    :param module: Объект модуля. 
         Для использования модуль д.б. импортирован.
-    @return: Возвращает список кортежей:
+    :return: Возвращает список кортежей:
         [(имя функции, описание функции, объект функции),...]
     """
     if module:
@@ -478,7 +478,7 @@ def getFuncListInModule(module=None):
 def isOSWindowsPlatform():
     """
     Функция определения ОС.
-    @return: True-если ОС-Windows и False во всех остальных случаях.
+    :return: True-если ОС-Windows и False во всех остальных случаях.
     """
     return bool(sys.platform[:3].lower() == 'win')
 

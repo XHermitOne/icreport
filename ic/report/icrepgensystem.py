@@ -62,8 +62,8 @@ class icReportGeneratorSystem(object):
     def __init__(self, report=None, parent=None):
         """
         Конструктор класса.
-        @param report: Шаблон отчета.
-        @param parent: Родительская форма, необходима для вывода сообщений.
+        :param report: Шаблон отчета.
+        :param parent: Родительская форма, необходима для вывода сообщений.
         """
         # Шаблон отчета
         self._Rep = report
@@ -102,10 +102,10 @@ class icReportGeneratorSystem(object):
     def sameGeneratorType(self, generator_type):
         """
         Проверка на тот же тип системы генерации отчетов что и указанный.
-        @param generator_type: Тип системы генерации отчетов.
+        :param generator_type: Тип системы генерации отчетов.
             Тип задается расширением файла источника шаблона.
             Обычно '.ods', '.xml', 'xls' и т.п.
-        @return: True/False
+        :return: True/False
         """
         my_generator_type = self.getGeneratorType()
         return my_generator_type == generator_type.lower()
@@ -113,7 +113,7 @@ class icReportGeneratorSystem(object):
     def getReportDescription(self):
         """
         Описание отчета.
-        @return: Строку описание отчета или его имя если описание не
+        :return: Строку описание отчета или его имя если описание не
             определено.
         """
         description = u''
@@ -136,7 +136,7 @@ class icReportGeneratorSystem(object):
     def reloadRepData(self, tmpl_filename=None):
         """
         Перегрузить данные отчета.
-        @param tmpl_filename: Имя файла шаблона отчета.
+        :param tmpl_filename: Имя файла шаблона отчета.
         """
         self._Rep = resfunc.loadResourceFile(tmpl_filename, bRefresh=True)
         
@@ -149,21 +149,21 @@ class icReportGeneratorSystem(object):
     def selectAction(self, report=None, *args, **kwargs):
         """
         Запуск генерации отчета с последующим выбором действия.
-        @param report: Полное описание шаблона отчета.
+        :param report: Полное описание шаблона отчета.
         """
         return
 
     def preview(self, report=None, *args, **kwargs):
         """
         Предварительный просмотр.
-        @param report: Полное описание шаблона отчета.
+        :param report: Полное описание шаблона отчета.
         """
         return
 
     def print(self, report=None, *args, **kwargs):
         """
         Печать.
-        @param report: Полное описание шаблона отчета.
+        :param report: Полное описание шаблона отчета.
         """
         return 
 
@@ -176,30 +176,30 @@ class icReportGeneratorSystem(object):
     def convert(self, report=None, to_filename=None, *args, **kwargs):
         """
         Конвертирование результатов отчета.
-        @param report: Полное описание шаблона отчета.
-        @param to_filename: Имя файла, куда необходимо сохранить отчет.
+        :param report: Полное описание шаблона отчета.
+        :param to_filename: Имя файла, куда необходимо сохранить отчет.
         """
         return
 
     def export(self, report=None, to_filename=None, *args, **kwargs):
         """
         Вывод результатов отчета во внешнюю программу.
-        @param report: Полное описание шаблона отчета.
-        @param to_filename: Имя файла, куда необходимо сохранить отчет.
+        :param report: Полное описание шаблона отчета.
+        :param to_filename: Имя файла, куда необходимо сохранить отчет.
         """
         return self.convert(report, to_filename)
 
     def createNew(self, dst_path=None):
         """
         Создание нового отчета.
-        @param dst_path: Результирующая папка, в которую будет помещен новый файл.
+        :param dst_path: Результирующая папка, в которую будет помещен новый файл.
         """
         return self.createNewByOffice(dst_path)
         
     def createNewByOffice(self, dst_path=None):
         """
         Создание нового отчета средствами LibreOffice Calc.
-        @param dst_path: Результирующая папка, в которую будет помещен новый файл.
+        :param dst_path: Результирующая папка, в которую будет помещен новый файл.
         """
         try:
             src_filename = DEFAULT_REP_TMPL_FILE
@@ -235,16 +235,16 @@ class icReportGeneratorSystem(object):
     def edit(self, report=None):
         """
         Редактирование отчета.
-        @param report: Полное описание шаблона отчета.
+        :param report: Полное описание шаблона отчета.
         """
         return
 
     def update(self, tmpl_filename=None):
         """
         Обновить шаблон отчета в системе генератора отчетов.
-        @param tmpl_filename: Имя файла шаблона отчета.
+        :param tmpl_filename: Имя файла шаблона отчета.
             Если None, то должен производиться запрос на выбор этого файла.
-        @return: Имя файла файла шаблона или None в случае ошибки.
+        :return: Имя файла файла шаблона или None в случае ошибки.
         """
         try:
             return self._update(tmpl_filename)
@@ -255,9 +255,9 @@ class icReportGeneratorSystem(object):
     def _update(self, tmpl_filename=None):
         """
         Обновить шаблон отчета в системе генератора отчетов.
-        @param tmpl_filename: Имя файла шаблона отчета.
+        :param tmpl_filename: Имя файла шаблона отчета.
             Если None, то должен производиться запрос на выбор этого файла.
-        @return: Имя файла файла шаблона или None в случае ошибки.
+        :return: Имя файла файла шаблона или None в случае ошибки.
         """
         if tmpl_filename is None:
             filename = dlg.getFileDlg(parent=self._ParentForm,
@@ -317,29 +317,29 @@ class icReportGeneratorSystem(object):
     def generate(self, report=None, db_url=None, sql=None, stylelib=None, vars=None, *args, **kwargs):
         """
         Запустить генератор отчета.
-        @param report: Шаблон отчета.
-        @param db_url: Connection string в виде url. Например
+        :param report: Шаблон отчета.
+        :param db_url: Connection string в виде url. Например
             postgresql+psycopg2://postgres:postgres@10.0.0.3:5432/realization.
-        @param sql: Запрос SQL.
-        @param stylelib: Библиотека стилей.
-        @param vars: Словарь переменных отчета.
-        @return: Возвращает сгенерированный отчет или None в случае ошибки.
+        :param sql: Запрос SQL.
+        :param stylelib: Библиотека стилей.
+        :param vars: Словарь переменных отчета.
+        :return: Возвращает сгенерированный отчет или None в случае ошибки.
         """
         return None
 
     def generateReport(self, report=None, *args, **kwargs):
         """
         Запустить генератор отчета.
-        @param report: Шаблон отчета.
-        @return: Возвращает сгенерированный отчет или None в случае ошибки.
+        :param report: Шаблон отчета.
+        :return: Возвращает сгенерированный отчет или None в случае ошибки.
         """
         return None
 
     def initRepTemplate(self, report, QueryTab_=None):
         """
         Прочитать данные о шаблоне отчета.
-        @param report: Полное описание шаблона отчета.
-        @param QueryTab_: Таблица запроса.
+        :param report: Полное описание шаблона отчета.
+        :param QueryTab_: Таблица запроса.
         """
         # 1. Прочитать структру отчета
         self._Rep = report
@@ -362,11 +362,11 @@ class icReportGeneratorSystem(object):
     def _getSQLQueryTable(self, report, db_url=None, sql=None):
         """
         Получить таблицу запроса.
-        @param report: Шаблон отчета.
-        @param db_url: Connection string в виде url. Например
+        :param report: Шаблон отчета.
+        :param db_url: Connection string в виде url. Например
             postgresql+psycopg2://postgres:postgres@10.0.0.3:5432/realization.
-        @param sql: Текст SQL запроса.
-        @return: Функция возвращает словарь -
+        :param sql: Текст SQL запроса.
+        :return: Функция возвращает словарь -
             ТАБЛИЦА ЗАПРОСА ПРЕДСТАВЛЯЕТСЯ В ВИДЕ СЛОВАРЯ 
             {'__fields__':имена полей таблицы,'__data__':данные таблицы}
         """
@@ -429,17 +429,17 @@ class icReportGeneratorSystem(object):
     def _isQueryFunc(self, query):
         """
         Определить представлен запрос в виде функции?
-        @param query: Текст запроса.
-        @return: True/False.
+        :param query: Текст запроса.
+        :return: True/False.
         """
         return query and isinstance(query, str) and query.startswith(PY_SIGNATURE)
 
     def _execQueryFunc(self, query, vars=None):
         """
         Получить запрос из функции.
-        @param query: Текст запроса.
-        @param vars: Внешние переменные.
-        @return: Возвращает запрос в разрешенном формате.
+        :param query: Текст запроса.
+        :param vars: Внешние переменные.
+        :return: Возвращает запрос в разрешенном формате.
         """
         # Убрать сигнатуру определения функции
         func = query.replace(PY_SIGNATURE, '').strip()
@@ -450,8 +450,8 @@ class icReportGeneratorSystem(object):
     def _isEmptyQueryTbl(self, query_tbl):
         """
         Проверка пустой таблицы запроса.
-        @param query_tbl: Словарь таблицы запроса.
-        @return: True - пустая таблица запроса.
+        :param query_tbl: Словарь таблицы запроса.
+        :return: True - пустая таблица запроса.
             False - есть данные.
         """
         if not query_tbl:
@@ -471,7 +471,7 @@ class icReportGeneratorSystem(object):
         """
         Создать пустую таблицу запроса.
         В случае постой таблицы запроса генерация не должна прекращаться.
-        @return: Функция возвращает словарь -
+        :return: Функция возвращает словарь -
             ТАБЛИЦА ЗАПРОСА ПРЕДСТАВЛЯЕТСЯ В ВИДЕ СЛОВАРЯ
             {'__fields__': (), '__data__': []}
         """
@@ -480,15 +480,15 @@ class icReportGeneratorSystem(object):
     def getQueryTbl(self, report, db_url=None, sql=None, *args, **kwargs):
         """
         Получить таблицу запроса.
-        @param report: Шаблон отчета.
-        @param db_url: Connection string в виде url. Например
+        :param report: Шаблон отчета.
+        :param db_url: Connection string в виде url. Например
             postgresql+psycopg2://postgres:postgres@10.0.0.3:5432/realization.
-        @param sql: Запрос SQL.
+        :param sql: Запрос SQL.
             ВНИМАНИЕ! В начале SQL запроса должна стоять сигнатура:
             <SQL:> - Текст SQL запроса
             <PY:> -  Запрос задается функцией Python
             <PRG:> - Запрос задается внешней функцией Python.
-        @return: Функция возвращает словарь -
+        :return: Функция возвращает словарь -
             ТАБЛИЦА ЗАПРОСА ПРЕДСТАВЛЯЕТСЯ В ВИДЕ СЛОВАРЯ 
             {'__fields__':описания полей таблицы,'__data__':данные таблицы}
         """
@@ -573,8 +573,8 @@ class icReportGeneratorSystem(object):
         """
         Преобразование имен в шаблоне отчета в контексте SQLObject в имена в
             контексте sqlite.
-        @param report: Щаблон отчета.
-        @param res_table: Ресурсное описание таблиц.
+        :param report: Щаблон отчета.
+        :param res_table: Ресурсное описание таблиц.
         """
         try:
             rep = report
@@ -624,29 +624,29 @@ class icReportGeneratorSystem(object):
     def previewResult(self, report_data=None):
         """
         Предварительный просмотр.
-        @param report_data: Сгенерированный отчет.
+        :param report_data: Сгенерированный отчет.
         """
         return
 
     def printResult(self, report_data=None):
         """
         Печать.
-        @param report_data: Сгенерированный отчет.
+        :param report_data: Сгенерированный отчет.
         """
         return
 
     def convertResult(self, report_data=None, to_filename=None):
         """
         Конвертирование результатов отчета.
-        @param report_data: Сгенерированный отчет.
-        @param to_filename: Имя результирующего файла.
+        :param report_data: Сгенерированный отчет.
+        :param to_filename: Имя результирующего файла.
         """
         return
 
     def save(self, report_data=None):
         """
         Сохранить результаты генерации в файл
-        @param report_data: Сгенерированный отчет.
-        @return: Имя сохраненного файла или None, если сохранения не произошло.
+        :param report_data: Сгенерированный отчет.
+        :return: Имя сохраненного файла или None, если сохранения не произошло.
         """
         return None

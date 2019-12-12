@@ -50,9 +50,9 @@ class icDICT2XMLWriter(saxutils.XMLGenerator):
     def __init__(self, data, out=None, encoding='utf-8'):
         """
         Конструктор.
-        @param data: Словарь данных XML.
-        @param out: Объект файла XML для записи.
-        @param encoding: Кодировка XML файла.
+        :param data: Словарь данных XML.
+        :param out: Объект файла XML для записи.
+        :param encoding: Кодировка XML файла.
             Далее в программе используется self._encoding.
             Специально инициализировать эту переменную не надо.
             Она инициализируется внутри родительского конструктора.
@@ -154,9 +154,9 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
     def __init__(self, data, out=None, encoding='utf-8'):
         """
         Конструктор.
-        @param data: Словарь данных XML.
-        @param out: Объект файла XML для записи.
-        @param encoding: Кодировка XML файла.
+        :param data: Словарь данных XML.
+        :param out: Объект файла XML для записи.
+        :param encoding: Кодировка XML файла.
             Далее в программе используется self._encoding.
             Специально инициализировать эту переменную не надо.
             Она инициализируется внутри родительского конструктора.

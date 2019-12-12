@@ -18,8 +18,8 @@ DEFAULT_ENCODING = 'utf-8'
 def StructToTxt(struct, level=0):
     """
     Перевод словарно-списковой структуры в форматированный текст.
-    @param struct : словарно-списковая структура.
-    @param level: уровень вложенности (д.б. 0).
+    :param struct : словарно-списковая структура.
+    :param level: уровень вложенности (д.б. 0).
     """
     try:
         txt = ''
@@ -174,9 +174,9 @@ def cmpLowerU(str1, str2):
 def text2unicode(text, txt_codepage=DEFAULT_ENCODING):
     """
     Перекодировка строки в юникод с проверкой типа входного аргумента.
-    @param text: Строка.
-    @param txt_codepage: Кодовая страница строки.
-    @return: Строка в юникоде.
+    :param text: Строка.
+    :param txt_codepage: Кодовая страница строки.
+    :return: Строка в юникоде.
     """
     if isinstance(text, str):
         return text
@@ -345,8 +345,8 @@ def get_codepage(text=None):
 def toUnicode(value, txt_codepage=DEFAULT_ENCODING):
     """
     Преобразовать любое значение в юникод.
-    @param value: Значение.
-    @param txt_codepage: Кодовая страница для строк.
+    :param value: Значение.
+    :param txt_codepage: Кодовая страница для строк.
     """
     if isinstance(value, str):
         return value
@@ -359,9 +359,9 @@ def txt_find_words(txt, *words):
     """
     Поиск слов в тексте.
     Поиск ведется до первого нахождения одного из указанных слов.
-    @param txt: Анализируемый текст.
-    @param words: Искомые слова.
-    @return: True (есть такие слова в тексте)/False (слова не найдены).
+    :param txt: Анализируемый текст.
+    :param words: Искомые слова.
+    :return: True (есть такие слова в тексте)/False (слова не найдены).
     """
     if not isinstance(txt, str):
         txt = toUnicode(txt)
@@ -377,9 +377,9 @@ def is_serial_symbol(txt, symbol):
     """
     Проверка на то что текст представляет из себя
     последовательность из одного конкретного символа.
-    @param txt: Текст.
-    @param symbol: Символ.
-    @return: True/False.
+    :param txt: Текст.
+    :param symbol: Символ.
+    :return: True/False.
     """
     if not txt:
         # Если это пустая строка то это
@@ -396,8 +396,8 @@ def is_serial(txt):
     """
     Проверка на то что текст представляет из себя
     последовательность из одного символа.
-    @param txt: Текст.
-    @return: True/False.
+    :param txt: Текст.
+    :return: True/False.
     """
     return is_serial_symbol(txt, txt[0])
 
@@ -406,8 +406,8 @@ def is_serial_zero(txt):
     """
     Проверка на то что текст представляет из себя
     последовательность из одного символа '0'.
-    @param txt: Текст.
-    @return: True/False.
+    :param txt: Текст.
+    :return: True/False.
     """
     return is_serial_symbol(txt, '0')
 
@@ -417,10 +417,10 @@ def getNumEnding(number, endings):
     Функция возвращает окончание для множественного числа слова на основании числа и
     массива окончаний.
     Функция взята с https://habrahabr.ru/post/105428/.
-    @param number: Число на основе которого нужно сформировать окончание
-    @param endings: Массив слов или окончаний для чисел(1, 4, 5),
+    :param number: Число на основе которого нужно сформировать окончание
+    :param endings: Массив слов или окончаний для чисел(1, 4, 5),
         например ['яблоко', 'яблока', 'яблок']
-    @return: Строку.
+    :return: Строку.
     """
     number %= 100
     if 11 <= number <= 19:
