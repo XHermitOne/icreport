@@ -38,6 +38,7 @@ class icIntegerDialog(std_dialogs_proto.integerDialogProto):
              min_value=DEFAULT_MIN_VALUE, max_value=DEFAULT_MAX_VALUE):
         """
         Инициализация диалогового окна.
+
         :param title: Заголовок окна.
         :param label: Текст приглашения ввода.
         :param min_value: Минимально-допустимое значение.

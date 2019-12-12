@@ -57,6 +57,7 @@ TITLE = 'icReport'
 def getReportList(report_dir, is_sort=True):
     """
     Получить список отчетов.
+
     :param report_dir: Директорий, в котором лежат файлы отчетов.
     :type is_sort: bool.
     :param is_sort: Сортировать список по именам?
@@ -616,6 +617,7 @@ class icReportBrowserDialog(wx.Dialog):
     def _fillReportTree(self, report_dir):
         """
         Наполнить дерево отчетов данными об отчетах.
+
         :param report_dir: Директория отчетов.
         """
         # Получить описание всех отчетов
@@ -636,6 +638,7 @@ class icReportBrowserDialog(wx.Dialog):
     def _appendItemsReportTree(self, parent_id, items):
         """
         Добавить пункты дерева по полученному описанию отчетов.
+
         :param parent_id: Идентификатор родительского узла.
         :param items: Ветка описаний отчетов.
         """
@@ -661,6 +664,7 @@ class icReportBrowserDialog(wx.Dialog):
     def setReportDir(self, rep_dir):
         """
         Установить директорий/папку отчетов.
+
         :param rep_dir: Папка отчетов.
         """
         self._ReportDir = rep_dir

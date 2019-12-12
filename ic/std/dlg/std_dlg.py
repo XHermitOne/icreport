@@ -40,6 +40,7 @@ __version__ = (0, 1, 7, 1)
 def getIntegerDlg(parent=None, title=None, label=None, min_value=0, max_value=100):
     """
     Ввод целого числа в диалоговом окне.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :param title: Заголовок окна.
@@ -67,6 +68,7 @@ def getIntegerDlg(parent=None, title=None, label=None, min_value=0, max_value=10
 def getDateDlg(parent=None):
     """
     Выбор даты в диалоговом окне календаря.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :return: Выбранную дату(datetime) или None если нажата <отмена>.
@@ -89,6 +91,7 @@ def getDateDlg(parent=None):
 def getYearDlg(parent=None, title=None, default_year=None):
     """
     Выбор года в диалоговом окне.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :param title: Заоголовок диалогового окна.
@@ -122,6 +125,7 @@ def getYearDlg(parent=None, title=None, default_year=None):
 def getMonthDlg(parent=None):
     """
     Выбор месяца в диалоговом окне.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :return: Первый день выбранного месяца (datetime) или None если нажата <отмена>.
@@ -144,6 +148,7 @@ def getMonthDlg(parent=None):
 def getMonthRangeDlg(parent=None):
     """
     Выбор периода по месяцам в диалоговом окне.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :return: Кортеж периода по месяцам (datetime) или None если нажата <отмена>.
@@ -166,6 +171,7 @@ def getMonthRangeDlg(parent=None):
 def getDateRangeDlg(parent=None, is_concrete_date=False):
     """
     Выбор периода по датам в диалоговом окне.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :param is_concrete_date: Вкл. режим ввода конкретной даты?
@@ -199,6 +205,7 @@ def getNSIListDlg(parent=None,
                   ext_filter=''):
     """
     Выбор значения из простого спискового справочника.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :param db_url: URL подключения к БД.
@@ -232,6 +239,7 @@ def getStdDlgQueue(*dlgs):
     """
     Определить очередность вызова диалоговых окон для
     определения параметров запроса отчета.
+
     :param dlgs: Список словарей описания вызова диалоговых окон.
         Вызов диалогового окна - это словарь формата:
         {'key': Ключ результата,
@@ -262,6 +270,7 @@ def getStdDlgQueue(*dlgs):
 def getRadioChoiceDlg(parent=None, title=None, label=None, choices=()):
     """
     Выбор элемента wxRadioBox.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :param title: Заголовок окна.
@@ -291,6 +300,7 @@ def getRadioChoiceDlg(parent=None, title=None, label=None, choices=()):
 def getIntRangeDlg(parent=None, title=None, label_begin=None, label_end=None, min_value=0, max_value=100):
     """
     Ввод целого числа в диалоговом окне.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :param title: Заголовок окна.
@@ -320,6 +330,7 @@ def getIntRangeDlg(parent=None, title=None, label_begin=None, label_end=None, mi
 def getCheckBoxDlg(parent=None, title=None, label=None, choices=(), defaults=()):
     """
     Выбор элементов wxCheckBox.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :param title: Заголовок окна.
@@ -351,6 +362,7 @@ def getRadioChoiceMaxiDlg(parent=None, title=None, label=None,
                           choices=(), default=None):
     """
     Выбор элемента wxRadioBox.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :param title: Заголовок окна.
@@ -381,6 +393,7 @@ def getRadioChoiceMaxiDlg(parent=None, title=None, label=None,
 def getCheckBoxMaxiDlg(parent=None, title=None, label=None, choices=(), defaults=()):
     """
     Выбор элементов wxCheckBox.
+
     :param parent: Родительское окно. Если не определено, то
         береться wx.GetApp().GetTopWindow()
     :param title: Заголовок окна.

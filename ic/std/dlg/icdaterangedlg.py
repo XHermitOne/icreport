@@ -45,6 +45,7 @@ class icDateRangeDialog(std_dialogs_proto.dateRangeDialogProto):
     def setConcreteDateCheck(self, checked=True):
         """
         Вкл./выкл. режима установки конкретной даты.
+
         :param checked: Установлена метка или нет. 
         """
         self.concrete_date_checkBox.SetValue(checked)

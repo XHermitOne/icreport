@@ -79,6 +79,7 @@ class icODS(object):
     def save(self, filename, data_dict=None):
         """
         Сохранить в ODS файл.
+
         :param filename: Имя ODS файла.
         :param data_dict: Словарь данных.
         :return: True/False.
@@ -113,6 +114,7 @@ class icODS(object):
     def getChildrenByName(self, data_dict, name):
         """
         Дочерние элементы по имени.
+
         :param data_dict: Словарь данных.
         :param name: Имя дочернего элемента.
         """
@@ -121,6 +123,7 @@ class icODS(object):
     def setWorkbook(self, data_dict):
         """
         Заполнить книгу.
+
         :param data_dict: Словарь данных.
         """
         self.ods_document = odf.opendocument.OpenDocumentSpreadsheet()
@@ -139,6 +142,7 @@ class icODS(object):
     def setStyles(self, data_dict):
         """
         Заполнить стили.
+
         :param data_dict: Словарь данных.
         """
         # log.info(u'Стили <%s>' % data_dict)
@@ -151,6 +155,7 @@ class icODS(object):
     def setFont(self, data_dict):
         """
         Заполнить шрифт стиля.
+
         :param data_dict: Словарь данных.
         """
         # log.debug(u'Установка шрифта <%s>' % data_dict)
@@ -189,6 +194,7 @@ class icODS(object):
     def setNumberFormat(self, data_dict):
         """
         Заполнить формат числового представления.
+
         :param data_dict: Словарь данных.
         """
         number_format = {}
@@ -224,6 +230,7 @@ class icODS(object):
     def setBorders(self, data_dict):
         """
         Заполнить бордеры.
+
         :param data_dict: Словарь данных.
         """
         borders = {}
@@ -257,6 +264,7 @@ class icODS(object):
     def setAlignmentParagraph(self, data_dict):
         """
         Заполнить выравнивания текста стиля.
+
         :param data_dict: Словарь данных.
         """
         align = {}
@@ -274,6 +282,7 @@ class icODS(object):
     def setAlignmentCell(self, data_dict):
         """
         Заполнить выравнивания текста стиля.
+
         :param data_dict: Словарь данных.
         """
         align = {}
@@ -295,6 +304,7 @@ class icODS(object):
     def setInteriorCell(self, data_dict):
         """
         Заполнить интерьер ячейки стиля.
+
         :param data_dict: Словарь данных.
         """
         interior = {}
@@ -308,6 +318,7 @@ class icODS(object):
     def setStyle(self, data_dict):
         """
         Заполнить стиль.
+
         :param data_dict: Словарь данных.
         """
         # log.info(u'Установка стиля <%s>' % data_dict)
@@ -393,6 +404,7 @@ class icODS(object):
     def setWorksheet(self, data_dict):
         """
         Заполнить лист.
+
         :param data_dict: Словарь данных.
         """
         # log.info(u'Установка листа <%s>' % data_dict)
@@ -419,6 +431,7 @@ class icODS(object):
     def _set_row_break(self, row, ods_table):
         """
         Установить разрыв по строке.
+
         :param row: Номер строки.
         :param ods_table: Объект ODS таблицы.
         """
@@ -435,6 +448,7 @@ class icODS(object):
     def setPageBreaks(self, data_dict, ods_table):
         """
         Установить разрывы страниц.
+
         :param data_dict: Словарь данных.
         :param ods_table: Объект ODS таблицы.
         """
@@ -447,6 +461,7 @@ class icODS(object):
     def setWorksheetOptions(self, data_dict):
         """
         Установить параметры страницы.
+
         :param data_dict: Словарь данных.
         """
         # log.debug(u'Параметры листа <%s>' % data_dict)
@@ -510,6 +525,7 @@ class icODS(object):
     def _getPageSizeByExcelIndex(self, paper_size_idx):
         """
         Получить размер листа по его индуксу в Excel.
+
         :param paper_size_idx: Индекс 9-A4 8-A3.
         :return: Кортеж (Ширина в см, Высота в см).
         """
@@ -529,6 +545,7 @@ class icODS(object):
     def setTable(self, data_dict, ods_table):
         """
         Заполнить таблицу.
+
         :param data_dict: Словарь данных.
         :param ods_table: Объект таблицы ODS файла.
         """
@@ -590,6 +607,7 @@ class icODS(object):
     def setColumn(self, data_dict):
         """
         Заполнить колонку.
+
         :param data_dict: Словарь данных.
         """
         # log.info('column: <%s>' % data_dict)
@@ -629,6 +647,7 @@ class icODS(object):
     def setRow(self, data_dict):
         """
         Заполнить строку.
+
         :param data_dict: Словарь данных.
         """
         # log.info(u'Установка строки <%s>' % data_dict)
@@ -715,6 +734,7 @@ class icODS(object):
     def _find_prev_style(self, cells):
         """
         Поиск стиля определенного в предыдущей ячейке.
+
         :param cells: Список предыдущих ячеек.
         :return: Идентификатор исокмого стиля или None если стиль не определен.
         """
@@ -726,6 +746,7 @@ class icODS(object):
     def getCellValue(self, data_dict):
         """
         Получить значение ячейки.
+
         :param data_dict: Словарь данных.
         """
         type = self.getCellType(data_dict)
@@ -741,6 +762,7 @@ class icODS(object):
     def getCellType(self, data_dict):
         """
         Тип значения ячейки.
+
         :param data_dict: Словарь данных.
         """
         dates = self.getChildrenByName(data_dict, 'Data')
@@ -825,6 +847,7 @@ class icODS(object):
     def _R1C1Fmt2A1Fmt(self, formula):
         """
         Перевод формулы из формата R1C1 в формат A1.
+
         :param formula: Формула в строковом представлении.
         :return: Строка транслированной формулы.
         """
@@ -839,6 +862,7 @@ class icODS(object):
     def _is_sheetAddress(self, address, formula):
         """
         Адресация ячейки с указанием листа? Например Лист1.A1
+
         :param address: Адресс ячейки.
         :param formula: Формула в строковом представлении.
         :return: True/False.
@@ -856,6 +880,7 @@ class icODS(object):
     def _A1Fmt2R1C1Fmt(self, formula):
         """
         Перевод формулы из формата A1 в формат R1C1.
+
         :param formula: Формула в строковом представлении.
         :return: Строка транслированной формулы.
         """
@@ -868,6 +893,7 @@ class icODS(object):
     def _translateR1C1Formula(self, formula):
         """
         Перевод формулы из формата R1C1 в формат ODS файла.
+
         :param formula: Формула в строковом представлении.
         :return: Строка транслированной формулы.
         """
@@ -876,6 +902,7 @@ class icODS(object):
     def _translateA1Formula(self, formula):
         """
         Перевод формулы из формата ODS(A1) в формат R1C1.
+
         :param formula: Формула в строковом представлении.
         :return: Строка транслированной формулы.
         """
@@ -884,6 +911,7 @@ class icODS(object):
     def setCell(self, data_dict):
         """
         Заполнить ячейку.
+
         :param data_dict: Словарь данных.
         """
         # log.info('new_cell: <%s>' % data_dict)
@@ -930,6 +958,7 @@ class icODS(object):
     def getDataValues(self, data_dict):
         """
         Получить значение ячейки с разбитием по строкам.
+
         :param data_dict: Словарь данных.
         """
         dates = self.getChildrenByName(data_dict, 'Data')
@@ -941,6 +970,7 @@ class icODS(object):
     def setData(self, data_dict, style_id=None, value=None):
         """
         Заполнить ячейку данными.
+
         :param data_dict: Словарь данных.
         :param style_id: Идентификатор стиля.
         :param value: Значение строки.
@@ -965,6 +995,7 @@ class icODS(object):
     def load(self, filename):
         """
         Загрузить из ODS файла.
+
         :param filename: Имя ODS файла.
         :return: Словарь данных или None в случае ошибки.
         """
@@ -982,6 +1013,7 @@ class icODS(object):
     def _loadODS(self, filename):
         """
         Загрузить из ODS файла.
+
         :param filename: Имя ODS файла.
         :return: Словарь данных или None в случае ошибки.
         """
@@ -997,7 +1029,8 @@ class icODS(object):
     def readWorkbook(self, ods_element=None):
         """
         Прочитать из ODS файла данные о книге.
-        @pararm ods_element: ODS элемент соответствующий книги Excel.
+
+        :param ods_element: ODS элемент соответствующий книги Excel.
         """
         data = {'name': 'Workbook', 'children': []}
         
@@ -1015,6 +1048,7 @@ class icODS(object):
     def readNumberStyles(self, *ods_styles):
         """
         Прочитать данные о стилях числовых форматов.
+
         :param ods_styles: Список стилей.
         """
         if not ods_styles:
@@ -1036,7 +1070,8 @@ class icODS(object):
     def readStyles(self, ods_element=None):
         """
         Прочитать из ODS файла данные о стилях.
-        @pararm ods_element: ODS элемент соответствующий стилям книги Excel.
+
+        :param ods_element: ODS элемент соответствующий стилям книги Excel.
         """
         data = {'name': 'Styles', 'children': []}
         ods_styles = self.ods_document.automaticstyles.getElementsByType(odf.style.Style) + \
@@ -1059,7 +1094,8 @@ class icODS(object):
     def readStyle(self, ods_element=None):
         """
         Прочитать из ODS файла данные о стиле.
-        @pararm ods_element: ODS элемент соответствующий стилю Excel.
+
+        :param ods_element: ODS элемент соответствующий стилю Excel.
         """
         data = {'name': 'Style', 'children': []}
         id = ods_element.getAttribute('name')
@@ -1116,7 +1152,8 @@ class icODS(object):
     def readNumberFormat(self, ods_element=None):
         """
         Прочитать из ODS файла данные о формате числового представления.
-        @pararm ods_element: ODS элемент соответствующий стилю числового представления.
+
+        :param ods_element: ODS элемент соответствующий стилю числового представления.
         """
         if ods_element is None:
             log.warning('Not define ods_element <%s>' % ods_element)
@@ -1162,7 +1199,8 @@ class icODS(object):
     def readFont(self, ods_element=None):
         """
         Прочитать из ODS файла данные о шрифте.
-        @pararm ods_element: ODS элемент соответствующий ствойствам текста стиля.
+
+        :param ods_element: ODS элемент соответствующий ствойствам текста стиля.
         """
         name = ods_element.getAttribute('fontname')
         name = name if name else ods_element.getAttribute('fontfamily')
@@ -1201,7 +1239,8 @@ class icODS(object):
     def readInterior(self, ods_element=None):
         """
         Прочитать из ODS файла данные о бордерах.
-        @pararm ods_element: ODS элемент соответствующий ствойствам ячейки таблицы стиля.
+
+        :param ods_element: ODS элемент соответствующий ствойствам ячейки таблицы стиля.
         """
         data = {'name': 'Interior', 'children': []}
 
@@ -1217,7 +1256,8 @@ class icODS(object):
     def readBorders(self, ods_element=None):
         """
         Прочитать из ODS файла данные о бордерах.
-        @pararm ods_element: ODS элемент соответствующий ствойствам ячейки таблицы стиля.
+
+        :param ods_element: ODS элемент соответствующий ствойствам ячейки таблицы стиля.
         """
         data = {'name': 'Borders', 'children': []}
         
@@ -1268,7 +1308,8 @@ class icODS(object):
     def readAlignmentParagraph(self, ods_element=None):
         """
         Прочитать из ODS файла данные о выравнивании текста.
-        @pararm ods_element: ODS элемент соответствующий ствойствам параграфа.
+
+        :param ods_element: ODS элемент соответствующий ствойствам параграфа.
         """
         data = {'name': 'Alignment', 'children': []}
 
@@ -1300,7 +1341,8 @@ class icODS(object):
     def readAlignmentCell(self, ods_element=None):
         """
         Прочитать из ODS файла данные о выравнивании текста.
-        @pararm ods_element: ODS элемент соответствующий ствойствам ячейки.
+
+        :param ods_element: ODS элемент соответствующий ствойствам ячейки.
         """
         data = {'name': 'Alignment', 'children': []}
 
@@ -1324,6 +1366,7 @@ class icODS(object):
     def parseBorder(self, data_string, position=None):
         """
         Распарсить бордер.
+
         :param data_string: Строка данных в виде <1pt solid #000000>.
         :param position: Позиция бордера.
         :return: Заполненный словарь бордера.
@@ -1343,6 +1386,7 @@ class icODS(object):
     def parseBorderData(self, data_string):
         """
         Распарсить данные бордера.
+
         :param data_string: Строка данных в виде <1pt solid #000000>.
         :return: Словарь {'weight':1,'line':'solid','color':'#000000'}.
         """
@@ -1377,6 +1421,7 @@ class icODS(object):
     def readWorksheet(self, ods_element=None):
         """
         Прочитать из ODS файла данные о листе.
+
         :param ods_element: ODS элемент соответствующий листу.
         """
         data = {'name': 'Worksheet', 'children': []}
@@ -1413,6 +1458,7 @@ class icODS(object):
     def readWorksheetOptions(self, ods_page_layouts):
         """
         Прочитать из ODS файла данные о параметрах страницы.
+
         :param ods_page_layouts: Список найденных параметров страницы.
         """
         # log.debug(u'Чтение данных параметров страницы из ODS')
@@ -1516,6 +1562,7 @@ class icODS(object):
     def _getPaperSizeFormat(self, page_width, page_height):
         """
         Определить по размеру листа его формат.
+
         :param page_width: Ширина листа в см.
         :param page_height: Высота листа в см.
         :return: A4 или A3.
@@ -1550,7 +1597,8 @@ class icODS(object):
     def readColumn(self, ods_element=None):
         """
         Прочитать из ODS файла данные о колонке.
-        @pararm ods_element: ODS элемент соответствующий колонке.
+
+        :param ods_element: ODS элемент соответствующий колонке.
         """
         data = {'name': 'Column', 'children': []}
         style_name = ods_element.getAttribute('stylename')
@@ -1588,6 +1636,7 @@ class icODS(object):
     def _dimension_ods2xml(self, dimension):
         """
         Перевод размеров из представления ODS в XML.
+
         :param dimension: Строковое представление размера.
         """
         if not dimension:
@@ -1605,6 +1654,7 @@ class icODS(object):
     def _dimension_xml2ods(self, dimension):
         """
         Перевод размеров из представления XML в ODS.
+
         :param dimension: Строковое представление размера в дюймах.
         """
         return str(float(dimension) * DIMENSION_CORRECT)
@@ -1612,6 +1662,7 @@ class icODS(object):
     def _dimension_inch2cm(self, sDimension, is_postfix=False):
         """
         Перевод размеров из представления в дюймах в сантиментры.
+
         :param sDimension: Строковое представление размера в дюймах.
         :param is_postfix: Добавить cm в качестве постфикса в строке?
         """
@@ -1620,6 +1671,7 @@ class icODS(object):
     def _dimension_cm2inch(self, dimension):
         """
         Перевод размеров из представления в сантиментрах/мм в дюймы.
+
         :param dimension: Строковое представление размера в сантиметрах/мм.
         """
         if not dimension:
@@ -1637,6 +1689,7 @@ class icODS(object):
     def _add_page_break(self, worksheet, row):
         """
         Добавить разрыв страницы.
+
         :param worksheet: Словарь, описывающий лист.
         :param row: Номер строки.
         """
@@ -1654,7 +1707,8 @@ class icODS(object):
     def readRow(self, ods_element=None, table=None, worksheet=None, row=-1):
         """
         Прочитать из ODS файла данные о строке.
-        @pararm ods_element: ODS элемент соответствующий строке.
+
+        :param ods_element: ODS элемент соответствующий строке.
         :param table: Словарь, описывающий таблицу.
         :param worksheet: Словарь, описывающий лист.
         :param row: Номер строки.
@@ -1747,7 +1801,8 @@ class icODS(object):
     def hasODSAttribute(self, ods_element, attr_name):
         """
         Имеется в ODS элементе атрибут с таким именем?
-        @pararm ods_element: ODS элемент.
+
+        :param ods_element: ODS элемент.
         :param attr_name: Имя атрибута.
         :return: True/False.
         """
@@ -1756,6 +1811,7 @@ class icODS(object):
     def readCell(self, ods_element=None, index=None):
         """
         Прочитать из ODS файла данные о ячейке.
+
         :param ods_element: ODS элемент соответствующий ячейке.
         :type index: C{int}
         :param index: Индекс ячейки, если необходимо указать.
@@ -1807,7 +1863,8 @@ class icODS(object):
     def readData(self, ods_element=None, value=None, value_type=None):
         """
         Прочитать из ODS файла данные.
-        @pararm ods_element: ODS элемент соответствующий данным ячейки.
+
+        :param ods_element: ODS элемент соответствующий данным ячейки.
         :param value: Строковое значение ячейки.
         :param value_type: Строковое представление типа значения ячейки.
         """

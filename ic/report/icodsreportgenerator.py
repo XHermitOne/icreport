@@ -35,6 +35,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def __init__(self, report=None, parent=None):
         """
         Конструктор класса.
+
         :param report: Шаблон отчета.
         :param parent: Родительская форма, необходима для вывода сообщений.
         """
@@ -52,6 +53,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def reloadRepData(self, tmpl_filename=None):
         """
         Перегрузить данные отчета.
+
         :param tmpl_filename: Имя файла шаблона отчета.
         """
         if tmpl_filename is None:
@@ -74,6 +76,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def _genODSReport(self, report, *args, **kwargs):
         """
         Генерация отчета и сохранение его в ODS файл.
+
         :param report: Полное описание шаблона отчета.
         :return: Возвращает имя xml файла или None в случае ошибки.
         """
@@ -85,6 +88,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def selectAction(self, report=None, *args, **kwargs):
         """
         Запуск генерации отчета с последующим выбором действия.
+
         :param report: Полное описание шаблона отчета.
         """
         ods_rep_file_name = self._genODSReport(report, *args, **kwargs)
@@ -96,6 +100,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def doSelectAction(self, data):
         """
         Запуск выбора действия над отчетом.
+
         :param data: Данные об отчете.
         """
         action = icreportactiondlg.getReportActionDlg(title=self.getReportDescription())
@@ -112,6 +117,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def preview(self, report=None, *args, **kwargs):
         """
         Предварительный просмотр.
+
         :param report: Полное описание шаблона отчета.
         """
         ods_rep_file_name = self._genODSReport(report, *args, **kwargs)
@@ -122,6 +128,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def PreviewOffice(self, ods_filename):
         """
         Открыть отчет в режиме предварительного просмотра.
+
         :param ods_filename: Имя ods файла, содержащего сгенерированный отчет.
         """
         if not os.path.exists(ods_filename):
@@ -146,6 +153,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def print(self, report=None, *args, **kwargs):
         """
         Печать.
+
         :param report: Полное описание шаблона отчета.
         """
         ods_rep_file_name = self._genODSReport(report, *args, **kwargs)
@@ -156,6 +164,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def PrintOffice(self, ods_filename):
         """
         Печать отчета с помощью CALC.
+
         :param ods_filename: Имя ods файла, содержащего сгенерированный отчет.
         """
         if ods_filename and os.path.exists(ods_filename):
@@ -174,6 +183,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def convert(self, report=None, to_filename=None, *args, **kwargs):
         """
         Вывод результатов отчета в Excel.
+
         :param report: Полное описание шаблона отчета.
         :param to_filename: Имя файла, куда необходимо сохранить отчет.
         """
@@ -185,6 +195,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def OpenOffice(self, ods_filename):
         """
         Открыть.
+
         :param ods_filename: Имя ods файла, содержащего сгенерированный отчет.
         """
         if ods_filename and os.path.exists(ods_filename):
@@ -197,6 +208,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def edit(self, rep_filename=None):
         """
         Редактирование отчета.
+
         :param rep_filename: Полное имя файла шаблона отчета.
         """
         # Определить файл *.ods
@@ -208,6 +220,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def generateReport(self, report=None, *args, **kwargs):
         """
         Запустить генератор отчета.
+
         :param report: Шаблон отчета.
         :return: Возвращает сгенерированный отчет или None в случае ошибки.
         """
@@ -246,6 +259,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def generate(self, report=None, db_url=None, sql=None, stylelib=None, vars=None, *args, **kwargs):
         """
         Запустить генератор отчета.
+
         :param report: Шаблон отчета.
         :param db_url: Connection string в виде url. Например
             postgresql+psycopg2://postgres:postgres@10.0.0.3:5432/realization.
@@ -288,6 +302,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def save(self, report_data=None, is_virtual_excel=True):
         """
         Сохранить результаты генерации в файл
+
         :param report_data: Сгенерированный отчет.
         :param is_virtual_excel: Сохранение произвести с помощью VirtualExcel?
             True - да, False - Сохранение производится конвертацией с помощью UNOCONV.
@@ -328,6 +343,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def previewResult(self, report_data=None):
         """
         Предварительный просмотр.
+
         :param report_data: Сгенерированный отчет.
         """
         report_filename = self.save(report_data)
@@ -337,6 +353,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def printResult(self, report_data=None):
         """
         Печать.
+
         :param report_data: Сгенерированный отчет.
         """
         report_filename = self.save(report_data)
@@ -346,6 +363,7 @@ class icODSReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def convertResult(self, report_data=None, to_filename=None):
         """
         Конвертирование результатов отчета.
+
         :param report_data: Сгенерированный отчет.
         :param to_filename: Имя результирующего файла.
         """

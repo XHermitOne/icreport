@@ -36,6 +36,7 @@ SRC_REPORT_EXT = _ReportGeneratorSystemTypes.keys()
 def getReportGeneratorSystem(rep_filename, parent=None, bRefresh=True):
     """
     Получить объект системы генерации отчетов.
+
     :param rep_filename: Имя файла шаблона отчета.
     :param parent: Родительская форма, необходима для вывода сообщений.
     :param bRefresh: Указание обновления данных шаблона отчета в генераторе.
@@ -76,6 +77,7 @@ def getReportGeneratorSystem(rep_filename, parent=None, bRefresh=True):
 def createReportGeneratorSystem(repgen_sys_type, report=None, parent=None):
     """
     Создать объект системы генерации отчетов.
+
     :param repgen_sys_type: Указание типа системы генерации отчетов.
         Тип задается расширением файла источника шаблона.
         В нашем случае один из SRC_REPORT_EXT.

@@ -26,7 +26,6 @@ class icRadioChoiceDialog(std_dialogs_proto.radioChoiceDialogProto):
     """
     Диалоговое окно выбора элемента wxRadioBox.
     """
-
     def __init__(self, *args, **kwargs):
         """
         Конструктор.
@@ -42,6 +41,7 @@ class icRadioChoiceDialog(std_dialogs_proto.radioChoiceDialogProto):
     def init(self, title=None, label=None, choices=(), do_fit_dlg=True):
         """
         Инициализация диалогового окна.
+
         :param title: Заголовок окна.
         :param label: Текст приглашения ввода.
         :param choices: Список выбора.

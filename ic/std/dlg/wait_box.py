@@ -12,7 +12,7 @@ import wx.animate
 import thread
 import time
 
-__version__ = (0, 0, 1, 2)
+__version__ = (0, 1, 1, 1)
 
 # Задержка между кадрами
 FRAME_DELAY = 0.3
@@ -25,6 +25,7 @@ def wait_func(parent, message,
               art_frames=None):
     """
     Окно ожидания.
+
     :param parent: Ссылка на окно.
     :param message: Текст диалога.
     :param function: Функция, которую необходимо подождать.
@@ -174,6 +175,7 @@ def test():
     result = wait_func(None, u'Ожидание длинное  ', funcA)
     app.MainLoop()
     print((u'Result: %s' % result))
+
 
 if __name__ == '__main__':
     test()

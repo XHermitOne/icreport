@@ -26,7 +26,6 @@ class icCheckBoxDialog(std_dialogs_proto.checkBoxDialogProto):
     """
     Диалоговое окно выбора элементов wxCheckBox.
     """
-
     def __init__(self, *args, **kwargs):
         """
         Конструктор.
@@ -49,6 +48,7 @@ class icCheckBoxDialog(std_dialogs_proto.checkBoxDialogProto):
     def getValue(self):
         """
         Выбранные элементы.
+
         :return: Кортеж выбранных элементов либо None при отмене выбора.
             Например (False, True, True, False).
         """
@@ -58,6 +58,7 @@ class icCheckBoxDialog(std_dialogs_proto.checkBoxDialogProto):
              defaults=()):
         """
         Инициализация диалогового окна.
+
         :param title: Заголовок окна.
         :param label: Текст приглашения ввода.
         :param choices: Список выбора.
@@ -94,6 +95,7 @@ class icCheckBoxDialog(std_dialogs_proto.checkBoxDialogProto):
     def getCheckedList(self):
         """
         Список выбранных отметок.
+
         :return: Кортеж выбранных элементов.
             Например (False, True, True, False).
         """

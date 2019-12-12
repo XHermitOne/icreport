@@ -32,6 +32,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def __init__(self, report=None, parent=None):
         """
         Конструктор класса.
+
         :param report: Шаблон отчета.
         :param parent: Родительская форма, необходима для вывода сообщений.
         """
@@ -49,6 +50,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def reloadRepData(self, tmpl_filename=None):
         """
         Перегрузить данные отчета.
+
         :param tmpl_filename: Имя файла шаблона отчета.
         """
         if tmpl_filename is None:
@@ -64,6 +66,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def _genRTFReport(self, report):
         """
         Генерация отчета и сохранение его в RTF файл.
+
         :param report: Полное описание шаблона отчета.
         :return: Возвращает имя rtf файла или None в случае ошибки.
         """
@@ -83,6 +86,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def preview(self, report=None):
         """
         Предварительный просмотр.
+
         :param report: Полное описание шаблона отчета.
         """
         rtf_rep_file_name = self._genRTFReport(report)
@@ -93,6 +97,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def previewWord(self, rtf_filename):
         """
         Открыть word  в режиме предварительного просмотра.
+
         :param rtf_filename: Имя rtf файла, содержащего сгенерированный отчет.
         """
         try:
@@ -115,6 +120,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def print(self, report=None):
         """
         Печать.
+
         :param report: Полное описание шаблона отчета.
         """
         rtf_rep_file_name = self._genRTFReport(report)
@@ -125,6 +131,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def printWord(self, rtf_filename):
         """
         Печать отчета с помощью word.
+
         :param rtf_filename: Имя rtf файла, содержащего сгенерированный отчет.
         """
         try:
@@ -153,6 +160,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def convert(self, report=None, to_xls_filename=None, *args, **kwargs):
         """
         Вывод результатов отчета в Excel.
+
         :param report: Полное описание шаблона отчета.
         :param to_xls_filename: Имя файла, куда необходимо сохранить отчет.
         """
@@ -161,6 +169,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def openWord(self, rtf_filename):
         """
         Открыть word.
+
         :param rtf_filename: Имя rtf файла, содержащего сгенерированный отчет.
         """
         try:
@@ -181,6 +190,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def edit(self, rep_filename=None):
         """
         Редактирование отчета.
+
         :param rep_filename: Полное имя файла шаблона отчета.
         """
         # Определить файл *.rtf
@@ -193,6 +203,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def generateReport(self, report=None):
         """
         Запустить генератор отчета.
+
         :param report: Шаблон отчета.
         :return: Возвращает сгенерированный отчет или None в случае ошибки.
         """
@@ -239,6 +250,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def _predGenerateAllVar(self, data):
         """
         Предобработка всех переменных. Выполняется рекурсивно.
+
         :return: Возвращает структуры с заполненными переменными.
         """
         if '__variables__' in data:
@@ -255,6 +267,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def _predGenerateVar(self, variables, value=None):
         """
         Предобработка словаря переменных.
+
         :param variables: Словарь переменных.
         :param value: Текущее обработываемое значение.
         """
@@ -284,6 +297,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def _funcTextParse(self, text, patterns=ALL_PATERNS):
         """
         Разобрать строку на формат и исполняемый код.
+
         :param text: Разбираемая строка.
         :param patterns: Cписок строк патернов тегов обозначения
             начала и конца функционала.
@@ -337,6 +351,7 @@ class icRTFReportGeneratorSystem(icrepgensystem.icReportGeneratorSystem):
     def _valueFormat(self, fmt, data_list):
         """
         Заполнение формата значения ячейки.
+        
         :param fmt: Формат.
         :param data_list: Данные, которые нужно поместить в формат.
         :return: Возвращает строку, соответствующую формату.

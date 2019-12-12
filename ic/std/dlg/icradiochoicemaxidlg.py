@@ -45,6 +45,7 @@ class icRadioChoiceMaxiDialog(std_dialogs_proto.radioChoiceMaxiDialogProto):
              default=None):
         """
         Инициализация диалогового окна.
+
         :param title: Заголовок окна.
         :param label: Текст приглашения ввода.
         :param choices: Список выбора.

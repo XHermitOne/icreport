@@ -39,6 +39,7 @@ class icRepStyleLib(icreptemplate.icReportTemplate):
         """
         Конвертация из XML представления библиотеки стилей в представление
             библиотеки стилей отчета.
+
         :param src_data: Исходные данные.
         """
         pass
@@ -63,6 +64,7 @@ class icXMLRepStyleLib(icRepStyleLib):
     def open(self, xml_filename):
         """
         Открыть XML файл.
+
         :param xml_filename: Имя XML файла библиотеки стилей отчета.
         """
         return xml2dict.XmlFile2Dict(xml_filename)
@@ -70,6 +72,7 @@ class icXMLRepStyleLib(icRepStyleLib):
     def convert(self, xml_filename):
         """
         Конвертация из XML файла в представление библиотеки стилей отчета.
+
         :param xml_filename: Исходные данные.
         """
         xml_data = self.open(xml_filename)
@@ -112,6 +115,7 @@ class icXMLRepStyleLib(icRepStyleLib):
     def _isStyleTag(self, value):
         """
         Определить является ли значение тегом стиля.
+
         :param value: Строка-значение в ячейке.
         :return: True/False.
         """
@@ -123,6 +127,7 @@ class icXMLRepStyleLib(icRepStyleLib):
     def _getStyles(self, rows, styles):
         """
         Определить словарь стилей.
+
         :param rows: Список строк в XML.
         :param styles: Словарь стилей в XML.
         """
@@ -141,6 +146,7 @@ class icXMLRepStyleLib(icRepStyleLib):
     def _getStyle(self, style_id, styles):
         """
         Определить стиль по его идентификатору.
+
         :param style_id: Идентификатор стиля в XML описании.
         :param styles: Словарь стилей в XML.
         """

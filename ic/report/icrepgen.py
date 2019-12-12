@@ -247,6 +247,7 @@ class icReportGenerator:
     def generate(self, rep_template, query_table, name_space=None, coord_fill=None):
         """
         Генерация отчета.
+
         :param rep_template: Структура шаблона отчета (см. спецификации).
         :param query_table: Таблица запроса.
             Словарь следующей структуры:
@@ -445,6 +446,7 @@ class icReportGenerator:
     def _genHeader(self, header):
         """
         Сгенерировать заголовок отчета и перенести ее в выходной отчет.
+
         :param header: Бэнд заголовка.
         :return: Возвращает результат выполнения операции True/False.
         """
@@ -482,6 +484,7 @@ class icReportGenerator:
     def _genFooter(self, footer):
         """
         Сгенерировать примечание отчета и перенести ее в выходной отчет.
+
         :param footer: Бэнд примечания.
         :return: Возвращает результат выполнения операции True/False.
         """
@@ -520,6 +523,7 @@ class icReportGenerator:
     def _genDetail(self, detail):
         """
         Сгенерировать область данных отчета и перенести ее в выходной отчет.
+
         :param detail: Бэнд области данных.
         :return: Возвращает результат выполнения операции True/False.
         """
@@ -558,6 +562,7 @@ class icReportGenerator:
     def _genGrpHeader(self, rep_group):
         """
         Генерация заголовка группы.
+
         :param rep_group: Словарь IC_REP_GRP, описывающий группу.
         :return: Возвращает результат выполнения операции True/False.
         """
@@ -594,6 +599,7 @@ class icReportGenerator:
     def _genGrpFooter(self, rep_group):
         """
         Генерация примечания группы.
+
         :param rep_group: Словарь IC_REP_GRP, описывающий группу.
         :return: Возвращает результат выполнения операции True/False.
         """
@@ -624,7 +630,9 @@ class icReportGenerator:
 
     def _genUpper(self, upper):
         """
-        Сгенерировать верхний колонтитул/заголовок страницы отчета и перенести ее в выходной отчет.
+        Сгенерировать верхний колонтитул/заголовок страницы отчета и
+        перенести ее в выходной отчет.
+
         :param upper: Бэнд верхнего колонтитула.
         :return: Возвращает результат выполнения операции True/False.
         """
@@ -664,6 +672,7 @@ class icReportGenerator:
     def _genUnder(self, under):
         """
         Сгенерировать нижний колонтитул отчета и перенести ее в выходной отчет.
+
         :param under: Бэнд нижнего колонтитула.
         :return: Возвращает результат выполнения операции True/False.
         """
@@ -702,6 +711,7 @@ class icReportGenerator:
     def _genSubReport(self, sub_rep_name, row):
         """
         Генерация под-отчета.
+
         :param sub_rep_name: Имя под-отчета.
         :param row: Номер строки листа, после которой будет вставляться под-отчет.
         :return: Возвращает результат выполнения операции True/False.
@@ -735,6 +745,7 @@ class icReportGenerator:
     def _genCell(self, from_sheet, from_row, from_col, to_report, to_row, to_col, record):
         """
         Генерация ячейки из шаблона в выходной отчет.
+
         :param from_sheet: Из листа шаблона.
         :param from_row: Координаты ячейки шаблона. Строка.
         :param from_col: Координаты ячейки шаблона. Столбец.
@@ -786,6 +797,7 @@ class icReportGenerator:
     def _genTxt(self, cell, record=None, cell_row=None, cell_col=None):
         """
         Генерация текста.
+
         :param cell: Ячейка.
         :param record: Словарь, описывающий текущую запись таблицы запроса.
             Формат: { <имя поля> : <значение поля>, ...}
@@ -886,6 +898,7 @@ class icReportGenerator:
         ВНИМАНИЕ: Функция в шаблоне может иметь 1 аргумент это словарь записи.
             Например:
                 [@package_name.module_name.function_name(record)@]
+
         :param cur_func: Текст вызова функции с тегами.
         :param locals: Словарь локального пространства имен.
         :param globals: Словарь глобального пространства имен.
@@ -906,6 +919,7 @@ class icReportGenerator:
             вид получения значения value.
             Например:
                 [#record["dt"].strftime("%B")#]
+
         :param cur_func: Текст исполняемого выражения с тегами.
         :param locals: Словарь локального пространства имен.
         :param globals: Словарь глобального пространства имен.
@@ -926,6 +940,7 @@ class icReportGenerator:
             ВНИМАНИЕ: Лямбда-выражение в шаблоне должно иметь 1 аргумент это словарь записи.
                 Например:
                     [~rec: rec['name']=='Петров'~]
+
         :param cur_func: Вызов lambda выражения с тегами.
         :param locals: Словарь локального пространства имен.
         :param globals: Словарь глобального пространства имен.
@@ -956,6 +971,7 @@ class icReportGenerator:
             переменную value.
             Например:
             [=value = '-' if record['name']=='Петров' else ''=]
+
         :param cur_func: Текст блока кода с тегами.
         :param locals: Словарь локального пространства имен.
         :param globals: Словарь глобального пространства имен.
@@ -978,6 +994,7 @@ class icReportGenerator:
     def _get_variable(self, cur_func, locals, globals):
         """
         Получить переменную из пространства имен отчета.
+
         :param cur_func: Текст блока обращения к переменной с тегами.
         :param locals: Словарь локального пространства имен.
         :param globals: Словарь глобального пространства имен.
@@ -994,6 +1011,7 @@ class icReportGenerator:
     def _set_style(self, cur_func, locals, globals):
         """
         Установить стиль.
+
         :param cur_func: Текст блока указания имени стиля с тегами.
         :param locals: Словарь локального пространства имен.
         :param globals: Словарь глобального пространства имен.
@@ -1007,6 +1025,7 @@ class icReportGenerator:
     def _get_field_value(self, cur_func, locals, globals):
         """
         Получить значение поля текущей записи.
+
         :param cur_func: Текст блока обращения к полю с тегами.
         :param locals: Словарь локального пространства имен.
         :param globals: Словарь глобального пространства имен.
@@ -1025,6 +1044,7 @@ class icReportGenerator:
     def _gen_subreport(self, cur_func, locals, globals):
         """
         Запуск генерации подъотчета.
+
         :param cur_func: Текст ссылки на подъотчет с тегами.
         :param locals: Словарь локального пространства имен.
         :param globals: Словарь глобального пространства имен.
@@ -1039,6 +1059,7 @@ class icReportGenerator:
     def _valueFormat(self, fmt, data_list):
         """
         Заполнение формата значения ячейки.
+
         :param fmt: Формат.
         :param data_list: Данные, которые нужно поместить в формат.
         :return: Возвращает строку, соответствующую формату.
@@ -1062,6 +1083,7 @@ class icReportGenerator:
     def _setStyleAttr(self, style_name):
         """
         Установить атрибуты по умолчанию ячеек по имени стиля из библиотеки стилей.
+
         :param style_name: Имя стиля из библиотеки стилей.
         """
         if self._StyleLib and style_name in self._StyleLib:
@@ -1072,6 +1094,7 @@ class icReportGenerator:
     def _getSum(self, formula):
         """
         Получить сумму по формуле.
+
         :param formula: Формула.
         :return: Возвращает строковое значение суммы.
         """
@@ -1080,6 +1103,7 @@ class icReportGenerator:
     def _initSumCells(self, sheet):
         """
         Выявление и инициализация ячеек с суммами.
+
         :param sheet: Описание листа отчета.
         :return: Возвращает описание листа с корректным описанием ячеек с суммами.
             В результате ошибки возвращает старое описание листа.
@@ -1100,6 +1124,7 @@ class icReportGenerator:
     def _initSumCell(self, cell):
         """
         Инициализация суммарной ячейки.
+
         :param cell: Описание ячейки.
         :return: Возвращает скоррекстированное описание ячейки.
             В случае ошибки возвращает старое описание ячейки.
@@ -1132,6 +1157,7 @@ class icReportGenerator:
     def _sumIterate(self, sheet, record):
         """
         Итерация суммирования.
+
         :param sheet: Описание листа отчета.
         :param record: Запись, на которой вызывается итерация.
         :return: Возвращает описание листа с корректным описанием ячеек с суммами.
@@ -1171,6 +1197,7 @@ class icReportGenerator:
     def _clearSum(self, sheet, start_row, stop_row):
         """
         Обнуление сумм.
+
         :param sheet: Описание листа отчета.
         :param start_row: Начало бэнда обнуления.
         :param stop_row: Конец бэнда обнуления.
@@ -1201,6 +1228,7 @@ class icReportGenerator:
     def funcTextParse(self, text, patterns=ALL_PATTERNS):
         """
         Разобрать строку на формат и исполняемый код.
+
         :param text: Разбираемая строка.
         :param patterns: Cписок строк патернов тегов обозначения
             начала и конца функционала.

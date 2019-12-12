@@ -96,6 +96,7 @@ class icVStyles(icprototype.icVPrototype):
     def _equalStyleElement(self, style_element_attr1, style_element_attr2):
         """
         Сравнение элементов стилей.
+
         :return: True - элементы равны, False - не равны.
         """
         if ((style_element_attr1 is None) and (style_element_attr2 is not None)) or \
@@ -319,6 +320,7 @@ class icVStyles(icprototype.icVPrototype):
     def _isCrcStyleID(self, style_id):
         """
         Есть ли в кеше стиль с таким идентификатором?
+
         :return: Возвращает контрольную сумму стиля в кеше или None,
             если стиль не найден.
         """
@@ -336,6 +338,7 @@ class icVStyles(icprototype.icVPrototype):
     def _createDefaultStyle(self):
         """
         Создать стиль по умолчанию, если его нет.
+
         :return: Возвращает True-если стиль Default создан,
         и False-если нет.
         """
@@ -351,6 +354,7 @@ class icVStyles(icprototype.icVPrototype):
     def clearUnUsedStyles(self):
         """
         Удаление не используемых стилей.
+
         :return: Возвращает список идентификаторов удаленных стилей.
         """
         # Создать стиль по умолчанию если он создан
@@ -424,6 +428,7 @@ class icVStyle(icprototype.icVPrototype):
     def setID(self, id_name):
         """
         Идентификатор стиля.
+
         :param id_name: Имя идентификатора.
         """
         self._attributes['ID'] = str(id_name)
@@ -515,6 +520,7 @@ class icVStyle(icprototype.icVPrototype):
     def getAttrs(self):
         """
         Содержание стиля.
+
         :return: Словарь внутреннего содержания стиля.
         """
         attrs = {}

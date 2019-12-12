@@ -104,6 +104,7 @@ class icVExcel(icprototype.icVPrototype):
         """
         Сконвертировать XLS файл в XML. Конвертация будет происходить
         только при установленном Excel.
+
         :return: True - все нормально сконвертировалось, False - ошибка.
         """
         try:
@@ -152,6 +153,7 @@ class icVExcel(icprototype.icVPrototype):
     def loadODS(self, ods_filename=None):
         """
         Загрузить из ODS файла.
+
         :param ods_filename: Полное имя ODS файла.
         """
         if ods_filename:
@@ -168,6 +170,7 @@ class icVExcel(icprototype.icVPrototype):
     def load(self, filename):
         """
         Загрузить данные из файла. Тип файла определяется по расширению.
+
         :param filename: Полное имя файла.
         """
         if filename:
@@ -197,6 +200,7 @@ class icVExcel(icprototype.icVPrototype):
     def saveAs(self, filename=None):
         """
         Сохранить данные в файл.
+
         :param filename: Полное имя файла.
         """
         if not filename:
@@ -214,6 +218,7 @@ class icVExcel(icprototype.icVPrototype):
     def saveAsODS(self, ods_filename=None):
         """
         Сохранить в ODS файле.
+
         :param ods_filename: Полное имя ODS файла.
         """
         if ods_filename is None:
@@ -274,6 +279,7 @@ class icVExcel(icprototype.icVPrototype):
     def save_copy_xml(self, save_data, xml_filename, n_copy=0):
         """
         Сохранение XML файла, если не получается, то сохранить копию.
+
         :param save_data: Сохраняемые данные.
         :param xml_filename: Имя XML файла.
         :param n_copy: Номер копии.
@@ -312,6 +318,7 @@ class icVExcel(icprototype.icVPrototype):
     def getWorkbook(self, name=None):
         """
         Книга.
+
         :param name: Имя книги - имя XML файла.
         """
         if name is None:
@@ -346,6 +353,7 @@ class icVExcel(icprototype.icVPrototype):
     def closeWorkbook(self, xml_filename=None):
         """
         Закрыть книгу.
+
         :param xml_filename: Указание XML файла закрываемой книги.
         Если не указан, то закрывается текущая книга.
         """
@@ -386,6 +394,7 @@ class icVExcel(icprototype.icVPrototype):
     def _findWorkbookData(self, xml_filename=None):
         """
         Найти данные указанной книги.
+
         :param xml_filename: Имя XML файла книги. Если не определено,
         то имеется ввиду активная книга.
         """
@@ -410,6 +419,7 @@ class icVExcel(icprototype.icVPrototype):
     def _findWorksheetData(self, xml_filename=None, sheet_name=None):
         """
         Найти данные указанного листа.
+
         :param xml_filename: Имя XML файла книги. Если не определено,
         то имеется ввиду активная книга.
         :param sheet_name: Имя листа в указанной книге. Если не указано,
@@ -439,6 +449,7 @@ class icVExcel(icprototype.icVPrototype):
     def _getWorkbookStyles(self, xml_filename=None):
         """
         Данные стилей указанной книги.
+
         :param xml_filename: Имя XML файла книги. Если не определено,
         то имеется ввиду активная книга.
         """
@@ -458,6 +469,7 @@ class icVExcel(icprototype.icVPrototype):
     def _genNewStyleID(self, style_id, reg_styles_id):
         """
         Сгенерировать идентификатор стиля при работе с листами.
+
         :param style_id: Имя стиля.
         :param reg_styles_id: Список идентификаторов уже зарегистрированных
         стилей.
@@ -472,6 +484,7 @@ class icVExcel(icprototype.icVPrototype):
     def copyWorksheet(self, xml_filename=None, sheet_name=None):
         """
         Положить в внутренний буфер обмена копию листа.
+
         :param xml_filename: Имя XML файла книги. Если не определено,
         то имеется ввиду активная книга.
         :param sheet_name: Имя листа в указанной книге. Если не указано,
@@ -495,6 +508,7 @@ class icVExcel(icprototype.icVPrototype):
     def cutWorksheet(self, xml_filename=None, sheet_name=None):
         """
         Вырезать лист.
+
         :param xml_filename: Имя XML файла книги. Если не определено,
         то имеется ввиду активная книга.
         :param sheet_name: Имя листа в указанной книге. Если не указано,
@@ -518,6 +532,7 @@ class icVExcel(icprototype.icVPrototype):
     def delWorksheet(self, xml_filename=None, sheet_name=None):
         """
         Удалить безвозвратно лист.
+
         :param xml_filename: Имя XML файла книги. Если не определено,
         то имеется ввиду активная книга.
         :param sheet_name: Имя листа в указанной книге. Если не указано,
@@ -554,6 +569,7 @@ class icVExcel(icprototype.icVPrototype):
     def delWithoutWorksheet(self, xml_filename=None, sheet_name_=None):
         """
         Удалить безвозвратно все листы из книги кроме указанного.
+
         :param xml_filename: Имя XML файла книги. Если не определено,
         то имеется ввиду активная книга.
         :param sheet_name_: Имя листа в указанной книге. Если не указано,
@@ -585,6 +601,7 @@ class icVExcel(icprototype.icVPrototype):
     def delSelectedWorksheetList(self, xml_filename=None):
         """
         Удалить выбранные листы.
+
         :param xml_filename: Имя XML файла книги из которй удаляется.
         Если не определено, то имеется ввиду активная книга.
         """
@@ -603,6 +620,7 @@ class icVExcel(icprototype.icVPrototype):
     def delWithoutSelectedWorksheetList(self, xml_filename=None):
         """
         Удалить все не выбранные листы из книги.
+
         :param xml_filename: Имя XML файла книги для из которой удаляется.
         Если не определено, то имеется ввиду активная книга.
         """
@@ -626,6 +644,7 @@ class icVExcel(icprototype.icVPrototype):
     def _pasteStyleIntoWorkbook(self, style, workbook_data):
         """
         Вставить стиль в готовую структуру книги.
+
         :param style: Данные вставляемого стиля.
         :param workbook_data: Данные книги.
         :return: Возвращает идентификатор стиля или None
@@ -651,6 +670,7 @@ class icVExcel(icprototype.icVPrototype):
     def _replaceStyleID(self, data, old_style_id, new_style_id):
         """
         Заменить идентификаторы стилей в вставляемых данных.
+
         :param data: Данные для вставки.
         :param old_style_id: Старый идентификатор стиля.
         :param new_style_id: Новый идентификатор стиля.
@@ -681,6 +701,7 @@ class icVExcel(icprototype.icVPrototype):
     def pasteWorksheet(self, xml_filename=None, is_cut=None, new_worksheet_name=None):
         """
         Вставить лист из буфера обмена в указанную книгу.
+
         :param xml_filename: Имя XML файла книги для вставки. Если не определено,
         то имеется ввиду активная книга.
         :param is_cut: Признак того, что старый лист нужно удалить.
@@ -737,6 +758,7 @@ class icVExcel(icprototype.icVPrototype):
     def selectWorksheet(self, xml_filename=None, sheet_name=None):
         """
         Выбрать лист для групповых операций с листами.
+
         :param xml_filename: Имя XML файла книги. Если не определено,
         то имеется ввиду активная книга.
         :param sheet_name: Имя листа в указанной книге. Если не указано,
@@ -762,6 +784,7 @@ class icVExcel(icprototype.icVPrototype):
     def copyWorksheetListTo(self, xml_filename=None, new_worksheet_names=None):
         """
         Копирование списка выбранных листов в книгу.
+
         :param xml_filename: Имя XML файла книги для вставки. Если не определено,
         то имеется ввиду активная книга.
         :param new_worksheet_names: Список имен новых листов.
@@ -782,6 +805,7 @@ class icVExcel(icprototype.icVPrototype):
     def moveWorksheetListTo(self, xml_filename=None, new_worksheet_names=None):
         """
         Перенести список выбранных листов в книгу.
+
         :param xml_filename: Имя XML файла книги для вставки. Если не определено,
         то имеется ввиду активная книга.
         :param new_worksheet_names: Список имен новых листов.
@@ -875,6 +899,7 @@ class icVExcel(icprototype.icVPrototype):
     def exec_cmd_script(self, cmd_script=None, bAutoSave=True):
         """
         Выполнить скрипт - список команд.
+
         :param cmd_script: Список команд формата
         [
         ('ИмяКоманды',(кортеж не именованных аргуметов),{словарь именованных аргументов}),

@@ -30,6 +30,7 @@ DETECT_MERGE_CELL_ERROR = False
 def get_cfg_var(name):
     """
     Прочитать значение переменной конфига.
+
     :type name: C{string}
     :param name: Имя переменной.
     """
@@ -39,6 +40,7 @@ def get_cfg_var(name):
 def set_cfg_var(name, value):
     """
     Установить значение переменной конфига.
+
     :type name: C{string}
     :param name: Имя переменной.
     :param value: Значение переменной.

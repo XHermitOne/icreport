@@ -79,6 +79,7 @@ class icVCell(icprototype.icVIndexedPrototype):
     def isFormula(self, value):
         """
         Проверка является ли значение формулой.
+
         :param value: Проверяемое значение.
         """
         return type(value) == str and bool(value) and value[0] == '='
@@ -228,6 +229,7 @@ class icVCell(icprototype.icVIndexedPrototype):
     def _delMergeArreaCells(self, row, column, merge_down, merge_across):
         """
         Удалить ячейки попавшие в зону объединения.
+
         :param row: Номер строки.
         :param column: Номер колонки.
         :param merge_down: Количество строк объединения.
@@ -267,6 +269,7 @@ class icVCell(icprototype.icVIndexedPrototype):
     def getOffset(self, offset_row=0, offset_column=0):
         """
         Получить ячейку по смещению с учетом объединенных ячеек.
+
         :param offset_row: Смещение по строкам.
         :param offset_column: Смещение по колонкам.
         :return: Возвращает объект ячейки по смещению или None в случае ошибки.
@@ -299,6 +302,7 @@ class icVCell(icprototype.icVIndexedPrototype):
     def getAddress(self):
         """
         Адрес ячейки.
+
         :return: Возвращает кортеж (номер строки, номер колонки).
         """
         return self._row_idx, self._col_idx
@@ -306,6 +310,7 @@ class icVCell(icprototype.icVIndexedPrototype):
     def getRegion(self):
         """
         Область ячеки=Адрес ячейки + количество объединненных строк и колонок.
+
         :return: Возвращает кортеж
             (номер строки, номер колонки,
             объединненных строк, объединенных колонок).

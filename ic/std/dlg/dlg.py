@@ -19,6 +19,7 @@ __version__ = (0, 1, 1, 1)
 def getFileDlg(parent=None, title='', wildcard='', default_path=''):
     """
     Открыть диалог выбора файла для открытия/записи.
+
     :param parent: Ссылка на окно.
     :param title: Заголовок диалогового окна.
     :param wildcard: Фильтр файлов.
@@ -59,6 +60,7 @@ def getFileDlg(parent=None, title='', wildcard='', default_path=''):
 def getDirDlg(parent=None, title='', default_path=''):
     """
     Диалог выбора каталога.
+
     :param parent: Ссылка на окно.
     :param title: Заголовок диалогового окна.
     :param default_path: Путь по умолчанию.
@@ -92,6 +94,7 @@ def getDirDlg(parent=None, title='', default_path=''):
 def getImageDlg(parent=None, default_img_dir=None):
     """
     Диалог выбора графических файлов.
+
     :param parent: Ссылка на окно.
     :param default_img_dir: Указание папки образа.
     :return: Возвращает полное имя выбранного файла.
@@ -128,6 +131,7 @@ def getImageDlg(parent=None, default_img_dir=None):
 def getColorDlg(parent=None, title='', default=wx.BLACK):
     """
     Диалог выбора цвета
+
     :param parent: Ссылка на окно.
     :param title: Заголовок диалогового окна.
     :param default: Значение по умолчанию.
@@ -160,6 +164,7 @@ def getColorDlg(parent=None, title='', default=wx.BLACK):
 def getTextInputDlg(parent=None, title='', message='', default=''):
     """
     Диалог ввода строки.
+
     :param parent: Ссылка на окно.
     :param title: Заголовок диалогового окна.
     :param message: Текст диалога.
@@ -193,6 +198,7 @@ def getTextInputDlg(parent=None, title='', message='', default=''):
 def getAskDlg(title='', message='', style=wx.YES_NO | wx.ICON_QUESTION):
     """
     Диалог вопроса.
+
     :param title: Заголовок диалогового окна.
     :param message: Текст диалога.
     :param style: Стиль диалога.
@@ -214,6 +220,7 @@ def getAskBox(*args, **kwargs):
 def getMsgBox(title='', message='', parent=None):
     """
     Вывод сообщения.
+
     :param parent: Родительское окно.
     :param title: Заголовок диалогового окна.
     :param message: Текст диалога.
@@ -228,6 +235,7 @@ def getMsgBox(title='', message='', parent=None):
 def getErrBox(title='', message='', parent=None):
     """
     Вывод сообщения об ошибке.
+
     :param parent: Родительское окно.
     :param title: Заголовок диалогового окна.
     :param message: Текст диалога.
@@ -242,6 +250,7 @@ def getErrBox(title='', message='', parent=None):
 def getWarningBox(title='', message='', parent=None):
     """
     Вывод предупреждающего сообщения.
+
     :param parent: Родительское окно.
     :param title: Заголовок диалогового окна.
     :param message: Текст диалога.
@@ -256,6 +265,7 @@ def getWarningBox(title='', message='', parent=None):
 def getSingleChoiceDlg(parent=None, title='', message='', choice=None):
     """
     Диалог выбора.
+
     :param parent: Родительское окно.
     :param title: Заголовок диалогового окна.
     :param message: Текст диалога.
@@ -288,6 +298,7 @@ def getSingleChoiceDlg(parent=None, title='', message='', choice=None):
 def getSingleChoiceIdxDlg(parent=None, title='', message='', choice=None):
     """
     Диалог выбора.
+
     :param parent: Родительское окно.
     :param title: Заголовок диалогового окна.
     :param message: Текст диалога.

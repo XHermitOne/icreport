@@ -32,6 +32,7 @@ def loadSource(name, path):
 def unLoadSource(name):
     """
     Выгрузить модуль.
+
     :type name: C{string}
     :param name: Имя модуля.
     """
@@ -44,6 +45,7 @@ def unLoadSource(name):
 def reLoadSource(name, path=None):
     """
     Перезагрузить модуль.
+
     :type name: C{string}
     :param name: Имя модуля.
     :type path: C{string}
@@ -64,6 +66,7 @@ def reLoadSource(name, path=None):
 def exec_code(sCode='', bReImport=False, name_space=None, kwargs=None):
     """
     Выполнить блок кода.
+
     :type sCode: C{string}
     :param sCode: Блок кода.
         Блок кода - строка в формате:
@@ -126,6 +129,7 @@ def view_file_ext(filename):
     """
     Запуск просмотра файла внешней программой.
     Определение какой программой производить просмотр определяется по расширению файла.
+
     :param filename: Полное имя файла.
     :return: True/False.
     """

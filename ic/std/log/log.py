@@ -98,6 +98,7 @@ CONFIG = None
 def get_default_encoding():
     """
     Определить актуальную кодировку для вывода текста.
+
     :return: Актуальная кодировка для вывода текста.
     """
     global CONFIG
@@ -111,6 +112,7 @@ def get_debug_mode():
     """
     Определить актуальный режим отладки.
     По умолчанию считаем что режим выключен.
+
     :return: True - режим отладки включен / False - режим отладки выключен.
     """
     global CONFIG
@@ -125,6 +127,7 @@ def get_log_mode():
     """
     Определить актуальный режим журналирования.
     По умолчанию считаем что режим выключен
+
     :return: True - режим журналирования включен / False - режим журналирования выключен.
     """
     global CONFIG
@@ -138,6 +141,7 @@ def get_log_mode():
 def get_log_filename():
     """
     Имя файла журнала.
+
     :return:
     """
     global CONFIG
@@ -147,6 +151,7 @@ def get_log_filename():
 def init(config_module=None, log_filename=None):
     """
     Инициализация файла лога.
+
     :param config_module: Модуль конфигурации.
     :param log_filename: Полное имя файла журнала/лога.
     """
@@ -184,6 +189,7 @@ def init(config_module=None, log_filename=None):
 def debug(message=u'', bForcePrint=False, bForceLog=False):
     """
     Вывести ОТЛАДОЧНУЮ информацию.
+
     :param message: Текстовое сообщение.
     :param bForcePrint: Принудительно вывести на экран.
     :param bForceLog: Принудительно записать в журнале.
@@ -203,6 +209,7 @@ def debug(message=u'', bForcePrint=False, bForceLog=False):
 def info(message=u'', bForcePrint=False, bForceLog=False):
     """
     Вывести ТЕКСТОВУЮ информацию.
+
     :param message: Текстовое сообщение.
     :param bForcePrint: Принудительно вывести на экран.
     :param bForceLog: Принудительно записать в журнале.
@@ -222,6 +229,7 @@ def info(message=u'', bForcePrint=False, bForceLog=False):
 def error(message=u'', bForcePrint=False, bForceLog=False):
     """
     Вывести ОБЩУЮ информацию.
+
     :param message: Текстовое сообщение.
     :param bForcePrint: Принудительно вывести на экран.
     :param bForceLog: Принудительно записать в журнале.
@@ -241,6 +249,7 @@ def error(message=u'', bForcePrint=False, bForceLog=False):
 def warning(message=u'', bForcePrint=False, bForceLog=False):
     """
     Вывести информацию ОБ ПРЕДУПРЕЖДЕНИИ.
+
     :param message: Текстовое сообщение.
     :param bForcePrint: Принудительно вывести на экран.
     :param bForceLog: Принудительно записать в журнале.
@@ -260,6 +269,7 @@ def warning(message=u'', bForcePrint=False, bForceLog=False):
 def fatal(message=u'', bForcePrint=False, bForceLog=False):
     """
     Вывести информацию ОБ ОШИБКЕ.
+
     :param message: Текстовое сообщение.
     :param bForcePrint: Принудительно вывести на экран.
     :param bForceLog: Принудительно записать в журнале.
@@ -290,6 +300,7 @@ def fatal(message=u'', bForcePrint=False, bForceLog=False):
 def service(message=u'', bForcePrint=False, bForceLog=False):
     """
     Вывести СЕРВИСНУЮ информацию.
+
     :param message: Текстовое сообщение.
     :param bForcePrint: Принудительно вывести на экран.
     :param bForceLog: Принудительно записать в журнале.

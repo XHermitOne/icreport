@@ -24,7 +24,6 @@ class icMonthDialog(std_dialogs_proto.monthDialogProto):
     """
     Диалоговое окно выбора месяца.
     """
-
     def __init__(self, *args, **kwargs):
         """
         Конструктор.

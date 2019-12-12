@@ -44,6 +44,7 @@ class icReportFile:
     def write(self, rep_filename, rec_data):
         """
         Сохранить заполненный отчет в файле.
+
         :param rep_filename: Имя файла отчета.
         :param rec_data: Данные отчета.
         :return: Функция возвращает имя созданного xml файла,
@@ -66,6 +67,7 @@ class icExcelXMLReportFile(icReportFile):
     def write(self, rep_filename, rec_data):
         """
         Сохранить заполненный отчет в файле.
+
         :param rep_filename: Имя файла отчета XML.
         :param rec_data: Данные отчета.
         :return: Функция возвращает имя созданного xml файла,
@@ -116,6 +118,7 @@ class icExcelXMLReportFile(icReportFile):
     def write_book(self, rep_filename, *rep_sheet_data):
         """
         Сохранить список листов заполненного отчета в файле.
+
         :param rep_filename: Имя файла отчета XML.
         :param rep_sheet_data: Данные отчета, разобранные по листам.
         :return: Функция возвращает имя созданного xml файла,
@@ -192,8 +195,9 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def startElementLevel(self, name, attrs):
         """
         Начало тега.
-        @name: Имя тега.
-        @attrs: Атрибуты тега (словарь).
+
+        :param name: Имя тега.
+        :param attrs: Атрибуты тега (словарь).
         """
         # Дописать новый отступ
         self._write(u'\n' + str(self.break_line))    # self._encoding
@@ -204,7 +208,8 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def endElementLevel(self, name):
         """
         Конец тега.
-        @name: Имя, закрываемого тега.
+
+        :param name: Имя, закрываемого тега.
         """
         # Дописать новый отступ
         self._write(u'\n' + str(self.break_line))    # self._encoding
@@ -217,8 +222,9 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def startElement(self, name, attrs):
         """
         Начало тега.
-        @name: Имя тега.
-        @attrs: Атрибуты тега (словарь).
+
+        :param name: Имя тега.
+        :param attrs: Атрибуты тега (словарь).
         """
         # Дописать новый отступ
         self._write(u'\n' + str(self.break_line))    # self._encoding
@@ -228,7 +234,8 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def endElement(self, name):
         """
         Конец тега.
-        @name: Имя, закрываемого тега.
+
+        :param name: Имя, закрываемого тега.
         """
         saxutils.XMLGenerator.endElement(self, name)
 
@@ -244,6 +251,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def savePageSetup(self, report):
         """
         Записать в xml файле параметры страницы.
+
         :param report: Тело отчета.
         """
         self.startElementLevel('WorksheetOptions', {'xmlns': 'urn:schemas-microsoft-com:office:excel'})
@@ -347,6 +355,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def startSheet(self, rep_name, report):
         """
         Теги начала страницы.
+
         :param rep_name: Имя отчета.
         :param report: Тело отчета.
         """
@@ -379,6 +388,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def endSheet(self, report):
         """
         Теги начала страницы.
+
         :param report: Тело отчета.
         """
         self.endElementLevel('Table')
@@ -399,6 +409,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def setStyle(self, cell):
         """
         Определить стиль ячейки.
+
         :param cell: Атрибуты ячейки.
         :return: Возвращает индекс стиля в списке стилей.
         """
@@ -422,6 +433,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def getStyle(self, cell):
         """
         Определить стиль ячейки из уже имеющихся.
+
         :param cell: Атрибуты ячейки.
         :return: Возвращает индекс стиля в списке стилей.
         """
@@ -704,6 +716,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def saveCell(self, row, column, cell, sheet=None):
         """
         Записать ячейку.
+
         :param row: НОмер строки.
         :param column: Номер колонки.
         :param cell: Атрибуты ячейки.
@@ -793,6 +806,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def _setCellmerge_across(self, row, column, merge_across_, sheet):
         """
         Сбросить все ячейки, которые попадают в горизонтальную зону объединения.
+
         :param row: НОмер строки.
         :param column: Номер колонки.
         :param merge_across_: Количество ячеек, объединенных с текущей.
@@ -810,6 +824,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def _setCellMergeDown(self, row, column, merge_down, sheet):
         """
         Сбросить все ячейки, которые попадают в вертикальную зону объединения.
+
         :param row: НОмер строки.
         :param column: Номер колонки.
         :param merge_down: Количество ячеек, объединенных с текущей.
@@ -827,6 +842,7 @@ class icXMLSSGenerator(saxutils.XMLGenerator):
     def _setCellMerge(self, row, column, merge_across_, merge_down, sheet):
         """
         Сбросить все ячейки, которые попадают в зону объединения.
+
         :param row: НОмер строки.
         :param column: Номер колонки.
         :param merge_across_: Количество ячеек, объединенных с текущей.

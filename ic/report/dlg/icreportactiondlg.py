@@ -7,8 +7,9 @@
 
 import wx
 from . import report_dlg_proto
+from ic.std.utils import textfunc
 
-__version__ = (0, 0, 1, 2)
+__version__ = (0, 1, 1, 1)
 
 DEFAULT_UNICODE = 'utf-8'
 
@@ -34,11 +35,12 @@ class icReportActionDialog(report_dlg_proto.icReportActionDialogProto):
     def setReportNameTitle(self, report_name):
         """
         Установить наименование отчета в заголовке диалогового окна.
+
         :param report_name: Имя отчета
         :return: True/False.
         """
         if not isinstance(report_name, str):
-            report_name = unicode(str(report_name), DEFAULT_UNICODE)
+            report_name = textfunc.toUnicode(report_name, DEFAULT_UNICODE)
         title = u'Отчет: %s' % report_name
         self.SetLabel(title)
         return True
@@ -46,6 +48,7 @@ class icReportActionDialog(report_dlg_proto.icReportActionDialogProto):
     def getSelectedAction(self):
         """
         Выбранное действие.
+
         :return: Строка-идентификатор выбранного действия.
         """
         return self._selected_action
@@ -53,6 +56,7 @@ class icReportActionDialog(report_dlg_proto.icReportActionDialogProto):
     def isSelectedPrintAction(self):
         """
         Выбрано действие ПЕЧАТЬ?
+
         :return: True/False.
         """
         return self._selected_action == PRINT_ACTION_ID
@@ -60,6 +64,7 @@ class icReportActionDialog(report_dlg_proto.icReportActionDialogProto):
     def isSelectedPreviewAction(self):
         """
         Выбрано действие ПРЕДВАРИТЕЛЬНЫЙ ПРОСМОТР?
+
         :return: True/False.
         """
         return self._selected_action == PREVIEW_ACTION_ID
@@ -67,6 +72,7 @@ class icReportActionDialog(report_dlg_proto.icReportActionDialogProto):
     def isSelectedExportAction(self):
         """
         Выбрано действие ЭКСПОРТ В ОФИС ПО?
+
         :return: True/False.
         """
         return self._selected_action == EXPORT_ACTION_ID
@@ -107,6 +113,7 @@ class icReportActionDialog(report_dlg_proto.icReportActionDialogProto):
 def getReportActionDlg(parent=None, title=''):
     """
     Запустить диалоговое окно выбора действия над отчетом.
+
     :param parent: Родительское wxWindow окно.
     :param title: Заголовок диалогового окна. Обычно это имя отчета.
     """

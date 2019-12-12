@@ -30,6 +30,7 @@ REPLACE_NAME_END = u'}}'
 def gen(sTxt, dContext=None):
     """
     Генерация текста.
+
     :param sTxt: Tекст шаблона.
     :param dContext. Контекст.
         В качестве контекста может выступать любая словарная структура.
@@ -59,6 +60,7 @@ def _getVarName(sPlace):
 def get_raplace_names(sTxt):
     """
     Определить имена автозамен.
+
     :param sTxt: Редактируемый текст.
     :return: Список имен замен.
     """
@@ -72,6 +74,7 @@ def get_raplace_names(sTxt):
 def auto_replace(sTxt, dReplaces=None):
     """
     Запуск автозамен из контекста.
+
     :param sTxt: Редактируемый текст.
     :param dReplaces: Словарь замен, если None, то берется locals().
     :return: Возвращается отредактированный текст или None в
@@ -109,6 +112,7 @@ def is_genered(txt):
     """
     Проверка является ли текст генерируемым.
         Т.е. есть ли в нем необходимые замены.
+
     :param txt: Тест.
     :return: True - есть замены, False - замен нет.
     """
@@ -124,6 +128,7 @@ def is_genered(txt):
 def gen_txt_file(sTxtTemplateFilename, sTxtOutputFilename, dContext=None, output_encoding=None):
     """
     Генерация текстового файла по шаблону.
+
     :param sTxtTemplateFilename: Шаблон - текстовый файл.
     :param sTxtOutputFilename: Наименование выходного текстового файла.
     :param dContext. Контекст.

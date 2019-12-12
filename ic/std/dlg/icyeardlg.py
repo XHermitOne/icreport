@@ -19,7 +19,6 @@ class icYearDialog(std_dialogs_proto.yearDialogProto):
     """
     Диалоговое окно выбора года.
     """
-
     def __init__(self, *args, **kwargs):
         """
         Конструктор.

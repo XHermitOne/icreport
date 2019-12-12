@@ -24,6 +24,7 @@ DEFAULT_PROFILE_DIRNAME = '.icreport'
 def _pathFilter(path, path_filter):
     """
     Фильтрация путей.
+
     :return: Возвращает True если папок с указанными имена в фильтре нет в пути и
         False если наоборот.
     """
@@ -46,6 +47,7 @@ DEFAULT_DIR_FILTER = ('.svn', '.SVN', '.Svn',
 def getSubDirsFilter(path, dir_filter=DEFAULT_DIR_FILTER):
     """
     Функция возвращает список поддиректорий с отфильтрованными папками.
+
     :param path: Дeрикторий.
     :param dir_filter: Список недопустимых имен папок.
     :return: В случае ошибки возвращает None.
@@ -63,6 +65,7 @@ def getSubDirsFilter(path, dir_filter=DEFAULT_DIR_FILTER):
 def getFilesByExt(path, ext):
     """
     Функция возвращает список всех файлов в директории с указанным расширением.
+
     :param path: Путь.
     :param ext: Расширение, например '.pro'.
     :return: В случае ошибки возвращает None.
@@ -87,6 +90,7 @@ def getFilesByExt(path, ext):
 def getHomePath():
     """
     Путь к домашней директории.
+
     :return: Строку-путь до папки пользователя.
     """
     os_platform = platform.uname()[0].lower()
@@ -104,6 +108,7 @@ def getHomePath():
 def getProfilePath(bAutoCreatePath=True):
     """
     Папка профиля программы.
+
     :param bAutoCreatePath: Создать автоматически путь если его нет?
     :return: Путь до профиля программы.
     """
@@ -141,6 +146,7 @@ HOME_PATH_SIGN = '~'
 def normal_path(path, username=None):
     """
     Нормировать путь.
+
     :param path: Путь.
     :param username: Имя пользователя.
     """
@@ -151,6 +157,7 @@ def normal_path(path, username=None):
 def file_modify_dt(filename):
     """
     Дата-время изменения файла.
+
     :param filename: Полное имя файла.
     :return: Дата-время изменения файла или None в случае ошибки.
     """
@@ -172,6 +179,7 @@ def file_modify_dt(filename):
 def remove_file(filename):
     """
     Удалить файл.
+
     :param filename: Имя файла.
     :return: True/False.
     """

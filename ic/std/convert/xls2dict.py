@@ -33,6 +33,7 @@ xlXMLSpreadsheet = 46
 def XlsFile2Dict(xls_filename):
     """
     Функция конвертации файлов Excel в xls формате в формат словаря Python.
+
     :param xls_filename: Имя xls файла.
     :return: Функция возвращает заполненный словарь,
         или None в случае ошибки.

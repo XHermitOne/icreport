@@ -13,7 +13,7 @@ import sys
 import time
 from xml.sax import saxutils
 
-__version__ = (1, 1, 1, 3)
+__version__ = (1, 1, 1, 4)
 
 # Удалять 'Cyr' из имен шрифтов для Linux систем
 # т.к. в Linux все шрифты unicode
@@ -50,6 +50,7 @@ class icDICT2XMLWriter(saxutils.XMLGenerator):
     def __init__(self, data, out=None, encoding='utf-8'):
         """
         Конструктор.
+
         :param data: Словарь данных XML.
         :param out: Объект файла XML для записи.
         :param encoding: Кодировка XML файла.
@@ -100,8 +101,9 @@ class icDICT2XMLWriter(saxutils.XMLGenerator):
     def startElementLevel(self, name, attrs={}, auto_close=False):
         """
         Начало тега.
-        @name: Имя тега.
-        @attrs: Атрибуты тега (словарь).
+
+        :param name: Имя тега.
+        :param attrs: Атрибуты тега (словарь).
         """
         # Дописать новый отступ
         self._my_write('\n'+self.break_line)
@@ -115,7 +117,8 @@ class icDICT2XMLWriter(saxutils.XMLGenerator):
     def endElementLevel(self, name, auto_close=False):
         """
         Конец тега.
-        @name: Имя, закрываемого тега.
+
+        :param name: Имя, закрываемого тега.
         """
         if self.break_line:
             self.break_line = self.break_line[:-2]
@@ -128,8 +131,9 @@ class icDICT2XMLWriter(saxutils.XMLGenerator):
     def startElement(self, name, attrs={}, auto_close=False):
         """
         Начало тега.
-        @name: Имя тега.
-        @attrs: Атрибуты тега (словарь).
+
+        :param name: Имя тега.
+        :param attrs: Атрибуты тега (словарь).
         """
         # Дописать новый отступ
         self._my_write('\n'+self.break_line)
@@ -142,7 +146,8 @@ class icDICT2XMLWriter(saxutils.XMLGenerator):
     def endElement(self, name, auto_close=False):
         """
         Конец тега.
-        @name: Имя, закрываемого тега.
+
+        :param name: Имя, закрываемого тега.
         """
         self._endElement(name, auto_close)
 
@@ -154,6 +159,7 @@ class icDict2XmlssWriter(icDICT2XMLWriter):
     def __init__(self, data, out=None, encoding='utf-8'):
         """
         Конструктор.
+
         :param data: Словарь данных XML.
         :param out: Объект файла XML для записи.
         :param encoding: Кодировка XML файла.

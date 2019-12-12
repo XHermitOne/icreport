@@ -350,6 +350,7 @@ class icVColumn(icprototype.icVIndexedPrototype, icVRange):
     def setCharacterWidth(self, character_count, font=None):
         """
         Установка ширины колонки по количеству символов в колонке.
+
         :param character_count: Количество символов в колонке.
         :param font: Указание шрифта, если не указано то
         берется Arial размера 10.
@@ -376,6 +377,7 @@ class icVColumn(icprototype.icVIndexedPrototype, icVRange):
     def setAutoFitWidth(self, bAutoFitWidth=True):
         """
         Установить авторазмер по ширине.
+
         :param bAutoFitWidth: Признак автообразмеривания колонки.
         """
         if bAutoFitWidth:

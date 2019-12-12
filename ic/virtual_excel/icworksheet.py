@@ -210,6 +210,7 @@ class icVWorksheet(icprototype.icVPrototype):
     def getColumns(self, start_idx=0, stop_idx=None):
         """
         Список объектов колонок.
+
         :param start_idx: Индекс первой колонки. По умолчанию с первой.
         :param stop_idx: Индекс последней колонки. По умолчанию до последней.
         """
@@ -273,6 +274,7 @@ class icVTable(icprototype.icVPrototype):
     def getColumns(self, start_idx=0, stop_idx=None):
         """
         Список объектов колонок.
+
         :param start_idx: Индекс первой колонки. По умолчанию с первой.
         :param stop_idx: Индекс последней колонки. По умолчанию до последней.
         """
@@ -305,6 +307,7 @@ class icVTable(icprototype.icVPrototype):
     def _createColIdx(self, index, idx):
         """
         Создать колонку с индексом.
+
         :param index: Индекс Excel.
         :param idx: Индекс в списке children.
         """
@@ -348,6 +351,7 @@ class icVTable(icprototype.icVPrototype):
     def cloneRow(self, bClearCell=True, row=-1):
         """
         Клонировать строку таблицы.
+
         :param bClearCell: Очистить значения в ячейках.
         :param row: Индекс(Начинаяется с 0) клонируемой ячейки. -1 - Последняя.
         :return: Возвращает объект клонированной строки. Если строк в таблице нет, то возвращает None.
@@ -933,6 +937,7 @@ class icVPageBreaks(icprototype.icVPrototype):
     def addRowBreak(self, row):
         """
         Добавить разрыв страницы по строке.
+
         :param row: Номер строки.
         """
         row_break = {'name': 'RowBreak', 'children': [{'name': 'Row', 'value': row}]}

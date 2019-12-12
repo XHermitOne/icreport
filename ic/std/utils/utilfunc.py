@@ -34,6 +34,7 @@ def isSubClass(class1, class2):
     """
     Функция определяет является ли Class1_ базовым для class2. Проверка
     производится рекурсивно.
+
     :param class1: Объект класса.
     :param class2: Объект класса.
     :return: Возвращает результат отношения (1/0).
@@ -44,6 +45,7 @@ def isSubClass(class1, class2):
 def getAttrValue(attr_name, spc):
     """
     Получить нормированное значение свойства из спецификации.
+
     :param attr_name: Имя атрибута.
     :param spc: Спецификация.
     """
@@ -77,6 +79,7 @@ def getStrInQuotes(value):
 def KeyToText(key, bShift=True, bAlt=True, bCtrl=True):
     """
     Функция преабразует код клавиши в текстовый эквивалент.
+
     :param key: код клавиши.
     :param bShift: флаг клавиши Shift.
     :param bAlt: флаг клавиши Alt.
@@ -174,6 +177,7 @@ def KeyToText(key, bShift=True, bAlt=True, bCtrl=True):
 def delKeyInDictTree(dictionary, key):
     """
     Функция удаляет из словаря рекурсивно все указанные ключи.
+
     :param dictionary: Непосредственно словарь или список.
     :param key: Ключ, который необходимо удалить.
     """
@@ -199,6 +203,7 @@ def delKeyInDictTree(dictionary, key):
 def setKeyInDictTree(dictionary, key, value):
     """
     Функция устанавливает значенеи ключа в словаре рекурсивно.
+
     :param dictionary: Непосредственно словарь или список.
     :param key: Ключ, который необходимо установить.
     :param value: Значение ключа.
@@ -225,6 +230,7 @@ def setKeyInDictTree(dictionary, key, value):
 def setObjToGlobal(objname, obj):
     """
     Поместить объект в глобальное пространство имен.
+
     :param objname: Имя объекта в глобальном пространстве имен.
     :param obj: Сам объект.
     """
@@ -234,6 +240,7 @@ def setObjToGlobal(objname, obj):
 def recodeText(text, txt_codepage, new_codepage):
     """
     Перекодировать из одной кодировки в другую.
+
     :param text: Строка.
     :param txt_codepage: Кодовая страница строки.
     :param new_codepage: Новая кодовая страница строки.
@@ -257,6 +264,7 @@ def toOctHexText(text, coding):
     """
     Закодировать строку в восьмеричном/шестнадцатеричном виде.
     Символы с кодом < 128 не кодируются.
+
     :param text:
     :param coding: Кодировка 'OCT'-восьмеричное представление.
                             'HEX'-шестнадцатеричное представление.
@@ -290,6 +298,7 @@ def recodeListStrings(cur_list, txt_codepage, new_codepage):
     """
     Перекодировать все строки в списке рекурсивно в другую кодировку.
     Перекодировка производится также внутри вложенных словарей и кортежей.
+
     :param cur_list: Сам список.
     :param txt_codepage: Кодовая страница строки.
     :param new_codepage: Новая кодовая страница строки.
@@ -329,6 +338,7 @@ def recodeDictStrings(dictionary, txt_codepage, new_codepage):
     """
     Перекодировать все строки в словаре рекурсивно в другую кодировку.
     Перекодировка производится также внутри вложенных словарей и кортежей.
+
     :param dictionary: Сам словарь.
     :param txt_codepage: Кодовая страница строки.
     :param new_codepage: Новая кодовая страница строки.
@@ -364,6 +374,7 @@ def recodeTupleStrings(cur_tuple, txt_codepage, new_codepage):
     """
     Перекодировать все строки в кортеже рекурсивно в другую кодировку.
     Перекодировка производится также внутри вложенных словарей и кортежей.
+
     :param cur_tuple: Сам кортеж.
     :param txt_codepage: Кодовая страница строки.
     :param new_codepage: Новая кодовая страница строки.
@@ -380,6 +391,7 @@ def recodeTupleStrings(cur_tuple, txt_codepage, new_codepage):
 def recodeStructStrings(struct, txt_codepage, new_codepage):
     """
     Перекодировать все строки в структуре рекурсивно в другую кодировку.
+
     :param struct: Сруктура (список, словарь, кортеж).
     :param txt_codepage: Кодовая страница строки.
     :param new_codepage: Новая кодовая страница строки.
@@ -406,6 +418,7 @@ def recodeStructStrings(struct, txt_codepage, new_codepage):
 def list2str(cur_list, delimeter):
     """
     Конвертация списка в строку с разделением символом разделителя.
+
     :param cur_list: Список.
     :param delimeter: Символ разделителя.
     :return: Возвращает сформированную строку.
@@ -429,6 +442,7 @@ def getHDDSerialNo():
 def getRegValue(reg_key, reg_value=None):
     """
     Взять информацию из реестра относительно данного проекта.
+
     :param reg_key: Ключ реестра.
     :param reg_value: Имя значения из реестра.
     """
@@ -449,6 +463,7 @@ def getRegValue(reg_key, reg_value=None):
 def findChildResByName(children_res, child_name):
     """
     Поиск ресурсного описания дочернего объекта по имени.
+
     :param children_res: Список ресурсов-описаний дечерних объектов.
     :return child_name: Имя искомого дочернего объекта.
     :return: Индекс ресурсного описания в списке, если
@@ -464,6 +479,7 @@ def findChildResByName(children_res, child_name):
 def getFuncListInModule(module=None):
     """
     Получить список имен функций в модуле.
+
     :param module: Объект модуля. 
         Для использования модуль д.б. импортирован.
     :return: Возвращает список кортежей:
@@ -478,6 +494,7 @@ def getFuncListInModule(module=None):
 def isOSWindowsPlatform():
     """
     Функция определения ОС.
+
     :return: True-если ОС-Windows и False во всех остальных случаях.
     """
     return bool(sys.platform[:3].lower() == 'win')

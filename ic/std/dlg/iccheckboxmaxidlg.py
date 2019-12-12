@@ -59,6 +59,7 @@ class icCheckBoxMaxiDialog(std_dialogs_proto.checkBoxMaxiDialogProto):
     def getValue(self):
         """
         Выбранные элементы.
+
         :return: Кортеж выбранных элементов либо None при отмене выбора.
             Например (False, True, True, False).
         """
@@ -68,6 +69,7 @@ class icCheckBoxMaxiDialog(std_dialogs_proto.checkBoxMaxiDialogProto):
              defaults=()):
         """
         Инициализация диалогового окна.
+
         :param title: Заголовок окна.
         :param label: Текст приглашения ввода.
         :param choices: Список выбора.
@@ -111,6 +113,7 @@ class icCheckBoxMaxiDialog(std_dialogs_proto.checkBoxMaxiDialogProto):
     def getCheckedList(self):
         """
         Список выбранных отметок.
+
         :return: Кортеж выбранных элементов.
             Например (False, True, True, False).
         """

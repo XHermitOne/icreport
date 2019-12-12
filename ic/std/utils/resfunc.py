@@ -26,6 +26,7 @@ Buff_readAndEvalFile = {}
 def loadResourceFile(filename, replace_dict={}, bRefresh=False, *arg, **kwarg):
     """
     Загрузить ресурс из файла. Функция читает файл и выполняет его.
+
     :type filename: C{string}
     :param filename: Имя ресурсного файла.
     :type replace_dict: C{dictionary}
@@ -118,6 +119,7 @@ def loadResourceFile(filename, replace_dict={}, bRefresh=False, *arg, **kwarg):
 def loadResource(filename):
     """
     Получить ресурс в ресурсном файле.
+
     :param filename: Полное имя ресурсного файла.
     """
     # Сначала предположим что файл в формате Pickle.
@@ -135,6 +137,7 @@ def loadResource(filename):
 def loadResourcePickle(filename):
     """
     Получить ресурс из ресурсного файла в формате Pickle.
+
     :param filename: Полное имя ресурсного файла.
     """
     if os.path.isfile(filename):
@@ -156,6 +159,7 @@ def loadResourcePickle(filename):
 def loadResourceText(filename):
     """
     Получить ресурс из ресурсного файла в текстовом формате.
+
     :param filename: Полное имя ресурсного файла.
     """
     if os.path.isfile(filename):
@@ -177,6 +181,7 @@ def loadResourceText(filename):
 def saveResourcePickle(filename, resource):
     """
     Сохранить ресурс в файле в формате Pickle.
+
     :param filename: Полное имя ресурсного файла.
     :param resource: Словарно-списковая структура спецификации.
     :return: Возвращает результат выполнения операции True/False.
@@ -206,6 +211,7 @@ def saveResourcePickle(filename, resource):
 def saveResourceText(filename, resource):
     """
     Сохранить ресурс в файле в текстовом формате.
+
     :param filename: Полное имя ресурсного файла.
     :param resource: Словарно-списковая структура спецификации.
     :return: Возвращает результат выполнения операции True/False.

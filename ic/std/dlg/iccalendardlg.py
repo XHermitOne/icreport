@@ -20,7 +20,6 @@ class icCalendarDialog(std_dialogs_proto.calendarDialogProto):
     """
     Диалоговое окно календаря.
     """
-
     def __init__(self, *args, **kwargs):
         """
         Конструктор.

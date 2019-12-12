@@ -38,6 +38,7 @@ def isLinuxPlatform():
 def getTerminalCodePage():
     """
     Кодировка командной оболочки по умолчанию.
+
     :return:
     """
     cmd_encoding = sys.stdout.encoding if isWindowsPlatform() else locale.getpreferredencoding()
@@ -58,6 +59,7 @@ def get_login():
 def getComputerName():
     """
     Имя компютера. Без перекодировки.
+
     :return: Получить имя компьютера в сети.
         Имя компьютера возвращается в utf-8 кодировке.
     """
@@ -83,6 +85,7 @@ def getPythonMinorVersion():
 def isPython2():
     """
     Проверка на Python версии 2.
+
     :return: True - Python версии 2 / False - другая версия Python.
     """
     return sys.version_info.major == 2
@@ -91,6 +94,7 @@ def isPython2():
 def isPython3():
     """
     Проверка на Python версии 3.
+
     :return: True - Python версии 3 / False - другая версия Python.
     """
     return sys.version_info.major == 3
@@ -99,6 +103,7 @@ def isPython3():
 def getActiveProcessCount(find_process):
     """
     Количество активных выполняемых процессов.
+
     :param find_process: Строка поиска процесса.
     :param find_process:
     :return: Количество найденных процессов.
@@ -112,6 +117,7 @@ def getActiveProcessCount(find_process):
 def isActiveProcess(find_process):
     """
     Проверка на существование активного выполняемого процесса.
+
     :param find_process: Строка поиска процесса.
     :return: True - есть такой процесс / False - процесс не найден.
     """
@@ -128,6 +134,7 @@ def exit_force():
 def beep(count=1):
     """
     Воспроизвести системный звук.
+
     :param count: Количество повторений.
     """
     for i in range(count):

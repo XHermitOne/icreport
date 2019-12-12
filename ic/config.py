@@ -39,6 +39,7 @@ LOG_FILENAME = os.path.join(PROFILE_PATH,
 def get_glob_var(name):
     """
     Прочитать значение глобальной переменной.
+
     :type name: C{string}
     :param name: Имя переменной.
     """
@@ -48,6 +49,7 @@ def get_glob_var(name):
 def set_glob_var(name, value):
     """
     Установить значение глобальной переменной.
+
     :type name: C{string}
     :param name: Имя переменной.
     :param value: Значение переменной.

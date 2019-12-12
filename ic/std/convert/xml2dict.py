@@ -22,6 +22,7 @@ __version__ = (1, 1, 1, 3)
 def XmlFile2Dict(xml_filename, encoding='utf-8'):
     """
     Функция конвертации файлов Excel в xml формате в словарь Python.
+
     :param xml_filename: Имя xml файла.
     :param encoding: Кодировка XML файла.
     :return: Функция возвращает заполненный словарь,
@@ -60,6 +61,7 @@ class icXML2DICTReader(xml.sax.handler.ContentHandler):
     def __init__(self, encoding='utf-8', *args, **kws):
         """
         Конструктор.
+
         :param encoding: Кодировка XML файла.
         """
         xml.sax.handler.ContentHandler.__init__(self, *args, **kws)

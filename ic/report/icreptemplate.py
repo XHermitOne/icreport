@@ -84,6 +84,7 @@ class icReportTemplate:
     def setTemplateFilename(self, template_filename):
         """
         Полное имя исходного файла шаблона.
+
         :param template_filename: Полное имя исходного файла шаблона
         """
         self.template_filename = template_filename
@@ -97,6 +98,7 @@ class icReportTemplate:
     def save(self, template_filename, template_name=None):
         """
         Сохранить шаблон в Pickle файле.
+
         :param template_filename: Имя XML файла шаблона.
         :param template_name: Имя шаблона (листа).
         """
@@ -113,6 +115,7 @@ class icReportTemplate:
     def load(self, template_filename, template_name=None):
         """
         Загрузить шаблон из Pickle файла.
+
         :param template_filename: Имя XML файла шаблона.
         :param template_name: Имя шаблона (листа).
         """
@@ -130,6 +133,7 @@ class icReportTemplate:
     def mustRenew(self, template_filename, template_name=None):
         """
         Надо обновить Pickle файл шаблона отчета?
+
         :param template_filename: Имя XML файла шаблона.
         :param template_name: Имя шаблона (листа).
         :return: True-необходимо обновление. False-обновлять не надо.
@@ -148,6 +152,7 @@ class icReportTemplate:
     def read(self, tmpl_filename, template_name=None):
         """
         Прочитать файл шаблона отчета.
+
         :param tmpl_filename: Файл шаблона отчета.
         :param template_name: Имя шаблона (листа).
         """
@@ -174,6 +179,7 @@ class icReportTemplate:
     def _getBordersStyle(self, style):
         """
         Определить границы ячейки из стиля.
+
         :param style: Описание стиля.
         """
         style_border = [style_attr for style_attr in style['children'] if style_attr['name'] == 'Borders']
@@ -209,6 +215,7 @@ class icReportTemplate:
     def _getFontStyle(self, style):
         """
         Взять описание шрифта из стиля.
+
         :param style: Описание стиля.
         """
         # Шрифт описанный в стиле
@@ -257,6 +264,7 @@ class icReportTemplate:
     def _getColorStyle(self, style):
         """
         Определить цвет, определенный в стиле.
+
         :param style: Описание стиля.
         """
         color = {}
@@ -290,6 +298,7 @@ class icReportTemplate:
     def _getAlignStyle(self, style):
         """
         Определить размещение.
+
         :param style: Описание стиля.
         """
         style_align = [style_attr for style_attr in style['children'] if style_attr['name'] == 'Alignment']
@@ -438,6 +447,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def read(self, tmpl_filename, template_name=None):
         """
         Прочитать файл шаблона отчета.
+
         :param tmpl_filename: Файл шаблона отчета.
         :param template_name: Имя шаблона (листа).
         """
@@ -454,6 +464,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def open(self, tmpl_filename):
         """
         Открыть файл шаблона отчета.
+
         :param tmpl_filename: Файл шаблона отчета.
         """
         return xml2dict.XmlFile2Dict(tmpl_filename)
@@ -461,6 +472,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _normList(self, data_list, element_name, length=None):
         """
         Нормализация списка.
+
         :param length: Максимальная длина списка, если указана, то
             список нормализуется до максимальной длины.
         """
@@ -511,6 +523,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _defineSpan(self, obj_list):
         """
         Задублировать описания объектов с указанием атрибута Span.
+
         :param obj_list: Список описаний объектов.
         :return: Список с добавленными дубликатами объектов.
         """
@@ -530,6 +543,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def parse(self, template_data, template_name=None):
         """
         Разобрать/преобразовать прочитанную структуру.
+
         :param template_data: Словарь описания шаблона.
         :param template_name: Имя шаблона(листа), если None то первый лист.
         """
@@ -641,6 +655,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
         Присутствует в шаблоне колонка тегов бендов?
             Если не существует, то далее считаем,
             что весь шаблон - это  заголовок отчета [header].
+
         :return: True - колонка тегов бендов есть в шаблоне / False - нет.
         """
         log.info(u'Колонка тегов бендов [%s]' % str(self._tag_band_col))
@@ -649,6 +664,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _getColumnCount(self, rows):
         """
         Определить количество колонок.
+
         :param rows: Список описаний строк.
         :return: Количество колонок шаблона отчета.
         """
@@ -668,6 +684,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _getTagBandIdx(self, rows):
         """
         Определить номер колонки тегов бэндов.
+
         :param rows: Список описаний строк.
         :return: Номер колонки тегов бендов.
         """
@@ -717,6 +734,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
         Приведение к нормальному виду табличной части отчета.
             Если ячейки в табличной части не заполнены, то имеется ввиду,
             что ячейки будет заполняться по порядку.
+
         :param detail: Описание бенда табличной части.
         :param report: Описание данных отчета.
         """
@@ -734,6 +752,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _defBand(self, band_tag, row, col_count, title_row, report):
         """
         Заполнить описание бенда.
+
         :param band_tag: Тег бэнда.
         :param row: Номер строки.
         :param title_row: Количество строк заголовочных бендов.
@@ -803,6 +822,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _bandUpper(self, band, worksheet_data):
         """
         Процедура заполнения верхнего колонтитула.
+
         :param band: Бэнд колонтитула.
         :param worksheet_data: Данные листа шаблона.
         """
@@ -824,6 +844,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _bandUnder(self, band, worksheet_data):
         """
         Процедура заполнения нижнего колонтитула.
+
         :param band: Бэнд колонтитула.
         :param worksheet_data: Данные листа шаблона.
         """
@@ -845,6 +866,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _getParseRow(self, row, cur_band):
         """
         Подготовить для разбора строку шаблона.
+
         :param row: Описание строки.
         :param cur_band: Текуший тег бенда.
         """
@@ -853,6 +875,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _getCellStyle(self, rows, columns, styles, row, column):
         """
         Определить стиль ячейки.
+
         :param rows: Список строк.
         :param columns: Список колонок.
         :param styles: Словарь стилей.
@@ -890,6 +913,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _getTypeCell(self, cell):
         """
         Определить тип ячейки.
+
         :param cell: Описание ячейки.
         """
         # В ячейке нет данных
@@ -912,6 +936,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _getCellValue(self, cell):
         """
         Значение ячейки.
+
         :param cell: Описание ячейки.
         """
         # Данных в ячейке нет
@@ -923,6 +948,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _setDefaultCellSize(self, table):
         """
         Установка параметров по умолчанию для ячейки.
+
         :param table: Описание Таблицы.
         """
         if 'DefaultColumnWidth' in table:
@@ -935,6 +961,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _getCellAttr(self, rows, columns, styles, row, column):
         """
         Функция возращает структуру атрибутов ячейки.
+
         :param rows: Список строк.
         :param columns: Список колонок.
         :param styles: Словарь стилей.
@@ -1028,6 +1055,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _isTag(self, value):
         """
         Есть ли теги бендов в значении ячейки.
+
         :param value: Значение ячейки.
         :return: Возвращает True/False.
         """
@@ -1042,6 +1070,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _getTagBandRow(self, rows, row):
         """
         Определить тег бенда, к которому принадлежит строка.
+
         :param rows: Список строк.
         :param row: Номер строки.
         :return: Строка-тег бэнда или None  в случае ошибки.
@@ -1074,6 +1103,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _findTagBandRow(self, row):
         """
         Поиск тега в текущем бэнде.
+
         :param row: Строка.
         :return: Кортеж: (Индекс ячейки в строке, в которой находится тег.
             Или -1, если тег в строке не найден,
@@ -1092,6 +1122,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _isUpperBand(self, rows, row):
         """
         Проверить является текущая строка листа бэндом верхнего колонтитула.
+
         :param rows: Список строк.
         :param row: Номер строки.
         :return: Возвращает True/False.
@@ -1106,6 +1137,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _isUnderBand(self, rows, row):
         """
         Проверить является текущая строка листа бэндом нижнего колонтитула.
+
         :param rows: Список строк.
         :param row: Номер строки.
         :return: Возвращает True/False.
@@ -1120,6 +1152,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _isTitleBand(self, rows, row):
         """
         Проверить является текущая строка листа бэндом заголовочной части.
+
         :param rows: Список строк.
         :param row: Номер строки.
         :return: Возвращает True/False.
@@ -1133,6 +1166,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _parseDescriptionTag(self, report, parse_row):
         """
         Разбор заголовочного тега описания.
+
         :param report: Шаблон отчета.
         :param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
@@ -1153,6 +1187,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _parseVarTag(self, report, parse_row):
         """
         Разбор заголовочного тега переменных.
+
         :param report: Шаблон отчета.
         :param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
@@ -1170,6 +1205,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _parseGeneratorTag(self, report, parse_row):
         """
         Разбор заголовочного тега генеаратора.
+
         :param report: Шаблон отчета.
         :param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
@@ -1190,6 +1226,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _parseDataSrcTag(self, report, parse_row):
         """
         Разбор заголовочного тега источника даных.
+
         :param report: Шаблон отчета.
         :param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
@@ -1202,6 +1239,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _parseQueryTag(self, report, parse_row):
         """
         Разбор заголовочного тега запроса.
+
         :param report: Шаблон отчета.
         :param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
@@ -1214,6 +1252,7 @@ class icExcelXMLReportTemplate(icReportTemplate):
     def _parseStyleLibTag(self, report, parse_row):
         """
         Разбор заголовочного тега библиотеки стилей.
+
         :param report: Шаблон отчета.
         :param parse_row: Разбираемая строка шаблона отчета в виде списка.
         """
@@ -1241,7 +1280,6 @@ class icODSReportTemplate(icExcelXMLReportTemplate):
     """
     Шаблон отчета в формате ODF Open Document Spreadsheet.
     """
-
     def __init__(self):
         """
         Конструктор класса.
@@ -1251,6 +1289,7 @@ class icODSReportTemplate(icExcelXMLReportTemplate):
     def open(self, tmpl_filename):
         """
         Открыть файл шаблона отчета.
+
         :param tmpl_filename: Файл шаблона отчета.
         """
         v_excel = icexcel.icVExcel()
@@ -1273,6 +1312,7 @@ class icXLSReportTemplate(icODSReportTemplate):
     def open(self, tmpl_filename):
         """
         Открыть файл шаблона отчета.
+
         :param tmpl_filename: Файл шаблона отчета.
         """
         try:
